@@ -6,7 +6,7 @@ import { pad, plainText } from "./parse-misi";
 /** Misi: satu kata kunci besar per misi, kalimat misi kecil di sisi berlawanan. Ganjil navy, genap pink. */
 export function MisiMisi({ misi }: { misi: Kabinet["misi"] }) {
   return (
-    <section className="mx-auto max-w-wrap px-6 py-24 md:py-36" aria-label="Misi">
+    <section className="mx-auto max-w-wrap px-6 py-16 md:py-24" aria-label="Misi">
       <div className="mb-10 text-[13px] font-bold uppercase tracking-[0.12em] text-accent-hover">(Misi)</div>
       <div className="space-y-10 md:space-y-8">
         {misi.map((m, i) => {
