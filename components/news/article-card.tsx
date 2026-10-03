@@ -1,0 +1,49 @@
+import Link from "next/link";
+import { Badge } from "@/components/ui";
+import { cn } from "@/lib/utils";
+import { categoryLabel, formatTanggal, type NewsArticle } from "@/lib/news";
+import { CATEGORY_STYLE } from "./category-style";
+import { Cover } from "./cover";
+
+export interface ArticleCardProps {
+  article: NewsArticle;
+  /** "large" = kartu besar (cover tinggi, excerpt); "small" = kartu ringkas. */
+  size?: "large" | "small";
+  className?: string;
+}
+
+export function ArticleCard({ article, size = "small", className }: ArticleCardProps) {
+  const large = size === "large";
+  return (
+    <article className={cn("group relative flex flex-col", className)}>
+      <Cover
+        kategori={article.kategori}
+        src={article.heroImage}
+        className={cn("rounded-xl", large ? "aspect-[16/10]" : "aspect-[4/3]")}
+        sizes={large ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"}
+      />
+      <div className="mt-4 flex flex-1 flex-col gap-2">
+        <div className="flex items-center gap-2 text-[12.5px] text-muted">
+          <Badge variant={CATEGORY_STYLE[article.kategori].badge}>{categoryLabel(article.kategori)}</Badge>
+          <time dateTime={article.tanggal}>{formatTanggal(article.tanggal)}</time>
+        </div>
+        <h3
+          className={cn(
+            "font-extrabold leading-snug text-navy transition-colors duration-fast group-hover:text-accent",
+            large ? "text-xl" : "text-base"
+          )}
+        >
+          {/* Link meregang ke seluruh kartu; fokus keyboard tampil di kartu. */}
+          <Link
+            href={`/news/${article.slug}`}
+            className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-4 focus-visible:after:ring-pink-pale"
+          >
+            {article.judul}
+          </Link>
+        </h3>
+        {large && <p className="line-clamp-3 text-[14.5px] leading-relaxed text-secondary">{article.excerpt}</p>}
+        <p className="mt-auto pt-1 text-[12.5px] text-muted">{article.estimasiBaca} menit baca</p>
+      </div>
+    </article>
+  );
+}
