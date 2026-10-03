@@ -177,5 +177,9 @@
         "alt": "Staff 8 Biro Administrasi"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20ADM&w=1200&h=1500&tone=blue&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Biro Administrasi"
+  }
 }

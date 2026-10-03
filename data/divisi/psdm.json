@@ -177,5 +177,9 @@
         "alt": "Staff 8 Pengembangan Sumber Daya Mahasiswa"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20PSDM&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Pengembangan Sumber Daya Mahasiswa"
+  }
 }

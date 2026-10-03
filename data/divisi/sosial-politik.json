@@ -177,5 +177,9 @@
         "alt": "Staff 8 Sosial Politik"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20SOSPOL&w=1200&h=1500&tone=blue&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Sosial Politik"
+  }
 }

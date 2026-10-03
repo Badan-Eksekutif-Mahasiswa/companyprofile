@@ -177,5 +177,9 @@
         "alt": "Staff 8 Komunikasi & Informasi"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20KOMINFO&w=1200&h=1500&tone=navy&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Komunikasi & Informasi"
+  }
 }

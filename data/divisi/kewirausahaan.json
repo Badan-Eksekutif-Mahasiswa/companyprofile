@@ -177,5 +177,9 @@
         "alt": "Staff 8 Kewirausahaan"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20WIRAUSAHA&w=1200&h=1500&tone=pink&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Kewirausahaan"
+  }
 }
