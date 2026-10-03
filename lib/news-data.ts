@@ -1,5 +1,6 @@
 // Hanya untuk server. Jangan diimpor dari komponen client.
 import { getSupabase, getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/server";
+import { fetchSitArticles, isSitConfigured } from "@/lib/news-api";
 import { mediaUrl } from "@/lib/media";
 import { isNewsCategory, tagKey, type NewsArticle, type NewsBlock } from "@/lib/news";
 import { estimateReadMinutes, normalizeLampiran, normalizeSumber, parseBody, slugify } from "@/lib/news-parse";
@@ -218,6 +219,7 @@ function fromRow(r: ArticleRow): NewsArticle {
 }
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {
+  if (isSitConfigured()) return fetchSitArticles();
   if (!isSupabaseConfigured()) {
     return [...DUMMY_ARTICLES].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
   }

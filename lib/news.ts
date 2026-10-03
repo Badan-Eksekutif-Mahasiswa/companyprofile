@@ -35,13 +35,22 @@ export interface NewsAttachment {
   url: string;
   tipe?: string;
   ukuran?: string;
+  halaman?: { url: string; width: number; height: number }[];
+}
+
+export interface Inline {
+  t: string;
+  b?: boolean;
+  i?: boolean;
+  u?: boolean;
+  href?: string;
 }
 
 export type NewsBlock =
-  | { type: "p"; text: string }
+  | { type: "p"; text: string; runs?: Inline[] }
   | { type: "h2" | "h3"; text: string }
-  | { type: "quote"; text: string; cite?: string }
-  | { type: "ul" | "ol"; items: string[] };
+  | { type: "quote"; text: string; cite?: string; runs?: Inline[] }
+  | { type: "ul" | "ol"; items: string[]; itemRuns?: Inline[][] };
 
 export function isNewsCategory(value: string | null | undefined): value is NewsCategory {
   return NEWS_CATEGORIES.some((c) => c.value === value);

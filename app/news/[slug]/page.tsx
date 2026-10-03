@@ -8,7 +8,11 @@ export const revalidate = 60;
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateStaticParams() {
-  return (await getNewsArticles()).map((a) => ({ slug: a.slug }));
+  try {
+    return (await getNewsArticles()).map((a) => ({ slug: a.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

@@ -50,6 +50,18 @@ export function Attachments({ items }: { items: NewsAttachment[] }) {
               </div>
               {pdf && shown && (
                 <div id={`pdf-${encodeURIComponent(a.url)}`} className="mt-4">
+                  {a.halaman?.length ? (
+                    <ol className="max-h-[85vh] space-y-3 overflow-y-auto rounded-xl border border-border bg-navy-5 p-3">
+                      {a.halaman.map((h, n) => (
+                        <li key={h.url}>
+                          <a href={a.url} target="_blank" rel="noopener noreferrer">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={h.url} width={h.width} height={h.height} loading="lazy" alt={`${a.nama}, halaman ${n + 1}`} className="h-auto w-full rounded-lg bg-white shadow-sm" />
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
                   <object data={`${a.url}#view=FitH`} type="application/pdf" className="h-[85vh] min-h-[560px] w-full rounded-xl border border-border">
                     <p className="p-4 text-sm text-secondary">
                       Browser ini tidak bisa menampilkan PDF di halaman.{" "}
@@ -58,6 +70,7 @@ export function Attachments({ items }: { items: NewsAttachment[] }) {
                       </a>
                     </p>
                   </object>
+                  )}
                 </div>
               )}
             </li>
