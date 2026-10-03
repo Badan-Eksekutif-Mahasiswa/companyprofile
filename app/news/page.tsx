@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { MeshGradient } from "@/components/webgl";
 import { GlassHighlight } from "@/components/news/glass-highlight";
-import { CursorRing } from "@/components/news/cursor-ring";
 import { NewsBrowser } from "@/components/news/news-browser";
 import { NewsSkeleton } from "@/components/news/news-skeleton";
 import { getNewsArticles } from "@/lib/news-data";
@@ -26,7 +25,6 @@ export default async function NewsPage() {
 
   return (
     <main id="main">
-      <CursorRing />
       <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
         <MeshGradient className="h-full" />
         <div className="relative mx-auto max-w-wrap px-6">

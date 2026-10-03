@@ -25,3 +25,16 @@
     padding-top: max(13vh, 112px);
   }
 }
+
+/* Kolom "Diselenggarakan oleh" & "Status" diberi ruang 3 kolom agar nama unit yang panjang tidak menabrak. */
+@media (min-width: 1025px) {
+  .kd.kd-hero .info__left { grid-column: 1 / span 3; padding-right: 24px; }
+  .kd.kd-hero .info__roles { grid-column: 4 / span 3; padding-right: 24px; }
+  .kd.kd-hero .info__right { grid-column: 7 / -1; }
+  .kd.kd-hero .info__left,
+  .kd.kd-hero .info__roles { overflow-wrap: anywhere; }
+}
+
+/* Kartu tengah disembunyikan selama klon terbang. Kanvas distorsi menggambar gambar ini sendiri dan hanya
+   membaca opacity elemen gambarnya, jadi visibility pada tombol induk tidak cukup. */
+.kd.kd-hero .kd-panel-hidden .media-item__inner { opacity: 0 !important; }

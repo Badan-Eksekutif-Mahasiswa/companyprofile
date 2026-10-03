@@ -11,7 +11,7 @@ const LINKS = [
 function SiteLogo() {
   return (
     <Link href="/" className="flex items-center" aria-label="Badan Eksekutif Mahasiswa Universitas Indonesia, Beranda">
-      <Image src="/images/logo-bem-ui.png" alt="Logo BEM UI" width={876} height={876} priority className="size-11 shrink-0" />
+      <Image src="/images/logo-bem-ui.png" alt="Logo BEM UI" width={876} height={876} priority className="size-9 shrink-0 sm:size-11" />
     </Link>
   );
 }

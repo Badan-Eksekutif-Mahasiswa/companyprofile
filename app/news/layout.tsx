@@ -1,4 +1,5 @@
 import { SiteFooter, SiteNav } from "@/components/ui";
+import { Cursor } from "@/components/kabinet/Cursor";
 
 export default function NewsLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function NewsLayout({ children }: { children: React.ReactNode }) 
       <SiteNav />
       {children}
       <SiteFooter />
+      <Cursor />
     </div>
   );
 }

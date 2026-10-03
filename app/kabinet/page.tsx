@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAllDivisi, getKabinet } from "@/lib/kabinet";
 import { SiteFooter, SiteNav } from "@/components/ui";
+import { Cursor } from "@/components/kabinet/Cursor";
 import { KabinetHero } from "@/components/kabinet-list/KabinetHero";
 import { Leaders } from "@/components/kabinet-list/Leaders";
 import { DivisiGrid } from "@/components/kabinet-list/DivisiGrid";
@@ -26,6 +27,7 @@ export default function KabinetPage() {
         <ProkerSpotlight kabinet={kabinet} />
       </main>
       <SiteFooter />
+      <Cursor />
     </>
   );
 }

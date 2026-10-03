@@ -92,7 +92,7 @@ function CardPanel({
           onMouseLeave={() => onHoverLabel(null)}
           data-hover
           aria-label={hoverText}
-          className="hero__panel block p-0"
+          className={`hero__panel block p-0${hidden ? " kd-panel-hidden" : ""}`}
           style={{ visibility: hidden ? "hidden" : "visible", border: 0, cursor: "pointer", background: "transparent" }}
         >
           <MediaAsset src={src} alt={alt} className="hero__panel-img" />

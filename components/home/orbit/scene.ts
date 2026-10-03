@@ -53,6 +53,8 @@ import {
 import { LOGO_SHAPES, LOGO_SIZE } from "./logo-shapes";
 
 export type Rect = { left: number; top: number; width: number; height: number };
+/** 4 sudut kartu di layar (px), urutan gambar: kiri-atas, kanan-atas, kanan-bawah, kiri-bawah. */
+export type Quad = [number, number][];
 export type Pick = { kind: "card"; instance: number } | { kind: "logo" };
 
 export interface OrbitOptions {
@@ -80,8 +82,9 @@ export interface OrbitController {
   release(): void;
   pick(clientX: number, clientY: number): Pick | null;
   rectOf(instance: number): Rect | null;
+  quadOf(instance: number): Quad | null;
   /** Kartu terlihat terbesar yang menampilkan item tertentu, untuk animasi kembali. */
-  findVisible(item: number): { instance: number; rect: Rect } | null;
+  findVisible(item: number): { instance: number; rect: Rect; quad: Quad } | null;
   setHidden(instance: number | null): void;
   dispose(): void;
 }
@@ -640,6 +643,19 @@ export async function createOrbit(opts: OrbitOptions): Promise<OrbitController> 
     return { left: x0, top: y0, width: x1 - x0, height: y1 - y0 };
   }
 
+  function quadOf(instance: number): Quad | null {
+    const r = canvas.getBoundingClientRect();
+    cards.getMatrixAt(instance, m4);
+    const q: Quad = [[-1, 1], [1, 1], [1, -1], [-1, -1]].map(([cx, cy]) => {
+      v3.set((cx * CARD_W) / 2, (cy * CARD_H) / 2, 0).applyMatrix4(m4).project(camera);
+      return [r.left + ((v3.x + 1) / 2) * r.width, r.top + ((1 - v3.y) / 2) * r.height] as [number, number];
+    });
+    if (q.some(([x, y]) => !isFinite(x) || !isFinite(y))) return null;
+    // Sisi belakang kartu digambar dicerminkan (shader) → tukar kiri/kanan agar cocok dengan gambarnya.
+    const cross = (q[1][0] - q[0][0]) * (q[3][1] - q[0][1]) - (q[1][1] - q[0][1]) * (q[3][0] - q[0][0]);
+    return cross < 0 ? [q[1], q[0], q[3], q[2]] : q;
+  }
+
   resize();
   kick();
 
@@ -675,15 +691,17 @@ export async function createOrbit(opts: OrbitOptions): Promise<OrbitController> 
     },
     pick,
     rectOf,
+    quadOf,
     findVisible(item) {
-      let best: { instance: number; rect: Rect } | null = null;
+      let best: { instance: number; rect: Rect; quad: Quad } | null = null;
       for (let i = 0; i < N; i++) {
         if (slots[i] !== item || alpha.getX(i) < 0.6) continue;
         const rect = rectOf(i);
         if (!rect) continue;
         const visible =
           rect.left + rect.width > 0 && rect.left < window.innerWidth && rect.top + rect.height > 0 && rect.top < window.innerHeight;
-        if (visible && (!best || rect.width * rect.height > best.rect.width * best.rect.height)) best = { instance: i, rect };
+        const quad = visible ? quadOf(i) : null;
+        if (quad && (!best || rect.width * rect.height > best.rect.width * best.rect.height)) best = { instance: i, rect, quad };
       }
       return best;
     },
