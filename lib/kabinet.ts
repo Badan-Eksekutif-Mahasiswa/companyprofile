@@ -9,6 +9,8 @@ export type Section =
   | { type: "media-trio"; media_1: Media; media_2: Media; media_3: Media }
   | { type: "text-block"; subtitle?: string; content: string[] };
 
+export type Person = { nama: string; jabatan: string; foto: Media };
+
 export type Divisi = {
   order: number;
   slug: string;
@@ -20,6 +22,12 @@ export type Divisi = {
   categories: { name: string; slug: string }[];
   roles: string[];
   description: string;
+  visi: string;
+  misi: string[];
+  /** Pengurus inti departemen (per individu). */
+  bph: Person[];
+  /** Staf departemen (per individu). */
+  staff: Person[];
   cover: Media;
   logo: Media;
   /** Foto BPH (pengurus inti) departemen — dipakai di kartu grid /kabinet. */

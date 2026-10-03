@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { Divisi, Media, Section } from "@/lib/kabinet";
+import type { Divisi, Media, Person, Section } from "@/lib/kabinet";
 import { createReveal } from "@/lib/gsap-reveal";
 import { CharRoll } from "./CharRoll";
 import { useShell } from "./shell-context";
@@ -31,6 +31,33 @@ function MediaAsset({ media, imgClass = "media-item__el" }: { media: Media; imgC
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className={imgClass} src={media.url} alt={media.alt} crossOrigin="anonymous" />
     </div>
+  );
+}
+
+function PersonCard({ p }: { p: Person }) {
+  return (
+    <figure className="person-card group relative m-0 aspect-[4/5] overflow-hidden rounded-2xl border border-border bg-navy-5 shadow-sm transition-shadow duration-base ease-out-expo hover:shadow-lg">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={p.foto.url} alt={p.foto.alt ?? p.nama} loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-[900ms] ease-out-expo group-hover:scale-[1.06]" />
+      <figcaption className="absolute inset-x-3 bottom-3 rounded-xl border border-glass-border bg-glass-strong p-3 shadow-glass-soft backdrop-blur-glass">
+        <div className="text-[14px] font-bold leading-tight text-navy">{p.nama}</div>
+        <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-secondary">{p.jabatan}</div>
+      </figcaption>
+    </figure>
+  );
+}
+
+function TeamSection({ title, people }: { title: string; people: Person[] }) {
+  if (!people.length) return null;
+  return (
+    <section className="section section--team">
+      <h2 className="section__subtitle">{title}</h2>
+      <div className="team__grid">
+        {people.map((p, i) => (
+          <PersonCard key={i} p={p} />
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -128,6 +155,10 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
       // media: fade + naik; mesh WebGL ikut membaca opacity & posisi elemen
       q(".section .media-item__inner").forEach((n) => {
         gsap.fromTo(n, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 88%", once: true } });
+      });
+
+      q(".person-card").forEach((n) => {
+        gsap.fromTo(n, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
       });
 
       // trio: parallax bertingkat (hanya desktop)
@@ -294,21 +325,27 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
         </div>
       </section>
 
+      <section className="section section--text">
+        <h2 className="section__subtitle col-start-1 col-3">Visi</h2>
+        <div className="rich-text col-7 col-start-7">
+          <p>{divisi.visi}</p>
+        </div>
+      </section>
+      <section className="section section--text">
+        <h2 className="section__subtitle col-start-1 col-3">Misi</h2>
+        <div className="rich-text col-7 col-start-7">
+          <ol className="misi-list">
+            {divisi.misi.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
       {divisi.sections.map(renderSection)}
 
-      {divisi.collaborators && divisi.collaborators.length > 0 && (
-        <section className="collaborators">
-          <span className="collaborators__label label_info">Dibuat oleh</span>
-          <ul className="collaborators__list">
-            {divisi.collaborators.map((c) => (
-              <li key={c.name} className="collaborators__item">
-                <span className="collaborators__name">{c.name}</span>
-                <span className="label_info">{c.role}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <TeamSection title="BPH" people={divisi.bph} />
+      <TeamSection title="Staff" people={divisi.staff} />
 
       {next && (
         <section
