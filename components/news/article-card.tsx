@@ -4,15 +4,18 @@ import { cn } from "@/lib/utils";
 import { categoryLabel, formatTanggal, type NewsArticle } from "@/lib/news";
 import { styleOf } from "./category-style";
 import { Cover } from "./cover";
+import { Highlight } from "./highlight";
 
 export interface ArticleCardProps {
+  /** Kata kunci pencarian untuk disorot. */
+  q?: string;
   article: NewsArticle;
   /** "large" = kartu besar (cover tinggi, excerpt); "small" = kartu ringkas. */
   size?: "large" | "small" | "compact";
   className?: string;
 }
 
-export function ArticleCard({ article, size = "small", className }: ArticleCardProps) {
+export function ArticleCard({ article, size = "small", className, q }: ArticleCardProps) {
   const large = size === "large";
   if (size === "compact") {
     return (
@@ -22,7 +25,7 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
           {article.kategori && <Badge variant={styleOf(article.kategori).badge} className="self-start">{categoryLabel(article.kategori)}</Badge>}
           <h3 className="text-base font-extrabold leading-snug text-navy transition-colors duration-fast group-hover:text-accent">
             <Link href={`/news/${article.slug}`} className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-4 focus-visible:after:ring-pink-pale">
-              {article.judul}
+              {<Highlight text={article.judul} q={q} />}
             </Link>
           </h3>
           <p className="mt-auto text-[12.5px] text-muted">
@@ -56,10 +59,10 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
             href={`/news/${article.slug}`}
             className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-4 focus-visible:after:ring-pink-pale"
           >
-            {article.judul}
+            {<Highlight text={article.judul} q={q} />}
           </Link>
         </h3>
-        {large && <p className="line-clamp-3 text-[14.5px] leading-relaxed text-secondary">{article.excerpt}</p>}
+        {large && <p className="line-clamp-3 text-[14.5px] leading-relaxed text-secondary"><Highlight text={article.excerpt} q={q} /></p>}
         <p className="mt-auto pt-1 text-[12.5px] text-muted">{article.estimasiBaca} menit baca</p>
       </div>
     </article>

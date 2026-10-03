@@ -1,11 +1,13 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { SearchX, Search } from "lucide-react";
 import { Button, EmptyState, InputWithIcon } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import {
+  BULAN,
   NEWS_CATEGORIES,
   categoryLabel,
   collectTags,
@@ -18,6 +20,7 @@ import { ArticleCard } from "./article-card";
 import { FeaturedArticle } from "./featured-article";
 import { Reveal } from "@/components/motion";
 import { TagCloud } from "./tag-cloud";
+import { LIST_KEY, BACK_FLAG } from "./list-memory";
 
 const PAGE_SIZE = 6;
 
@@ -33,6 +36,8 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const kategori = isNewsCategory(rawKategori) ? rawKategori : null;
   const tag = params.get("tag") ? tagKey(params.get("tag") as string) : null;
   const q = params.get("q") ?? "";
+  const tahun = params.get("tahun");
+  const bulan = tahun ? params.get("bulan") : null;
 
   const [query, setQuery] = React.useState(q);
   const [visible, setVisible] = React.useState(PAGE_SIZE);
@@ -75,15 +80,62 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
     }
   }, [q]);
 
-  React.useEffect(() => setVisible(PAGE_SIZE), [kategori, tag, query]);
+  const sig = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    const now = JSON.stringify([kategori, tag, query, tahun, bulan]);
+    if (sig.current === null) { sig.current = now; return; }
+    if (sig.current !== now) { sig.current = now; setVisible(PAGE_SIZE); }
+  }, [kategori, tag, query, tahun, bulan]);
 
-  const results = React.useMemo(() => filterArticles(articles, { kategori, tag, q: query }), [articles, kategori, tag, query]);
+  // Ingat daftar (URL, scroll, jumlah kartu) saat pembaca membuka artikel.
+  const visibleRef = React.useRef(visible);
+  visibleRef.current = visible;
+  React.useEffect(() => {
+    const save = () => {
+      try {
+        sessionStorage.setItem(LIST_KEY, JSON.stringify({ url: location.pathname + location.search, y: window.scrollY, visible: visibleRef.current }));
+      } catch {}
+    };
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest('a[href^="/news/"]')) save();
+    };
+    document.addEventListener("click", onClick, true);
+    window.addEventListener("pagehide", save);
+    return () => {
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("pagehide", save);
+    };
+  }, []);
+
+  // Pulihkan posisi hanya bila datang dari "kembali" (tombol atau Back browser).
+  React.useEffect(() => {
+    try {
+      if (sessionStorage.getItem(BACK_FLAG) !== "1") return;
+      // Flag dihapus setelah jeda: komponen bisa terpasang ulang (Suspense) saat navigasi Back.
+      setTimeout(() => { try { sessionStorage.removeItem(BACK_FLAG); } catch {} }, 2500);
+      const s = JSON.parse(sessionStorage.getItem(LIST_KEY) ?? "null");
+      if (!s || s.url !== location.pathname + location.search) return;
+      setVisible(Math.max(PAGE_SIZE, s.visible));
+      let n = 0;
+      const go = () => {
+        window.scrollTo(0, s.y);
+        if (++n < 6 && Math.abs(window.scrollY - s.y) > 4) setTimeout(go, 100);
+      };
+      requestAnimationFrame(go);
+    } catch {}
+  }, []);
+
+  const results = React.useMemo(() => filterArticles(articles, { kategori, tag, q: query, tahun, bulan }), [articles, kategori, tag, query, tahun, bulan]);
   const tags = React.useMemo(() => collectTags(articles), [articles]);
   const tagLabel = tags.find((t) => t.key === tag)?.label;
 
-  const hasKategori = articles.some((x) => x.kategori);
+  const years = React.useMemo(() => [...new Set(articles.map((x) => x.tanggal.slice(0, 4)))].sort().reverse(), [articles]);
+  const months = React.useMemo(
+    () => [...new Set(articles.filter((x) => x.tanggal.startsWith(tahun ?? "")).map((x) => Number(x.tanggal.slice(5, 7))))].sort((a, b) => a - b),
+    [articles, tahun]
+  );
   const searching = query.trim().length > 0;
-  const filtered = Boolean(kategori || tag || searching);
+  const filtered = Boolean(kategori || tag || searching || tahun);
   const featured = searching ? undefined : results[0];
   const rest = searching ? results : results.slice(1);
   const shown = rest.slice(0, visible);
@@ -114,7 +166,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           />
         </div>
 
-        {hasKategori && (
+        {(
           <div role="group" aria-label="Filter kategori" className="-mx-4 flex gap-2 overflow-x-auto px-4 py-2 sm:mx-0 sm:flex-wrap sm:px-0">
             {[{ value: null, label: "Semua" }, ...NEWS_CATEGORIES].map((c) => {
               const on = (c.value ?? null) === kategori;
@@ -138,9 +190,34 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           </div>
         )}
 
+        <div className="flex flex-wrap gap-3 text-sm">
+          <label className="sr-only" htmlFor="f-tahun">Tahun</label>
+          <select
+            id="f-tahun"
+            value={tahun ?? ""}
+            onChange={(e) => setParam({ tahun: e.target.value || null, bulan: null })}
+            className="rounded-full border-[1.5px] border-border bg-white px-4 py-2 font-bold text-navy outline-none focus-visible:ring-4 focus-visible:ring-pink-pale"
+          >
+            <option value="">Semua tahun</option>
+            {years.map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+          <label className="sr-only" htmlFor="f-bulan">Bulan</label>
+          <select
+            id="f-bulan"
+            value={bulan ?? ""}
+            disabled={!tahun}
+            onChange={(e) => setParam({ bulan: e.target.value || null })}
+            className="rounded-full border-[1.5px] border-border bg-white px-4 py-2 font-bold text-navy outline-none focus-visible:ring-4 focus-visible:ring-pink-pale disabled:opacity-50"
+          >
+            <option value="">Semua bulan</option>
+            {months.map((m) => <option key={m} value={m}>{BULAN[m - 1]}</option>)}
+          </select>
+        </div>
+
         {tag && (
           <p className="text-sm text-secondary">
             Topik: <strong className="text-navy">#{tagLabel ?? tag}</strong>{" "}
+            <Link href={`/news/tag/${encodeURIComponent(tag)}`} className="ml-1 font-bold text-accent underline underline-offset-2">Halaman topik</Link>{" "}
             <button
               type="button"
               onClick={() => setParam({ tag: null })}
@@ -183,7 +260,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           {featured && (
             <div className="mt-10">
               <Reveal>
-                <FeaturedArticle article={featured} />
+                <FeaturedArticle article={featured} q={query} />
               </Reveal>
             </div>
           )}
@@ -197,20 +274,20 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                 {Array.from({ length: Math.ceil(shown.length / 6) }, (_, c) => shown.slice(c * 6, c * 6 + 6)).map((blok, c) => (
                   <React.Fragment key={c}>
                     <Reveal className="lg:col-span-7">
-                      <ArticleCard article={blok[0]} size="large" className="h-full" />
+                      <ArticleCard article={blok[0]} size="large" className="h-full" q={query} />
                     </Reveal>
                     {blok.length > 1 && (
                       <div className="flex flex-col gap-8 lg:col-span-5">
                         {blok.slice(1, 3).map((a, i) => (
                           <Reveal key={a.slug} index={i + 1}>
-                            <ArticleCard article={a} size="compact" />
+                            <ArticleCard article={a} size="compact" q={query} />
                           </Reveal>
                         ))}
                       </div>
                     )}
                     {blok.slice(3).map((a, i) => (
                       <Reveal key={a.slug} index={i} className="lg:col-span-4">
-                        <ArticleCard article={a} size="small" className="h-full" />
+                        <ArticleCard article={a} size="small" className="h-full" q={query} />
                       </Reveal>
                     ))}
                   </React.Fragment>

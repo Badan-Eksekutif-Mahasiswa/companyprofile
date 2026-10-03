@@ -2,16 +2,15 @@ export type NewsCategory = "kajian-strategis" | "siaran-pers" | "opini-artikel" 
 
 export const NEWS_CATEGORIES: { value: NewsCategory; label: string }[] = [
   { value: "kajian-strategis", label: "Kajian Strategis" },
-  { value: "siaran-pers", label: "Siaran Pers" },
-  { value: "opini-artikel", label: "Opini & Artikel" },
+  { value: "siaran-pers", label: "Pernyataan Resmi" },
+  { value: "opini-artikel", label: "Opini" },
   { value: "kabar-ui", label: "Kabar UI" },
 ];
 
 export interface NewsArticle {
   slug: string;
   judul: string;
-  /** Opsional: tidak semua sumber data punya kategori. */
-  kategori?: NewsCategory;
+  kategori: NewsCategory;
   tag: string[];
   tanggal: string;
   penulis: string;
@@ -24,6 +23,12 @@ export interface NewsArticle {
   body: NewsBlock[];
   /** Kosong = pakai judul/excerpt artikel. */
   seo?: { title?: string; description?: string; ogImage?: string };
+  /** 3–4 poin penting di atas artikel (opsional, ditulis redaksi). */
+  poinUtama?: string[];
+  /** Tanggal revisi terakhir (opsional). */
+  diperbarui?: string;
+  /** Catatan koreksi/revisi (opsional). */
+  koreksi?: string;
   /** Sumber/rujukan artikel (boleh kosong). */
   sumber: NewsSource[];
   /** Lampiran (PDF dll). PDF bisa dipratinjau di halaman artikel. */
@@ -54,6 +59,48 @@ export function isNewsCategory(value: string | null | undefined): value is NewsC
   return NEWS_CATEGORIES.some((c) => c.value === value);
 }
 
+/** Label jenis konten yang tegas; yang pertama dicek pembaca (jurnalis). */
+export const JENIS_KONTEN: Record<NewsCategory, { label: string; note?: string }> = {
+  "siaran-pers": { label: "Pernyataan Resmi", note: "Sikap resmi BEM UI 2026." },
+  "opini-artikel": { label: "Opini", note: "Pendapat penulis; tidak mewakili sikap resmi BEM UI 2026." },
+  "kajian-strategis": { label: "Kajian Strategis", note: "Hasil kajian tim BEM UI 2026." },
+  "kabar-ui": { label: "Kabar UI" },
+};
+
+export interface Heading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+function slugHeading(t: string) {
+  return t.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "bagian";
+}
+
+/** Daftar subjudul + id unik (dipakai TOC dan ArticleBody supaya id sama). */
+export function extractHeadings(blocks: NewsBlock[]): Heading[] {
+  const used = new Map<string, number>();
+  const out: Heading[] = [];
+  for (const b of blocks) {
+    if (b.type !== "h2" && b.type !== "h3") continue;
+    const base = slugHeading(b.text);
+    const n = used.get(base) ?? 0;
+    used.set(base, n + 1);
+    out.push({ id: n ? `${base}-${n + 1}` : base, text: b.text, level: b.type === "h2" ? 2 : 3 });
+  }
+  return out;
+}
+
+/** Pecah teks menurut kata kunci (untuk sorotan). */
+export function splitHighlight(text: string, q?: string): { t: string; hit: boolean }[] {
+  const needle = q?.trim();
+  if (!needle) return [{ t: text, hit: false }];
+  const re = new RegExp(`(${needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+  return text.split(re).filter(Boolean).map((t) => ({ t, hit: t.toLowerCase() === needle.toLowerCase() }));
+}
+
+export const BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
 export function categoryLabel(value: NewsCategory): string {
   return NEWS_CATEGORIES.find((c) => c.value === value)?.label ?? value;
 }
@@ -74,14 +121,22 @@ export interface NewsFilters {
   /** Kunci tag (huruf kecil). */
   tag?: string | null;
   q?: string;
+  tahun?: string | null;
+  /** 1–12 */
+  bulan?: string | null;
 }
 
-export function filterArticles(articles: NewsArticle[], { kategori, tag, q }: NewsFilters): NewsArticle[] {
+export function filterArticles(articles: NewsArticle[], { kategori, tag, q, tahun, bulan }: NewsFilters): NewsArticle[] {
   const needle = q?.trim().toLowerCase();
   return articles.filter((a) => {
     if (kategori && a.kategori !== kategori) return false;
     if (tag && !a.tag.some((t) => tagKey(t) === tag)) return false;
-    if (needle && !(a.judul.toLowerCase().includes(needle) || a.excerpt.toLowerCase().includes(needle))) {
+    if (tahun && a.tanggal.slice(0, 4) !== tahun) return false;
+    if (bulan && Number(a.tanggal.slice(5, 7)) !== Number(bulan)) return false;
+    if (
+      needle &&
+      !(a.judul.toLowerCase().includes(needle) || a.excerpt.toLowerCase().includes(needle) || a.tag.some((t) => t.toLowerCase().includes(needle)))
+    ) {
       return false;
     }
     return true;

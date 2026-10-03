@@ -167,3 +167,18 @@
 @media (prefers-reduced-motion: reduce) {
   .news-rise, .news-drift, .news-fade { animation: none !important; }
 }
+
+/* Ukuran huruf baca (dipilih pembaca) */
+.reader-body { font-size: 17px; }
+:root[data-fs="sm"] .reader-body { font-size: 15px; }
+:root[data-fs="lg"] .reader-body { font-size: 20px; }
+
+/* Cetak: hanya isi artikel */
+@media print {
+  body { background: #fff !important; }
+  #main { padding-top: 0 !important; max-width: none !important; }
+  .reader-body { font-size: 12pt !important; max-width: none !important; }
+  a[href^="http"]:not([aria-label])::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; word-break: break-all; }
+  h1, h2, h3 { break-after: avoid; }
+  blockquote, li { break-inside: avoid; }
+}

@@ -4,7 +4,7 @@
 
 create table if not exists public.articles (
   id             bigint generated always as identity primary key,
-  slug           text unique,            -- opsional; kosong -> dibuat dari judul oleh aplikasi
+  slug           text unique not null,   -- URL artikel, huruf kecil-dengan-strip, mis. analisis-kritis-kebijakan-ukt
   judul          text not null,
   ringkasan      text not null,          -- teks pratinjau di kartu & meta description
   isi            text not null,          -- teks biasa (## subjudul, > kutipan, - daftar) ATAU array blok JSON; HTML tidak dirender
@@ -15,7 +15,10 @@ create table if not exists public.articles (
   tanggal        date not null,
   sumber         jsonb not null default '[]',   -- ["Teks"] atau [{"nama":"Kompas","url":"https://..."}]
   lampiran       jsonb not null default '[]',   -- [{"nama":"Kajian UKT.pdf","url":"news/ukt/kajian.pdf","tipe":"pdf","ukuran":"1,2 MB"}]
-  kategori       text check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),  -- opsional
+  kategori       text not null default 'kabar-ui' check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),
+  poin_utama     text[],                 -- opsional: 3-4 poin penting di atas artikel
+  diperbarui     date,                   -- opsional: tanggal revisi
+  koreksi        text,                   -- opsional: catatan koreksi
   seo            jsonb,                  -- opsional {title, description, ogImage}
   published      boolean not null default false,
   created_at     timestamptz not null default now()
@@ -30,3 +33,6 @@ drop policy if exists "baca artikel terbit" on public.articles;
 create policy "baca artikel terbit" on public.articles
   for select to anon, authenticated
   using (published = true);
+
+-- Bila tabel sudah ada:
+-- alter table public.articles add column if not exists poin_utama text[], add column if not exists diperbarui date, add column if not exists koreksi text;

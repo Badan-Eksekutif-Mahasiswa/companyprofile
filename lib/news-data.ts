@@ -17,7 +17,11 @@ const dummyBody = (excerpt: string): NewsBlock[] => [
   { type: "ul", items: ["Poin pertama placeholder", "Poin kedua placeholder", "Poin ketiga placeholder"] },
   { type: "h3", text: "Langkah Tindak Lanjut" },
   { type: "ol", items: ["Langkah pertama placeholder", "Langkah kedua placeholder"] },
-  { type: "p", text: "Paragraf penutup placeholder." },
+  { type: "p", text: "Paragraf penutup placeholder. ".repeat(12) },
+  { type: "h2", text: "Rekomendasi" },
+  { type: "p", text: "Paragraf rekomendasi placeholder. ".repeat(20) },
+  { type: "h2", text: "Penutup" },
+  { type: "p", text: "Paragraf penutup placeholder. ".repeat(20) },
 ];
 
 type DummyInput = Omit<NewsArticle, "body" | "caption" | "sumber" | "lampiran">;
@@ -167,6 +171,12 @@ const DUMMY_INPUT: DummyInput[] = [
 
 const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a, i) => ({
   ...a,
+  poinUtama:
+    a.kategori === "kajian-strategis" || a.kategori === "siaran-pers"
+      ? ["Poin penting pertama (placeholder).", "Poin penting kedua (placeholder).", "Poin penting ketiga (placeholder)."]
+      : undefined,
+  diperbarui: i % 4 === 0 ? "2026-04-02" : undefined,
+  koreksi: i % 4 === 0 ? "Angka pada bagian Temuan Utama dikoreksi dari versi sebelumnya (placeholder)." : undefined,
   caption: "Keterangan foto placeholder. Sumber: dokumentasi BEM UI 2026.",
   body: dummyBody(a.excerpt),
   sumber: [{ nama: "Dokumentasi BEM UI 2026" }, { nama: "Tautan rujukan placeholder", url: "https://example.com" }],
@@ -194,6 +204,9 @@ interface ArticleRow {
   sumber: unknown;
   lampiran: unknown;
   kategori: string | null;
+  poin_utama: string[] | null;
+  diperbarui: string | null;
+  koreksi: string | null;
   seo: { title?: string; description?: string; ogImage?: string } | null;
 }
 
@@ -202,7 +215,10 @@ function fromRow(r: ArticleRow): NewsArticle {
   return {
     slug: r.slug || slugify(r.judul),
     judul: r.judul,
-    kategori: isNewsCategory(r.kategori) ? r.kategori : undefined,
+    kategori: isNewsCategory(r.kategori) ? r.kategori : "kabar-ui",
+    poinUtama: r.poin_utama?.filter(Boolean).slice(0, 4),
+    diperbarui: r.diperbarui ? String(r.diperbarui).slice(0, 10) : undefined,
+    koreksi: r.koreksi ?? undefined,
     tag: r.tag ?? [],
     tanggal: String(r.tanggal).slice(0, 10),
     penulis: r.penulis,

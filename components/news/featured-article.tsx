@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui";
 import { categoryLabel, formatTanggal, type NewsArticle } from "@/lib/news";
 import { styleOf } from "./category-style";
 import { Cover } from "./cover";
+import { Highlight } from "./highlight";
 
-export function FeaturedArticle({ article }: { article: NewsArticle }) {
+export function FeaturedArticle({ article, q }: { article: NewsArticle; q?: string }) {
   return (
     <article data-cursor="Baca" className="group relative grid gap-6 lg:grid-cols-3 lg:gap-10">
       <Cover
@@ -24,10 +25,10 @@ export function FeaturedArticle({ article }: { article: NewsArticle }) {
             href={`/news/${article.slug}`}
             className="outline-none after:absolute after:inset-0 after:rounded-2xl focus-visible:after:ring-4 focus-visible:after:ring-pink-pale"
           >
-            {article.judul}
+            {<Highlight text={article.judul} q={q} />}
           </Link>
         </h2>
-        <p className="text-[15px] leading-relaxed text-secondary">{article.excerpt}</p>
+        <p className="text-[15px] leading-relaxed text-secondary"><Highlight text={article.excerpt} q={q} /></p>
         <p className="text-[13px] text-muted">
           {article.penulis} · {article.estimasiBaca} menit baca
         </p>
