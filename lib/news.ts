@@ -7,6 +7,9 @@ export const NEWS_CATEGORIES: { value: NewsCategory; label: string }[] = [
   { value: "kabar-ui", label: "Kabar UI" },
 ];
 
+import { getSupabase, isSupabaseConfigured } from "@/lib/supabase/server";
+import { mediaUrl } from "@/lib/media";
+
 export interface NewsArticle {
   slug: string;
   judul: string;
@@ -253,8 +256,51 @@ const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a) => ({
   body: dummyBody(a.excerpt),
 }));
 
+/** Baris tabel `articles` (lihat docs/news-schema.sql). Ubah di sini kalau nama kolom berbeda. */
+interface ArticleRow {
+  slug: string;
+  judul: string;
+  kategori: string;
+  tag: string[] | null;
+  tanggal: string;
+  penulis: string;
+  estimasi_baca: number | null;
+  excerpt: string;
+  hero_image: string | null;
+  caption: string | null;
+  body: NewsBlock[] | null;
+  seo: { title?: string; description?: string; ogImage?: string } | null;
+}
+
+function fromRow(r: ArticleRow): NewsArticle {
+  return {
+    slug: r.slug,
+    judul: r.judul,
+    kategori: isNewsCategory(r.kategori) ? r.kategori : "kabar-ui",
+    tag: r.tag ?? [],
+    tanggal: String(r.tanggal).slice(0, 10),
+    penulis: r.penulis,
+    estimasiBaca: r.estimasi_baca ?? 3,
+    excerpt: r.excerpt,
+    heroImage: mediaUrl(r.hero_image),
+    caption: r.caption ?? undefined,
+    body: r.body ?? [],
+    seo: r.seo ? { ...r.seo, ogImage: mediaUrl(r.seo.ogImage) } : undefined,
+  };
+}
+
+/** Artikel terbit, terbaru lebih dulu. Supabase bila env terisi, kalau tidak data dummy. */
 export async function getNewsArticles(): Promise<NewsArticle[]> {
-  return [...DUMMY_ARTICLES].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  if (!isSupabaseConfigured()) {
+    return [...DUMMY_ARTICLES].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  }
+  const { data, error } = await getSupabase()
+    .from("articles")
+    .select("*")
+    .eq("published", true)
+    .order("tanggal", { ascending: false });
+  if (error) throw new Error(`Gagal memuat artikel dari Supabase: ${error.message}`);
+  return (data as ArticleRow[]).map(fromRow);
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefined> {

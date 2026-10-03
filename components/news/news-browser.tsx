@@ -14,8 +14,6 @@ import {
   tagKey,
   type NewsArticle,
 } from "@/lib/news";
-import { TopicSections } from "./topic-sections";
-import { MasonryGrid } from "./masonry-grid";
 import { ArticleCard } from "./article-card";
 import { FeaturedArticle } from "./featured-article";
 import { Reveal } from "@/components/motion";
@@ -35,9 +33,6 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const kategori = isNewsCategory(rawKategori) ? rawKategori : null;
   const tag = params.get("tag") ? tagKey(params.get("tag") as string) : null;
   const q = params.get("q") ?? "";
-  const view = params.get("tampilan");
-  const gridMode = view === "grid";
-  const topicMode = view === "topik";
 
   const [query, setQuery] = React.useState(q);
   const [visible, setVisible] = React.useState(PAGE_SIZE);
@@ -88,7 +83,6 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
 
   const searching = query.trim().length > 0;
   const filtered = Boolean(kategori || tag || searching);
-  const gridShown = results.slice(0, visible * 2);
   const featured = searching ? undefined : results[0];
   const rest = searching ? results : results.slice(1);
   const shown = rest.slice(0, visible);
@@ -141,26 +135,6 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           })}
         </div>
 
-        <div role="group" aria-label="Tampilan" className="flex w-fit gap-1 rounded-full border border-border bg-white p-1">
-          {[{ v: null, l: "Majalah" }, { v: "grid", l: "Grid" }, { v: "topik", l: "Topik" }].map((o) => {
-            const on = (o.v ?? null) === (view === "grid" || view === "topik" ? view : null);
-            return (
-              <button
-                key={o.l}
-                type="button"
-                aria-pressed={on}
-                onClick={() => setParam({ tampilan: o.v })}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-sm font-bold outline-none transition-colors duration-fast focus-visible:ring-4 focus-visible:ring-pink-pale",
-                  on ? "bg-navy text-white" : "text-navy hover:text-accent"
-                )}
-              >
-                {o.l}
-              </button>
-            );
-          })}
-        </div>
-
         {tag && (
           <p className="text-sm text-secondary">
             Topik: <strong className="text-navy">#{tagLabel ?? tag}</strong>{" "}
@@ -203,9 +177,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
         </div>
       ) : (
         <>
-          {topicMode && <TopicSections articles={results} onSeeAll={(k) => setParam({ kategori: k, tampilan: null })} />}
-
-          {!gridMode && !topicMode && featured && (
+          {featured && (
             <div className="mt-10">
               <Reveal>
                 <FeaturedArticle article={featured} />
@@ -213,9 +185,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
             </div>
           )}
 
-          {gridMode && <MasonryGrid articles={gridShown} />}
-
-          {!gridMode && !topicMode && shown.length > 0 && (
+          {shown.length > 0 && (
             <div className="mt-16 border-t border-divider pt-6">
               <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-navy">
                 {searching ? `Hasil pencarian (${results.length})` : "Terbaru"}
@@ -246,7 +216,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
             </div>
           )}
 
-          {!topicMode && (gridMode ? results.length > gridShown.length : rest.length > shown.length) && (
+          {rest.length > shown.length && (
             <div className="mt-12 flex justify-center">
               <Button variant="outline" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
                 Muat Lebih Banyak
