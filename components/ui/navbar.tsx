@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export function NavbarLogo({ className, children = "Kabinet TT" }: { className?: string; children?: React.ReactNode }) {
@@ -26,6 +27,8 @@ export interface NavbarProps extends Omit<React.HTMLAttributes<HTMLElement>, "ch
  */
 export function Navbar({ logo = <NavbarLogo />, links = [], actions, className, ...props }: NavbarProps) {
   // Di paling atas halaman navbar melebar hampir selebar layar; mulai scroll → memendek jadi pill 880px.
+  const pathname = usePathname();
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
   const [atTop, setAtTop] = React.useState(true);
   React.useEffect(() => {
     const onScroll = () => setAtTop(window.scrollY < 24);
@@ -51,7 +54,11 @@ export function Navbar({ logo = <NavbarLogo />, links = [], actions, className, 
           <ul className="hidden items-center gap-[26px] text-[14.5px] font-semibold text-secondary md:flex">
             {links.map((l) => (
               <li key={l.href + l.label}>
-                <Link href={l.href} className="transition-colors hover:text-navy">
+                <Link
+                  href={l.href}
+                  aria-current={isActive(l.href) ? "page" : undefined}
+                  className={cn("transition-colors hover:text-navy", isActive(l.href) && "font-bold text-navy underline underline-offset-[6px] decoration-2")}
+                >
                   {l.label}
                 </Link>
               </li>

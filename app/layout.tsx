@@ -10,8 +10,13 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "BEM UI 2026 — Kabinet Terus Terang",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: {
+    default: "BEM UI 2026 | Kabinet Terus Terang",
+    template: "%s | BEM UI 2026",
+  },
   description: "Website resmi BEM UI 2026, Kabinet Terus Terang.",
+  openGraph: { type: "website", locale: "id_ID", title: "BEM UI 2026 | Kabinet Terus Terang" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
