@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { NewsBackdrop } from "@/components/news/backdrop";
+import { GlassHighlight } from "@/components/news/glass-highlight";
 import { CursorRing } from "@/components/news/cursor-ring";
 import { NewsBrowser } from "@/components/news/news-browser";
 import { NewsSkeleton } from "@/components/news/news-skeleton";
@@ -25,13 +25,12 @@ export default async function NewsPage() {
 
   return (
     <main id="main" className="relative mx-auto w-full max-w-wrap px-4 pb-24 pt-16 sm:px-6 lg:pt-24">
-      <NewsBackdrop />
       <CursorRing />
       <header className="mb-12 border-b-2 border-navy pb-6">
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-accent">Publikasi resmi BEM UI 2026</p>
         <h1 tabIndex={-1} className="mt-2 text-5xl font-extrabold leading-[0.95] tracking-tight text-navy sm:text-6xl lg:text-8xl">
-          <span className="block overflow-hidden pb-2">
-            <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita &amp; Artikel</span>
+          <span className="block overflow-hidden py-2">
+            <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita <GlassHighlight>&amp; Artikel</GlassHighlight></span>
           </span>
         </h1>
         <p className="news-fade mt-3 text-base text-secondary [animation:news-fade_0.8s_0.35s_var(--ease-out)_both]">
