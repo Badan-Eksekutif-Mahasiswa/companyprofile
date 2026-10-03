@@ -1,10 +1,3 @@
-/**
- * Lapisan data News & Artikel.
- *
- * v1: data dummy lokal. Semua akses data lewat fungsi di file ini (getNewsArticles),
- * jadi saat sumber data pindah ke database cukup ganti isi fungsi, bukan komponen UI.
- */
-
 export type NewsCategory = "kajian-strategis" | "siaran-pers" | "opini-artikel" | "kabar-ui";
 
 export const NEWS_CATEGORIES: { value: NewsCategory; label: string }[] = [
@@ -18,17 +11,26 @@ export interface NewsArticle {
   slug: string;
   judul: string;
   kategori: NewsCategory;
-  /** Nama tag tanpa "#", mis. "UKT". Pencocokan tidak peka huruf besar/kecil. */
+  
   tag: string[];
-  /** ISO date (YYYY-MM-DD). */
   tanggal: string;
   penulis: string;
-  /** Estimasi waktu baca, menit. */
   estimasiBaca: number;
   excerpt: string;
-  /** Path gambar (mis. "/images/news/xxx.jpg"). Kosong = tampilkan placeholder. */
   heroImage?: string;
+  /** Keterangan di bawah hero image. */
+  caption?: string;
+  /** Isi artikel sebagai blok terstruktur (aman disimpan di database/JSON, tanpa HTML mentah). */
+  body: NewsBlock[];
+  /** Kosong = pakai judul/excerpt artikel. */
+  seo?: { title?: string; description?: string; ogImage?: string };
 }
+
+export type NewsBlock =
+  | { type: "p"; text: string }
+  | { type: "h2" | "h3"; text: string }
+  | { type: "quote"; text: string; cite?: string }
+  | { type: "ul" | "ol"; items: string[] };
 
 export function isNewsCategory(value: string | null | undefined): value is NewsCategory {
   return NEWS_CATEGORIES.some((c) => c.value === value);
@@ -40,7 +42,6 @@ export function categoryLabel(value: NewsCategory): string {
 
 export const tagKey = (tag: string) => tag.trim().toLowerCase();
 
-/** Format tanggal Indonesia, mis. "15 Maret 2026". UTC supaya server dan client sama. */
 export function formatTanggal(iso: string): string {
   return new Intl.DateTimeFormat("id-ID", {
     day: "numeric",
@@ -57,7 +58,6 @@ export interface NewsFilters {
   q?: string;
 }
 
-/** Pencarian saat ini mencakup judul dan excerpt. Ubah di sini kalau scope-nya berubah. */
 export function filterArticles(articles: NewsArticle[], { kategori, tag, q }: NewsFilters): NewsArticle[] {
   const needle = q?.trim().toLowerCase();
   return articles.filter((a) => {
@@ -89,11 +89,21 @@ export function collectTags(articles: NewsArticle[]): TagCount[] {
   return [...map.values()].sort((x, y) => y.count - x.count || x.label.localeCompare(y.label));
 }
 
-/* ------------------------------------------------------------------ */
-/* DATA DUMMY — ganti dengan sumber data asli (database).             */
-/* Judul/ringkasan hanyalah placeholder untuk menguji tampilan.        */
-/* ------------------------------------------------------------------ */
-const DUMMY_ARTICLES: NewsArticle[] = [
+const dummyBody = (excerpt: string): NewsBlock[] => [
+  { type: "p", text: excerpt },
+  { type: "p", text: "Paragraf pembuka placeholder. Ganti dengan isi artikel asli dari sistem internal. Teks ini hanya untuk menguji ukuran huruf, tinggi baris, dan lebar kolom baca." },
+  { type: "h2", text: "Latar Belakang" },
+  { type: "p", text: "Paragraf placeholder kedua. Isi artikel dapat memuat teks tebal atau miring, dan dipecah menjadi beberapa paragraf agar nyaman dibaca di layar kecil." },
+  { type: "quote", text: "Kutipan placeholder untuk menguji tampilan blockquote.", cite: "Narasumber" },
+  { type: "h2", text: "Temuan Utama" },
+  { type: "ul", items: ["Poin pertama placeholder", "Poin kedua placeholder", "Poin ketiga placeholder"] },
+  { type: "h3", text: "Langkah Tindak Lanjut" },
+  { type: "ol", items: ["Langkah pertama placeholder", "Langkah kedua placeholder"] },
+  { type: "p", text: "Paragraf penutup placeholder." },
+];
+
+type DummyInput = Omit<NewsArticle, "body" | "caption">;
+const DUMMY_INPUT: DummyInput[] = [
   {
     slug: "analisis-kritis-kebijakan-ukt-baru",
     judul: "Analisis Kritis Kebijakan UKT Baru: Menuju Pendidikan yang Berkeadilan",
@@ -237,7 +247,29 @@ const DUMMY_ARTICLES: NewsArticle[] = [
   },
 ];
 
-/** Artikel terbaru lebih dulu. Async supaya mudah diganti ke fetch database. */
+const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a) => ({
+  ...a,
+  caption: "Keterangan foto placeholder. Sumber: dokumentasi BEM UI 2026.",
+  body: dummyBody(a.excerpt),
+}));
+
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   return [...DUMMY_ARTICLES].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefined> {
+  return (await getNewsArticles()).find((a) => a.slug === slug);
+}
+
+/** Artikel terkait: tag/kategori sama dulu, sisanya terbaru. Selalu `limit` artikel (bila cukup). */
+export async function getRelatedArticles(slug: string, limit = 3): Promise<NewsArticle[]> {
+  const all = await getNewsArticles();
+  const cur = all.find((a) => a.slug === slug);
+  if (!cur) return all.slice(0, limit);
+  const score = (a: NewsArticle) =>
+    a.tag.filter((t) => cur.tag.some((c) => tagKey(c) === tagKey(t))).length * 2 + (a.kategori === cur.kategori ? 1 : 0);
+  return all
+    .filter((a) => a.slug !== slug)
+    .sort((x, y) => score(y) - score(x) || y.tanggal.localeCompare(x.tanggal))
+    .slice(0, limit);
 }
