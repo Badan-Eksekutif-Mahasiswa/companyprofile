@@ -5,7 +5,7 @@ import { AlertTriangle, FolderOpen, LogOut, Mail, Plus, Settings, Star, Sparkles
 import {
   Alert, Avatar, AvatarGroup, Badge, Breadcrumb, Button, Card, CardDescription, CardIcon, CardTitle,
   Checkbox, Dropdown, DropdownItem, DropdownMenu, DropdownSeparator, EmptyState, Field, Input,
-  InputWithIcon, MemberCard, Modal, Navbar, NavbarLogo, Pagination, Progress, Select, Skeleton,
+  InputWithIcon, MemberCard, Modal, Navbar, Pagination, Progress, Select, Skeleton,
   StatCard, Tabs, Textarea, Toast,
 } from "@/components/ui";
 import { MeshGradient } from "@/components/webgl";
@@ -267,17 +267,6 @@ export default function DesignSystemPage() {
         </Section>
       </main>
 
-      <div className="relative z-10 mx-auto max-w-wrap px-6">
-        <footer className="mt-10 rounded-2xl bg-navy px-10 pb-8 pt-14 text-white/65 max-sm:px-5">
-          <div className="mb-10 flex flex-wrap justify-between gap-10">
-            <div className="max-w-[280px]">
-              <NavbarLogo className="mb-3 text-white" />
-              <p className="text-sm leading-relaxed">Badan Eksekutif Mahasiswa Universitas Indonesia 2026 — Terus Terang.</p>
-            </div>
-          </div>
-          <div className="border-t border-white/10 pt-6 text-[13px]">© 2026 BEM UI — Kabinet Terus Terang</div>
-        </footer>
-      </div>
     </div>
   );
 }
