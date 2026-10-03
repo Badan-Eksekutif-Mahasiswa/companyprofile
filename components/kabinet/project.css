@@ -196,6 +196,14 @@ html.kd-root::-webkit-scrollbar { display: none; }
 .kd .section--media-trio .media-item:nth-child(2) { grid-column-start: 5; }
 .kd .section--media-trio .media-item:last-child { grid-column-start: 9; }
 
+.kd .misi-list { counter-reset: m; margin: 0; padding: 0; }
+.kd .misi-list li { counter-increment: m; position: relative; padding-left: 3em; margin-bottom: 16px; }
+.kd .misi-list li::before { content: "0" counter(m); position: absolute; left: 0; top: 0.1em; font-size: var(--t16); opacity: 0.5; }
+
+.kd .section--team { padding: var(--spaceMedium) var(--margin) 30px; }
+.kd .team__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 28px; }
+@media (max-width: 767px) { .kd .team__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+
 .kd .collaborators { display: flex; gap: 28px; padding: 0 var(--margin) var(--spaceHigh); }
 .kd .collaborators__label { flex-shrink: 0; width: 22.4%; }
 .kd .collaborators__list { display: flex; flex-direction: column; gap: 20px; }

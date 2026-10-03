@@ -18,7 +18,7 @@
     "Advokasi",
     "Publikasi"
   ],
-  "description": "Placeholder deskripsi Pengabdian Masyarakat. Ganti dengan penjelasan singkat tentang peran divisi, fokus kerja, dan kontribusinya untuk Kabinet Terus Terang BEM UI 2026. Teks ini sengaja dibuat cukup panjang supaya layout dua belas kolom dapat dinilai dengan benar, termasuk pemotongan baris dan animasi reveal per kata saat masuk viewport.",
+  "description": "Pengabdian Masyarakat bertugas menghadirkan program pengabdian yang berdampak bagi masyarakat. Departemen ini bekerja bersama seluruh divisi Kabinet Terus Terang BEM UI 2026 agar setiap program berjalan terarah, terbuka, dan berdampak bagi mahasiswa.",
   "cover": {
     "url": "/api/placeholder?label=FOTO%20PENGMAS&w=1400&h=1900&tone=maroon&sub=COVER",
     "alt": "Cover Pengabdian Masyarakat"
@@ -38,10 +38,9 @@
     },
     {
       "type": "text-block",
-      "subtitle": "Konsep",
+      "subtitle": "Program Kerja",
       "content": [
-        "Placeholder konsep Pengabdian Masyarakat: jelaskan gagasan besar di balik kerja divisi ini, bagaimana program dirancang, dan nilai yang ingin disampaikan kepada mahasiswa.",
-        "Paragraf kedua menjelaskan pendekatan pelaksanaan, kolaborasi dengan divisi lain, serta dampak yang diharapkan sepanjang masa kepengurusan 2026."
+        "Pengabdian Masyarakat merancang program kerja yang menjawab kebutuhan mahasiswa, dari perencanaan hingga evaluasi. Rincian program dan capaian akan diisi dari data asli."
       ]
     },
     {
@@ -53,63 +52,6 @@
       "media_right": {
         "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20PROKER%202&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
         "alt": "Program kerja 2"
-      }
-    },
-    {
-      "type": "media-single",
-      "position": "center",
-      "media": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20DOKUMENTASI%201&w=2000&h=1100&tone=maroon&sub=FOTO%20DOKUMENTASI",
-        "alt": "Dokumentasi 1"
-      }
-    },
-    {
-      "type": "media-duo",
-      "media_left": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20PROKER%203&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
-        "alt": "Program kerja 3"
-      },
-      "media_right": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20PROKER%204&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
-        "alt": "Program kerja 4"
-      }
-    },
-    {
-      "type": "media-trio",
-      "media_1": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20GALERI%201&w=900&h=1200&tone=maroon&sub=FOTO%20GALERI",
-        "alt": "Galeri 1"
-      },
-      "media_2": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20GALERI%202&w=900&h=1200&tone=maroon&sub=FOTO%20GALERI",
-        "alt": "Galeri 2"
-      },
-      "media_3": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20GALERI%203&w=900&h=1200&tone=maroon&sub=FOTO%20GALERI",
-        "alt": "Galeri 3"
-      }
-    },
-    {
-      "type": "media-single",
-      "position": "center",
-      "media": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20DOKUMENTASI%202&w=2000&h=1100&tone=maroon&sub=FOTO%20DOKUMENTASI",
-        "alt": "Dokumentasi 2"
-      }
-    },
-    {
-      "type": "text-block",
-      "subtitle": "Program Kerja",
-      "content": [
-        "Placeholder ringkasan program kerja Pengabdian Masyarakat beserta capaian utamanya. Daftar lengkap dan tanggal akan diisi dari data asli."
-      ]
-    },
-    {
-      "type": "media-single",
-      "position": "center",
-      "media": {
-        "url": "/api/placeholder?label=PENGMAS%20%E2%80%94%20DOKUMENTASI%203&w=2000&h=1100&tone=maroon&sub=FOTO%20DOKUMENTASI",
-        "alt": "Dokumentasi 3"
       }
     }
   ],
@@ -128,6 +70,112 @@
       "title": "Proker Unggulan PENGMAS",
       "date": "Maret 2026",
       "image": "/api/placeholder?label=PENGMAS%20%E2%80%94%20PROKER%20UNGGULAN&w=1400&h=1000&tone=maroon&sub=FOTO%20PROKER"
+    }
+  ],
+  "visi": "Menjadi departemen yang andal dalam menghadirkan program pengabdian yang berdampak bagi masyarakat, serta terbuka dan berpihak pada mahasiswa Universitas Indonesia.",
+  "misi": [
+    "Menjalankan program kerja Pengabdian Masyarakat secara terencana dan transparan.",
+    "Berkolaborasi dengan departemen lain dan seluruh elemen kemahasiswaan.",
+    "Mengevaluasi dan mendokumentasikan setiap kegiatan agar terus berkembang."
+  ],
+  "bph": [
+    {
+      "nama": "Nama Kepala Departemen",
+      "jabatan": "Kepala Departemen",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20KEPALA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Kepala Departemen Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Wakil Kepala Departemen",
+      "jabatan": "Wakil Kepala Departemen",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20WAKIL%20KEPALA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Wakil Kepala Departemen Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Sekretaris",
+      "jabatan": "Sekretaris",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20SEKRETARIS&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Sekretaris Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Bendahara",
+      "jabatan": "Bendahara",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20BENDAHARA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Bendahara Pengabdian Masyarakat"
+      }
+    }
+  ],
+  "staff": [
+    {
+      "nama": "Nama Staff 1",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%201&w=1200&h=1500&tone=pink&sub=FOTO%20STAFF",
+        "alt": "Staff 1 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 2",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%202&w=1200&h=1500&tone=blue&sub=FOTO%20STAFF",
+        "alt": "Staff 2 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 3",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%203&w=1200&h=1500&tone=navy&sub=FOTO%20STAFF",
+        "alt": "Staff 3 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 4",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%204&w=1200&h=1500&tone=maroon&sub=FOTO%20STAFF",
+        "alt": "Staff 4 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 5",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%205&w=1200&h=1500&tone=pink&sub=FOTO%20STAFF",
+        "alt": "Staff 5 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 6",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%206&w=1200&h=1500&tone=blue&sub=FOTO%20STAFF",
+        "alt": "Staff 6 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 7",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%207&w=1200&h=1500&tone=navy&sub=FOTO%20STAFF",
+        "alt": "Staff 7 Pengabdian Masyarakat"
+      }
+    },
+    {
+      "nama": "Nama Staff 8",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%208&w=1200&h=1500&tone=maroon&sub=FOTO%20STAFF",
+        "alt": "Staff 8 Pengabdian Masyarakat"
+      }
     }
   ]
 }
