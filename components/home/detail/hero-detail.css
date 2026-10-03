@@ -38,3 +38,6 @@
 /* Kartu tengah disembunyikan selama klon terbang. Kanvas distorsi menggambar gambar ini sendiri dan hanya
    membaca opacity elemen gambarnya, jadi visibility pada tombol induk tidak cukup. */
 .kd.kd-hero .kd-panel-hidden .media-item__inner { opacity: 0 !important; }
+.kd.kd-hero .kd-wordroll { display: inline-flex; flex-wrap: wrap; column-gap: 0.3em; text-align: left; }
+.kd.kd-hero .kd-wordroll > .kd-charroll { white-space: nowrap; }
+.kd.kd-hero .info__category { max-width: 100%; }
