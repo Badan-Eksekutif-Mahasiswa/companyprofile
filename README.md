@@ -146,3 +146,6 @@ Token ada di `app/globals.css` (palet navy, blue, maroon, red, pink; radius; sha
 
 - `dev` adalah branch integrasi; fitur dikerjakan di `feature/*` (mis. `feature/home`, `feature/kabinet`, `feature/news`).
 - Buka Pull Request ke `dev`.
+
+
+
