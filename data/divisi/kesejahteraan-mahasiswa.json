@@ -24,7 +24,7 @@
     "alt": "Cover Kesejahteraan Mahasiswa"
   },
   "logo": {
-    "url": "/api/placeholder?label=KESMA&w=600&h=600&tone=maroon&sub=LOGO",
+    "url": "/api/placeholder?label=KESMA&w=1200&h=1200&tone=maroon&sub=LOGO&kind=logo",
     "alt": "Logo Kesejahteraan Mahasiswa"
   },
   "sections": [
@@ -173,5 +173,9 @@
         "alt": "Staff 8 Kesejahteraan Mahasiswa"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20KESMA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Kesejahteraan Mahasiswa"
+  }
 }

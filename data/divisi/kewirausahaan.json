@@ -24,7 +24,7 @@
     "alt": "Cover Kewirausahaan"
   },
   "logo": {
-    "url": "/api/placeholder?label=WIRAUSAHA&w=600&h=600&tone=pink&sub=LOGO",
+    "url": "/api/placeholder?label=WIRAUSAHA&w=1200&h=1200&tone=pink&sub=LOGO&kind=logo",
     "alt": "Logo Kewirausahaan"
   },
   "sections": [
@@ -173,5 +173,9 @@
         "alt": "Staff 8 Kewirausahaan"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20WIRAUSAHA&w=1200&h=1500&tone=pink&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Kewirausahaan"
+  }
 }

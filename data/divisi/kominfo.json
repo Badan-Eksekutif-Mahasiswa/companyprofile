@@ -24,7 +24,7 @@
     "alt": "Cover Komunikasi & Informasi"
   },
   "logo": {
-    "url": "/api/placeholder?label=KOMINFO&w=600&h=600&tone=navy&sub=LOGO",
+    "url": "/api/placeholder?label=KOMINFO&w=1200&h=1200&tone=navy&sub=LOGO&kind=logo",
     "alt": "Logo Komunikasi & Informasi"
   },
   "sections": [
@@ -173,5 +173,9 @@
         "alt": "Staff 8 Komunikasi & Informasi"
       }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20KOMINFO&w=1200&h=1500&tone=navy&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Komunikasi & Informasi"
+  }
 }
