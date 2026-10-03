@@ -270,7 +270,7 @@ export function ProkerView({
         />
         <div className="hero__col hero__col--year">
           <div className="hero__year label_info hero--reveal-pending">
-            {STATUS_LABEL[item.status]} · {item.tanggal}
+            {[item.status && STATUS_LABEL[item.status], item.tanggal].filter(Boolean).join(" · ")}
           </div>
         </div>
       </section>
@@ -289,7 +289,7 @@ export function ProkerView({
         <div className="info__roles col-start-3 col-2">
           <h3 className="label_info info__label project--reveal-pending">Status</h3>
           <ul className="info__roles-list">
-            <li className="project--reveal-pending">{STATUS_LABEL[item.status]}</li>
+            {item.status && <li className="project--reveal-pending">{STATUS_LABEL[item.status]}</li>}
             {item.tanggal && <li className="project--reveal-pending">{item.tanggal}</li>}
           </ul>
         </div>
@@ -339,7 +339,7 @@ export function ProkerView({
               <li key={o.slug} className="proker-row border-b border-navy-10 py-4 first:border-t">
                 <span className="flex items-baseline justify-between gap-6 text-[1.25em]">
                   <span>{o.nama}</span>
-                  <span className="label_info shrink-0 opacity-60">{STATUS_LABEL[o.status]}</span>
+                  {o.status && <span className="label_info shrink-0 opacity-60">{STATUS_LABEL[o.status]}</span>}
                 </span>
               </li>
             ))}
@@ -474,7 +474,7 @@ export function DivisiView({
                     {o.nama}
                     {o.slug === item.slug && <span className="label_info ml-3 text-accent">· sedang dilihat</span>}
                   </span>
-                  <span className="label_info shrink-0 opacity-60">{STATUS_LABEL[o.status]}</span>
+                  {o.status && <span className="label_info shrink-0 opacity-60">{STATUS_LABEL[o.status]}</span>}
                 </button>
               </li>
             ))}

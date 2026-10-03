@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { cache } from "react";
+import { fetchSitCabinet, toDivisi, toHeroProker, toKabinet, type ApiCabinet } from "@/lib/kabinet-api";
+import type { HeroProker } from "@/types";
 
 export type Media = { url: string; alt: string; /** Opsional: judul & deskripsi (mis. program kerja) yang tampil sebagai caption. */ title?: string; desc?: string };
 
@@ -62,11 +65,21 @@ const DATA = path.join(process.cwd(), "data");
 
 const readJson = <T,>(file: string): T => JSON.parse(fs.readFileSync(path.join(DATA, file), "utf8")) as T;
 
-export function getKabinet(): Kabinet {
-  return readJson<Kabinet>("kabinet.json");
-}
+/**
+ * Sumber data: kabinet terbit di CMS SIT (SIT_API_URL). data/*.json hanya cadangan placeholder
+ * selama SIT belum dikonfigurasi, belum ada kabinet yang terbit, atau API sedang gagal, agar
+ * halaman tetap tampil. Struktur birdep SIT berbeda dari placeholder, jadi keduanya tidak dicampur.
+ */
+const getSitCabinet = cache(async (): Promise<ApiCabinet | null> => {
+  try {
+    return await fetchSitCabinet();
+  } catch (e) {
+    console.error("Data kabinet SIT gagal dimuat, memakai data/*.json:", e);
+    return null;
+  }
+});
 
-export function getAllDivisi(): Divisi[] {
+function localDivisi(): Divisi[] {
   return fs
     .readdirSync(path.join(DATA, "divisi"))
     .filter((f) => f.endsWith(".json"))
@@ -74,17 +87,38 @@ export function getAllDivisi(): Divisi[] {
     .sort((a, b) => a.order - b.order);
 }
 
-export function getDivisi(slug: string): Divisi | null {
-  const file = path.join(DATA, "divisi", `${slug}.json`);
-  if (!/^[a-z0-9-]+$/.test(slug) || !fs.existsSync(file)) return null;
-  return readJson<Divisi>(`divisi/${slug}.json`);
+export async function getKabinet(): Promise<Kabinet> {
+  const local = readJson<Kabinet>("kabinet.json");
+  const sit = await getSitCabinet();
+  return sit ? toKabinet(sit, local) : local;
+}
+
+export async function getAllDivisi(): Promise<Divisi[]> {
+  const sit = await getSitCabinet();
+  return sit ? sit.units.map((u, i) => toDivisi(u, i + 1, sit.name)) : localDivisi();
+}
+
+export async function getDivisi(slug: string): Promise<Divisi | null> {
+  if (!/^[a-z0-9-]+$/.test(slug)) return null;
+  return (await getAllDivisi()).find((d) => d.slug === slug) ?? null;
 }
 
 /** Divisi berikutnya (melingkar) untuk bagian "Divisi Selanjutnya". */
-export function getNextDivisi(slug: string): Divisi | null {
-  const all = getAllDivisi();
+export async function getNextDivisi(slug: string): Promise<Divisi | null> {
+  const all = await getAllDivisi();
   const i = all.findIndex((d) => d.slug === slug);
   return i === -1 || all.length < 2 ? null : all[(i + 1) % all.length];
+}
+
+/** true bila data kabinet berasal dari SIT, bukan dari data/*.json. */
+export async function isSitCabinetLive(): Promise<boolean> {
+  return (await getSitCabinet()) !== null;
+}
+
+/** Proker beranda dari SIT; null berarti pakai data/proker.json. */
+export async function getSitHeroProker(unitType: Parameters<typeof toHeroProker>[1]): Promise<HeroProker[] | null> {
+  const sit = await getSitCabinet();
+  return sit ? toHeroProker(sit, unitType) : null;
 }
 
 /** Buang penanda **frasa kunci** → teks biasa. */

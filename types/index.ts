@@ -17,7 +17,8 @@ export interface Proker {
   slug: string;
   divisi: string;
   nama: string;
-  status: ProkerStatus;
+  /** Kosong bila sumbernya SIT, yang belum menyimpan status proker. */
+  status?: ProkerStatus;
   /** Ringkasan satu kalimat (dipakai di list). */
   deskripsi: string;
   /** Penjelasan lengkap, satu string per paragraf. */

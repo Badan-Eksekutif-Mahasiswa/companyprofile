@@ -8,14 +8,16 @@ import { DivisiGrid } from "@/components/kabinet-list/DivisiGrid";
 import { MisiMisi } from "@/components/kabinet-list/MisiMisi";
 import { ProkerSpotlight } from "@/components/kabinet-list/ProkerSpotlight";
 
-export const metadata: Metadata = {
-  title: "Kabinet — BEM UI 2026 Terus Terang",
-  description: "Visi, misi, ketua, wakil ketua, dan seluruh departemen Kabinet Terus Terang BEM UI 2026.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { nama, periode } = await getKabinet();
+  return {
+    title: nama,
+    description: `Visi, misi, ketua, wakil ketua, dan seluruh birdep ${nama} ${periode}.`,
+  };
+}
 
-export default function KabinetPage() {
-  const kabinet = getKabinet();
-  const divisi = getAllDivisi();
+export default async function KabinetPage() {
+  const [kabinet, divisi] = await Promise.all([getKabinet(), getAllDivisi()]);
   return (
     <>
       <SiteNav />

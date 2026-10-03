@@ -17,8 +17,7 @@ export default async function HomePage() {
     getStats(),
     getLatestNews(3),
   ]);
-  const kabinet = getKabinet();
-  const divisi = getAllDivisi();
+  const [kabinet, divisi] = await Promise.all([getKabinet(), getAllDivisi()]);
 
   return (
     <>

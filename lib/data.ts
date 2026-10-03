@@ -1,21 +1,23 @@
 /**
  * Data access layer untuk beranda (proker, statistik, berita).
- * Data kabinet & divisi ada di lib/kabinet.ts (dikelola tim kabinet).
- *
- * v1: baca flat JSON di /data. v2: ganti isi fungsi di sini dengan fetch ke SIT API;
- * komponen UI tidak perlu diubah (PRD 6.6).
+ * Proker, jumlah proker, dan jumlah fungsionaris dibaca dari kabinet terbit di SIT
+ * (lib/kabinet.ts); berita memakai sumber yang sama dengan halaman /news. data/*.json
+ * hanya cadangan selama SIT belum dikonfigurasi atau belum ada yang terbit.
  */
 import "server-only";
 import prokerJson from "@/data/proker.json";
 import statsJson from "@/data/stats.json";
-import newsJson from "@/data/news.json";
-import { getAllDivisi } from "@/lib/kabinet";
+import { getAllDivisi, getKabinet, getSitHeroProker, isSitCabinetLive } from "@/lib/kabinet";
+import { getNewsArticles } from "@/lib/news-data";
+import type { NewsCategory } from "@/lib/news";
 import { unitType } from "@/lib/unit";
-import type { Artikel, HeroProker, Proker, Stats } from "@/types";
+import type { Artikel, HeroProker, KategoriArtikel, Proker, Stats } from "@/types";
 
 /** Semua proker yang punya sampul, lengkap dengan unit pemiliknya, untuk hero orbit. */
 export async function getHeroProker(): Promise<HeroProker[]> {
-  const unit = new Map(getAllDivisi().map((d) => [d.slug, d]));
+  const sit = await getSitHeroProker(unitType);
+  if (sit) return sit;
+  const unit = new Map((await getAllDivisi()).map((d) => [d.slug, d]));
   return (prokerJson as Proker[]).flatMap((p) => {
     const foto_url = p.foto_url || p.dokumentasi[0]?.url;
     const u = unit.get(p.divisi);
@@ -40,13 +42,29 @@ export function pickFeaturedProker(all: HeroProker[], limit: number): HeroProker
 }
 
 export async function getStats(): Promise<Stats> {
-  return statsJson as Stats;
+  const local = statsJson as Stats;
+  if (!(await isSitCabinetLive())) return local;
+  const { stats } = await getKabinet();
+  // Jumlah mahasiswa terwakili tidak ada di SIT, jadi tetap dari data/stats.json.
+  return { ...local, proker_aktif: stats.proker, fungsionaris: stats.anggota };
 }
 
-/** v1: JSON lokal. v2: query tabel artikel di Supabase (PRD 7). */
+const KATEGORI: Record<NewsCategory, KategoriArtikel> = {
+  "kajian-strategis": "Kajian Strategis",
+  "siaran-pers": "Siaran Pers",
+  "opini-artikel": "Opini & Artikel",
+  "kabar-ui": "Kabar UI",
+};
+
+/** Berita terbaru dari sumber yang sama dengan halaman /news (SIT, Supabase, atau contoh). */
 export async function getLatestNews(limit = 3): Promise<Artikel[]> {
-  return (newsJson as Artikel[])
-    .slice()
-    .sort((a, b) => b.tanggal.localeCompare(a.tanggal))
-    .slice(0, limit);
+  return (await getNewsArticles()).slice(0, limit).map((a) => ({
+    slug: a.slug,
+    judul: a.judul,
+    kategori: KATEGORI[a.kategori],
+    tanggal: a.tanggal,
+    excerpt: a.excerpt,
+    tags: a.tag,
+    thumbnail_url: a.heroImage ?? `/api/placeholder?label=${encodeURIComponent(a.judul.slice(0, 24).toUpperCase())}&w=1200&h=900&tone=navy&sub=BERITA`,
+  }));
 }

@@ -8,12 +8,12 @@ import { getAllDivisi, getDivisi } from "@/lib/kabinet";
  */
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return getAllDivisi().map((d) => ({ slug: d.slug }));
+export async function generateStaticParams() {
+  return (await getAllDivisi()).map((d) => ({ slug: d.slug }));
 }
 
-export function GET(_req: Request, { params }: { params: { slug: string } }) {
-  const d = getDivisi(params.slug);
+export async function GET(_req: Request, { params }: { params: { slug: string } }) {
+  const d = await getDivisi(params.slug);
   if (!d) return NextResponse.json({ error: "Divisi tidak ditemukan" }, { status: 404 });
   return NextResponse.json(d);
 }

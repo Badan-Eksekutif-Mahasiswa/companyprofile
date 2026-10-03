@@ -4,6 +4,8 @@ import { MeshGradient } from "@/components/webgl";
 import { Reveal } from "./Reveal";
 
 export function KabinetHero({ kabinet }: { kabinet: Kabinet }) {
+  // "Kabinet Terus Terang" → baris pertama "Kabinet", baris kedua sisa nama dalam kotak kaca.
+  const sisa = kabinet.nama.replace(/^kabinet\s+/i, "");
   return (
     <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
       <MeshGradient className="h-full" />
@@ -13,12 +15,14 @@ export function KabinetHero({ kabinet }: { kabinet: Kabinet }) {
         </Reveal>
 
         <h1 className="text-[clamp(56px,11vw,168px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
-          <Reveal as="span" className="block">
-            Kabinet
-          </Reveal>
+          {sisa !== kabinet.nama && (
+            <Reveal as="span" className="block">
+              Kabinet
+            </Reveal>
+          )}
           <Reveal as="span" className="block" delay={120}>
             <span className="inline-flex items-center rounded-xl border border-glass-border bg-glass px-[0.22em] pb-[0.04em] text-maroon shadow-glass backdrop-blur-glass">
-              Terus Terang
+              {sisa}
             </span>
           </Reveal>
         </h1>
