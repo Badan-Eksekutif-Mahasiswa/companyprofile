@@ -38,9 +38,9 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       <ReadingProgress />
       {banner}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <header className="relative overflow-hidden pb-12 pt-28 lg:pt-32 print:pt-0">
+      <header className="relative overflow-hidden pb-16 pt-32 md:pt-40 print:pt-0">
       <MeshGradient className="h-full print:hidden" />
-      <div className="relative mx-auto max-w-wrap px-4 sm:px-6">
+      <div className="relative mx-auto max-w-wrap px-6">
       <div className="mb-4 print:hidden"><BackToList /></div>
       <Breadcrumb items={[{ label: "News", href: "/news" }, ...(a.kategori ? [{ label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }] : []), { label: a.judul }]} />
 
@@ -72,6 +72,8 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       </header>
 
       <div className="mx-auto w-full max-w-wrap px-4 pb-24 pt-10 sm:px-6">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px] print:block">
+      <div className="min-w-0">
       <div className="max-w-[860px]">
     {a.koreksi && (
       <aside role="note" className="mt-6 rounded-2xl border-l-4 border-accent bg-pink-pale p-4 text-[14.5px] leading-relaxed text-navy">
@@ -93,8 +95,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
         {a.caption && <figcaption className="mt-3 text-[13px] text-muted">{a.caption}</figcaption>}
       </figure>
 
-      <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px] print:block">
-        <article id="isi-artikel">
+        <article id="isi-artikel" className="mt-12">
           {showToc && <div className="mb-8 lg:hidden"><ArticleToc headings={headings} /></div>}
           <ArticleBody blocks={a.body} />
           <div className="print:hidden"><Attachments items={a.lampiran} /></div>
@@ -120,6 +121,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
             <ShareButtons title={a.judul} label="Bagikan artikel ini" />
           </div>
         </article>
+        </div>
         {showToc ? (
           <aside className="hidden lg:block print:hidden">
             <div className="sticky top-28">

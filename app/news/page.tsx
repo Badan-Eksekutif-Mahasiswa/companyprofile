@@ -28,7 +28,7 @@ export default async function NewsPage() {
   return (
     <main id="main">
       <CursorRing />
-      <header className="relative overflow-hidden pb-14 pt-32 md:pt-40">
+      <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
         <MeshGradient className="h-full" />
         <div className="relative mx-auto max-w-wrap px-6">
           <h1 tabIndex={-1} className="text-[clamp(48px,9vw,136px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
