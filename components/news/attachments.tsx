@@ -11,12 +11,12 @@ import type { NewsAttachment } from "@/lib/news";
  * browser HP) mendapat tautan "Buka di tab baru".
  */
 export function Attachments({ items }: { items: NewsAttachment[] }) {
-  const [open, setOpen] = React.useState<string | null>(null);
+  const [open, setOpen] = React.useState<string | null>(items.find((i) => i.tipe === "pdf")?.url ?? null);
   if (items.length === 0) return null;
   const btn = buttonVariants({ variant: "outline", size: "sm" });
 
   return (
-    <section aria-labelledby="lampiran" className="mt-12 max-w-[720px]">
+    <section aria-labelledby="lampiran" className="mt-12">
       <h2 id="lampiran" className="text-xl font-extrabold text-navy">
         Lampiran
       </h2>
@@ -55,7 +55,7 @@ export function Attachments({ items }: { items: NewsAttachment[] }) {
               </div>
               {pdf && shown && (
                 <div id={`pdf-${encodeURIComponent(a.url)}`} className="mt-4">
-                  <object data={`${a.url}#view=FitH`} type="application/pdf" className="h-[70vh] w-full rounded-xl border border-border">
+                  <object data={`${a.url}#view=FitH`} type="application/pdf" className="h-[85vh] min-h-[560px] w-full rounded-xl border border-border">
                     <p className="p-4 text-sm text-secondary">
                       Browser ini tidak bisa menampilkan PDF di halaman.{" "}
                       <a href={a.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-bold text-accent underline underline-offset-2">

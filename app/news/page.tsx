@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Badge } from "@/components/ui";
 import { MeshGradient } from "@/components/webgl";
 import { GlassHighlight } from "@/components/news/glass-highlight";
 import { CursorRing } from "@/components/news/cursor-ring";
@@ -32,7 +31,6 @@ export default async function NewsPage() {
       <header className="relative overflow-hidden pb-14 pt-32 md:pt-40">
         <MeshGradient className="h-full" />
         <div className="relative mx-auto max-w-wrap px-6">
-          <Badge className="mb-6 px-3.5 py-1.5 text-[13px]">Publikasi resmi BEM UI 2026</Badge>
           <h1 tabIndex={-1} className="text-[clamp(48px,9vw,136px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
             <span className="block overflow-hidden pb-3">
               <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita</span>

@@ -49,8 +49,8 @@ export function CursorRing() {
     >
       <div
         className={
-          "grid place-items-center rounded-full border border-navy text-[11px] font-extrabold uppercase tracking-wider text-white transition-[width,height,background-color] duration-base ease-out-expo " +
-          (label ? "size-20 bg-accent border-transparent" : "size-8 bg-transparent")
+          "grid place-items-center rounded-full border border-navy text-[9px] font-bold uppercase tracking-wider text-white transition-[width,height,background-color] duration-base ease-out-expo " +
+          (label ? "size-14 bg-accent border-transparent" : "size-6 bg-transparent")
         }
       >
         {label}

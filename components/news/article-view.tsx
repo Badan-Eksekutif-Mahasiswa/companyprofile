@@ -79,12 +79,12 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
         )}
       </header>
 
-      <figure className="mt-10">
-        <Cover kategori={a.kategori} src={a.heroImage} className="aspect-[16/9] w-full rounded-2xl" sizes="(min-width: 1180px) 1180px, 100vw" />
+      <figure className="mt-8 max-w-[720px]">
+        <Cover kategori={a.kategori} src={a.heroImage} className="aspect-[21/9] w-full rounded-xl" sizes="(min-width: 768px) 720px, 100vw" />
         {a.caption && <figcaption className="mt-3 text-[13px] text-muted">{a.caption}</figcaption>}
       </figure>
 
-      <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_300px] print:block">
+      <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px] print:block">
         <article id="isi-artikel">
           {showToc && <div className="mb-8 lg:hidden"><ArticleToc headings={headings} /></div>}
           <ArticleBody blocks={a.body} />
