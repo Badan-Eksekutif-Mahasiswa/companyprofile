@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export type Media = { url: string; alt: string };
+export type Media = { url: string; alt: string; /** Opsional: judul & deskripsi (mis. program kerja) yang tampil sebagai caption. */ title?: string; desc?: string };
 
 export type Section =
   | { type: "media-single"; position?: "left" | "center" | "right"; media: Media }
