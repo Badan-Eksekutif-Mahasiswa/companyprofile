@@ -16,7 +16,7 @@ import {
 } from "@/lib/news";
 import { ArticleCard } from "./article-card";
 import { FeaturedArticle } from "./featured-article";
-import { Reveal } from "./reveal";
+import { Reveal } from "@/components/motion";
 import { TagCloud } from "./tag-cloud";
 
 const PAGE_SIZE = 6;
@@ -174,7 +174,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
               {shown.map((a, i) => {
                 const large = i % 6 < 2; // pola: 2 besar + 4 kecil per baris
                 return (
-                  <Reveal key={a.slug} delay={(i % 3) * 60} className={large ? "lg:col-span-6" : "lg:col-span-3"}>
+                  <Reveal key={a.slug} index={i % 3} className={large ? "lg:col-span-6" : "lg:col-span-3"}>
                     <ArticleCard article={a} size={large ? "large" : "small"} className="h-full" />
                   </Reveal>
                 );
