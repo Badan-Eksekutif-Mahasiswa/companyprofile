@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -23,12 +25,23 @@ export interface NavbarProps extends Omit<React.HTMLAttributes<HTMLElement>, "ch
  * halaman) — backdrop-blur tidak kelihatan di atas putih polos.
  */
 export function Navbar({ logo = <NavbarLogo />, links = [], actions, className, ...props }: NavbarProps) {
+  // Di paling atas halaman navbar melebar hampir selebar layar; mulai scroll → memendek jadi pill 880px.
+  const [atTop, setAtTop] = React.useState(true);
+  React.useEffect(() => {
+    const onScroll = () => setAtTop(window.scrollY < 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <header className="sticky top-4 z-50 flex justify-center px-5">
       <nav
         aria-label="Utama"
+        style={{ maxWidth: atTop ? "min(1480px, 100%)" : "880px" }}
         className={cn(
-          "flex w-full max-w-[880px] items-center justify-between gap-7 rounded-full border border-glass-border bg-glass-strong py-2 pl-[22px] pr-2 shadow-glass-soft backdrop-blur-glass",
+          "flex w-full items-center justify-between gap-7 rounded-full border border-glass-border bg-glass-strong py-2 pl-[22px] pr-2 shadow-glass-soft backdrop-blur-glass transition-[max-width,padding,box-shadow] duration-[700ms] ease-out-expo motion-reduce:transition-none",
+          atTop ? "pl-8 pr-3" : "",
           className
         )}
         {...props}
