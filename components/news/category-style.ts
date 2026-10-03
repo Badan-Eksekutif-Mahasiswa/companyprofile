@@ -15,3 +15,5 @@ export const CATEGORY_STYLE: Record<NewsCategory, CategoryStyle> = {
   "opini-artikel": { badge: "pink", gradient: "from-pink-pale to-pink-light", Icon: PenLine },
   "kabar-ui": { badge: "navy", gradient: "from-blue-pale to-pink-pale", Icon: Newspaper },
 };
+
+export const styleOf = (k?: NewsCategory | null): CategoryStyle => CATEGORY_STYLE[k ?? "kabar-ui"];

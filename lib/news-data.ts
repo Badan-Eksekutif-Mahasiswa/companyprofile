@@ -4,7 +4,8 @@
  */
 import { getSupabase, getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/media";
-import { isNewsCategory, tagKey, type NewsArticle, type NewsBlock, type NewsCategory } from "@/lib/news";
+import { isNewsCategory, tagKey, type NewsArticle, type NewsBlock } from "@/lib/news";
+import { estimateReadMinutes, normalizeLampiran, normalizeSumber, parseBody, slugify } from "@/lib/news-parse";
 
 const dummyBody = (excerpt: string): NewsBlock[] => [
   { type: "p", text: excerpt },
@@ -19,7 +20,7 @@ const dummyBody = (excerpt: string): NewsBlock[] => [
   { type: "p", text: "Paragraf penutup placeholder." },
 ];
 
-type DummyInput = Omit<NewsArticle, "body" | "caption">;
+type DummyInput = Omit<NewsArticle, "body" | "caption" | "sumber" | "lampiran">;
 const DUMMY_INPUT: DummyInput[] = [
   {
     slug: "analisis-kritis-kebijakan-ukt-baru",
@@ -164,42 +165,55 @@ const DUMMY_INPUT: DummyInput[] = [
   },
 ];
 
-const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a) => ({
+const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a, i) => ({
   ...a,
   caption: "Keterangan foto placeholder. Sumber: dokumentasi BEM UI 2026.",
   body: dummyBody(a.excerpt),
+  sumber: [{ nama: "Dokumentasi BEM UI 2026" }, { nama: "Tautan rujukan placeholder", url: "https://example.com" }],
+  lampiran:
+    i % 3 === 0
+      ? [{ nama: "Lampiran contoh.pdf", url: "/dummy/lampiran-contoh.pdf", tipe: "pdf", ukuran: "2 KB" }]
+      : [],
 }));
 
-/** Baris tabel `articles` (lihat docs/news-schema.sql). Ubah di sini kalau nama kolom berbeda. */
+/**
+ * Baris tabel `articles` (lihat docs/news-schema.sql). Nama kolom mengikuti data yang diterima:
+ * judul, ringkasan, isi, gambar_utama, penulis, tag, tanggal, sumber, lampiran
+ * (+ opsional: slug, kategori, gambar_caption, seo). Ubah di sini kalau nama kolom berbeda.
+ */
 interface ArticleRow {
-  slug: string;
+  slug: string | null;
   judul: string;
-  kategori: string;
+  ringkasan: string;
+  isi: unknown;
+  gambar_utama: string | null;
+  gambar_caption: string | null;
+  penulis: string;
   tag: string[] | null;
   tanggal: string;
-  penulis: string;
-  estimasi_baca: number | null;
-  excerpt: string;
-  hero_image: string | null;
-  caption: string | null;
-  body: NewsBlock[] | null;
+  sumber: unknown;
+  lampiran: unknown;
+  kategori: string | null;
   seo: { title?: string; description?: string; ogImage?: string } | null;
 }
 
 function fromRow(r: ArticleRow): NewsArticle {
+  const body = parseBody(r.isi);
   return {
-    slug: r.slug,
+    slug: r.slug || slugify(r.judul),
     judul: r.judul,
-    kategori: isNewsCategory(r.kategori) ? r.kategori : "kabar-ui",
+    kategori: isNewsCategory(r.kategori) ? r.kategori : undefined,
     tag: r.tag ?? [],
     tanggal: String(r.tanggal).slice(0, 10),
     penulis: r.penulis,
-    estimasiBaca: r.estimasi_baca ?? 3,
-    excerpt: r.excerpt,
-    heroImage: mediaUrl(r.hero_image),
-    caption: r.caption ?? undefined,
-    body: r.body ?? [],
+    estimasiBaca: estimateReadMinutes(body),
+    excerpt: r.ringkasan,
+    heroImage: mediaUrl(r.gambar_utama),
+    caption: r.gambar_caption ?? undefined,
+    body,
     seo: r.seo ? { ...r.seo, ogImage: mediaUrl(r.seo.ogImage) } : undefined,
+    sumber: normalizeSumber(r.sumber),
+    lampiran: normalizeLampiran(r.lampiran, mediaUrl),
   };
 }
 

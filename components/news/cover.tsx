@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { NewsCategory } from "@/lib/news";
-import { CATEGORY_STYLE } from "./category-style";
+import { styleOf } from "./category-style";
 
 export interface CoverProps {
-  kategori: NewsCategory;
+  kategori?: NewsCategory;
   /** Gambar hero artikel. Kosong = placeholder gradient + ikon kategori. */
   src?: string;
   className?: string;
@@ -13,7 +13,7 @@ export interface CoverProps {
 
 /** Cover dekoratif (alt kosong): judul artikel sudah menjelaskan konteksnya. */
 export function Cover({ kategori, src, className, sizes = "(min-width: 1024px) 33vw, 100vw" }: CoverProps) {
-  const { gradient, Icon } = CATEGORY_STYLE[kategori];
+  const { gradient, Icon } = styleOf(kategori);
   return (
     <div className={cn("relative overflow-hidden bg-gradient-to-br", gradient, className)}>
       {src ? (

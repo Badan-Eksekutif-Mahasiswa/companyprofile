@@ -2,9 +2,10 @@ import Link from "next/link";
 import { Breadcrumb, Badge } from "@/components/ui";
 import { ArticleBody } from "./article-body";
 import { ArticleCard } from "./article-card";
-import { CATEGORY_STYLE } from "./category-style";
+import { styleOf } from "./category-style";
 import { Cover } from "./cover";
 import { ShareButtons } from "./share-buttons";
+import { Attachments } from "./attachments";
 import { Reveal } from "@/components/motion";
 import { categoryLabel, formatTanggal, tagKey, type NewsArticle } from "@/lib/news";
 
@@ -28,10 +29,10 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
     <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-28 sm:px-6 lg:pt-32">
       {banner}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <Breadcrumb items={[{ label: "News", href: "/news" }, { label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }, { label: a.judul }]} />
+      <Breadcrumb items={[{ label: "News", href: "/news" }, ...(a.kategori ? [{ label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }] : []), { label: a.judul }]} />
 
       <header className="mt-8 max-w-[860px]">
-        <Badge variant={CATEGORY_STYLE[a.kategori].badge}>{categoryLabel(a.kategori)}</Badge>
+        {a.kategori && <Badge variant={styleOf(a.kategori).badge}>{categoryLabel(a.kategori)}</Badge>}
         <h1 tabIndex={-1} className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl lg:text-5xl">
           {a.judul}
         </h1>
@@ -60,6 +61,25 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_300px]">
         <article>
           <ArticleBody blocks={a.body} />
+          <Attachments items={a.lampiran} />
+          {a.sumber.length > 0 && (
+            <section aria-labelledby="sumber" className="mt-12 max-w-[720px]">
+              <h2 id="sumber" className="text-xl font-extrabold text-navy">Sumber</h2>
+              <ul className="mt-3 list-disc space-y-1.5 pl-6 text-[15px] text-secondary marker:text-accent">
+                {a.sumber.map((s, i) => (
+                  <li key={i}>
+                    {s.url ? (
+                      <a href={s.url} target="_blank" rel="noopener noreferrer nofollow" className="font-semibold text-navy underline underline-offset-2 hover:text-accent">
+                        {s.nama}<span className="sr-only"> (buka di tab baru)</span>
+                      </a>
+                    ) : (
+                      s.nama
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <div className="mt-12 max-w-[720px] border-t border-divider pt-6">
             <ShareButtons title={a.judul} label="Bagikan artikel ini" />
           </div>

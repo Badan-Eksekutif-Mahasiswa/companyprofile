@@ -10,8 +10,8 @@ export const NEWS_CATEGORIES: { value: NewsCategory; label: string }[] = [
 export interface NewsArticle {
   slug: string;
   judul: string;
-  kategori: NewsCategory;
-  
+  /** Opsional: tidak semua sumber data punya kategori. */
+  kategori?: NewsCategory;
   tag: string[];
   tanggal: string;
   penulis: string;
@@ -24,6 +24,24 @@ export interface NewsArticle {
   body: NewsBlock[];
   /** Kosong = pakai judul/excerpt artikel. */
   seo?: { title?: string; description?: string; ogImage?: string };
+  /** Sumber/rujukan artikel (boleh kosong). */
+  sumber: NewsSource[];
+  /** Lampiran (PDF dll). PDF bisa dipratinjau di halaman artikel. */
+  lampiran: NewsAttachment[];
+}
+
+export interface NewsSource {
+  nama: string;
+  url?: string;
+}
+
+export interface NewsAttachment {
+  nama: string;
+  url: string;
+  /** "pdf" -> ada tombol pratinjau. */
+  tipe?: string;
+  /** Teks bebas, mis. "1,2 MB". */
+  ukuran?: string;
 }
 
 export type NewsBlock =

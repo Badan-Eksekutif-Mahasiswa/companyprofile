@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui";
 import { categoryLabel, formatTanggal, type NewsArticle } from "@/lib/news";
-import { CATEGORY_STYLE } from "./category-style";
+import { styleOf } from "./category-style";
 import { Cover } from "./cover";
 
 export function FeaturedArticle({ article }: { article: NewsArticle }) {
@@ -16,7 +16,7 @@ export function FeaturedArticle({ article }: { article: NewsArticle }) {
       />
       <div className="flex flex-col justify-center gap-3">
         <div className="flex items-center gap-2 text-[12.5px] text-muted">
-          <Badge variant={CATEGORY_STYLE[article.kategori].badge}>{categoryLabel(article.kategori)}</Badge>
+          {article.kategori && <Badge variant={styleOf(article.kategori).badge}>{categoryLabel(article.kategori)}</Badge>}
           <time dateTime={article.tanggal}>{formatTanggal(article.tanggal)}</time>
         </div>
         <h2 className="text-2xl font-extrabold leading-tight text-navy transition-colors duration-fast group-hover:text-accent lg:text-[28px]">

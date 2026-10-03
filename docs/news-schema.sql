@@ -1,21 +1,24 @@
 -- Skema tabel artikel News BEM UI 2026 (Supabase / Postgres).
--- Jalankan di Supabase: SQL Editor. Sesuaikan bila tabel sudah ada, lalu ubah mapper di lib/news.ts (fromRow).
+-- Kolom mengikuti data yang diterima: judul, ringkasan, isi, gambar_utama, penulis, tag, tanggal, sumber, lampiran.
+-- Jalankan di Supabase SQL Editor. Bila tabel sudah ada dengan nama lain, ubah pemetaan di lib/news-data.ts (fromRow).
 
 create table if not exists public.articles (
-  slug          text primary key,
-  judul         text not null,
-  kategori      text not null check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),
-  tag           text[] not null default '{}',
-  tanggal       date not null,
-  penulis       text not null,
-  estimasi_baca int  not null default 3,
-  excerpt       text not null,
-  hero_image    text,                 -- path di R2 (mis. news/slug/hero.webp) atau URL penuh
-  caption       text,
-  body          jsonb not null default '[]',  -- array blok: {type:"p"|"h2"|"h3"|"quote"|"ul"|"ol", ...}
-  seo           jsonb,                -- {title, description, ogImage}
-  published     boolean not null default false,
-  created_at    timestamptz not null default now()
+  id             bigint generated always as identity primary key,
+  slug           text unique,            -- opsional; kosong -> dibuat dari judul oleh aplikasi
+  judul          text not null,
+  ringkasan      text not null,          -- teks pratinjau di kartu & meta description
+  isi            text not null,          -- teks biasa (## subjudul, > kutipan, - daftar) ATAU array blok JSON; HTML tidak dirender
+  gambar_utama   text,                   -- path di R2 (mis. news/slug/hero.webp) atau URL penuh
+  gambar_caption text,
+  penulis        text not null,
+  tag            text[] not null default '{}',
+  tanggal        date not null,
+  sumber         jsonb not null default '[]',   -- ["Teks"] atau [{"nama":"Kompas","url":"https://..."}]
+  lampiran       jsonb not null default '[]',   -- [{"nama":"Kajian UKT.pdf","url":"news/ukt/kajian.pdf","tipe":"pdf","ukuran":"1,2 MB"}]
+  kategori       text check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),  -- opsional
+  seo            jsonb,                  -- opsional {title, description, ogImage}
+  published      boolean not null default false,
+  created_at     timestamptz not null default now()
 );
 
 create index if not exists articles_published_tanggal_idx on public.articles (published, tanggal desc);

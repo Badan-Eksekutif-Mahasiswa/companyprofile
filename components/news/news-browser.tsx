@@ -81,6 +81,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const tags = React.useMemo(() => collectTags(articles), [articles]);
   const tagLabel = tags.find((t) => t.key === tag)?.label;
 
+  const hasKategori = articles.some((x) => x.kategori);
   const searching = query.trim().length > 0;
   const filtered = Boolean(kategori || tag || searching);
   const featured = searching ? undefined : results[0];
@@ -113,27 +114,29 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           />
         </div>
 
-        <div role="group" aria-label="Filter kategori" className="-mx-4 flex gap-2 overflow-x-auto px-4 py-2 sm:mx-0 sm:flex-wrap sm:px-0">
-          {[{ value: null, label: "Semua" }, ...NEWS_CATEGORIES].map((c) => {
-            const on = (c.value ?? null) === kategori;
-            return (
-              <button
-                key={c.label}
-                type="button"
-                aria-pressed={on}
-                onClick={() => setParam({ kategori: c.value })}
-                className={cn(
-                  "shrink-0 rounded-full border-[1.5px] px-4 py-2 text-sm font-bold outline-none transition-colors duration-fast focus-visible:ring-4 focus-visible:ring-pink-pale",
-                  on
-                    ? "border-navy bg-navy text-white shadow-md"
-                    : "border-border bg-white text-navy hover:border-accent hover:text-accent"
-                )}
-              >
-                {c.label}
-              </button>
-            );
-          })}
-        </div>
+        {hasKategori && (
+          <div role="group" aria-label="Filter kategori" className="-mx-4 flex gap-2 overflow-x-auto px-4 py-2 sm:mx-0 sm:flex-wrap sm:px-0">
+            {[{ value: null, label: "Semua" }, ...NEWS_CATEGORIES].map((c) => {
+              const on = (c.value ?? null) === kategori;
+              return (
+                <button
+                  key={c.label}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => setParam({ kategori: c.value })}
+                  className={cn(
+                    "shrink-0 rounded-full border-[1.5px] px-4 py-2 text-sm font-bold outline-none transition-colors duration-fast focus-visible:ring-4 focus-visible:ring-pink-pale",
+                    on
+                      ? "border-navy bg-navy text-white shadow-md"
+                      : "border-border bg-white text-navy hover:border-accent hover:text-accent"
+                  )}
+                >
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {tag && (
           <p className="text-sm text-secondary">
