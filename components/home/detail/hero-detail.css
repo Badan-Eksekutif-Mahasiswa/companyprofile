@@ -1,0 +1,27 @@
+/* ============================================================
+   Override KHUSUS tampilan detail di hero beranda (.kd.kd-hero).
+   Halaman detail kabinet (components/kabinet/project.css) tidak terpengaruh.
+   Kartu tengah dibatasi tinggi layar dan diberi ruang di bawah navbar glass.
+   Jika angka di sini diubah, samakan juga dengan heroPanelRect() di HeroDetail.tsx.
+   ============================================================ */
+.kd.kd-hero .hero__row {
+  padding-top: 112px;
+  padding-bottom: 32px;
+}
+.kd.kd-hero .hero__panel {
+  width: min(30vw, calc((100vh - 168px) * 1.4 / 1.9));
+}
+
+@media (max-width: 1024px) {
+  .kd.kd-hero .hero__row {
+    padding-top: max(15vh, 120px);
+  }
+  .kd.kd-hero .hero__panel {
+    width: 100%;
+  }
+}
+@media (max-width: 500px) {
+  .kd.kd-hero .hero__row {
+    padding-top: max(13vh, 112px);
+  }
+}

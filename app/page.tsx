@@ -4,15 +4,15 @@ import { NewsPreview } from "@/components/home/NewsPreview";
 import { StatsSection } from "@/components/home/StatsSection";
 import { TaglineSection } from "@/components/home/TaglineSection";
 import { VideoSection } from "@/components/home/VideoSection";
-import { CustomCursor } from "@/components/layout/CustomCursor";
+import { Cursor } from "@/components/kabinet/Cursor";
 import { SiteFooter, SiteNav } from "@/components/ui";
-import { getDivisiSummaries, getHeroProker, getLatestNews, getStats } from "@/lib/data";
+import { HERO } from "@/config/site";
+import { getHeroProker, getLatestNews, getStats, pickFeaturedProker } from "@/lib/data";
 import { getAllDivisi, getKabinet } from "@/lib/kabinet";
 
 export default async function HomePage() {
-  const [proker, summaries, stats, news] = await Promise.all([
+  const [proker, stats, news] = await Promise.all([
     getHeroProker(),
-    getDivisiSummaries(),
     getStats(),
     getLatestNews(3),
   ]);
@@ -23,13 +23,13 @@ export default async function HomePage() {
     <>
       <a
         href="#konten"
-        className="sr-only z-[80] rounded-full bg-accent px-4 py-2 font-bold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-[80] rounded-full bg-accent px-4 py-2 font-bold text-white focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4"
       >
         Lewati ke konten
       </a>
       <SiteNav />
       <main>
-        <HeroOrbit items={proker} divisi={summaries} />
+        <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} />
         <div id="konten">
           <StatsSection stats={stats} />
           <TaglineSection kabinet={kabinet} />
@@ -39,7 +39,7 @@ export default async function HomePage() {
         </div>
       </main>
       <SiteFooter />
-      <CustomCursor />
+      <Cursor />
     </>
   );
 }

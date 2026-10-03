@@ -16,18 +16,18 @@ export const SITE = {
 } as const;
 
 export const HERO = {
-  /** Berapa kali orbit berputar penuh (lewat scroll) sebelum halaman lanjut ke section berikutnya. */
-  maxRotations: 2,
+  /** Putaran tambahan dari scroll selama hero ditahan, sebelum halaman lanjut ke bawah. */
+  maxRotations: 1,
   /** Jarak scroll (dalam tinggi viewport) untuk satu putaran penuh. */
-  viewportsPerRotation: 1.25,
-  /** Jumlah cincin & kartu per cincin pada mode "Rings". */
-  rings: 3,
-  cardsPerRing: 12,
+  viewportsPerRotation: 2.5,
+  /** Jumlah baris & kartu per baris (4 × 5 = 20 kartu = jumlah proker unggulan). Baris berulang vertikal tanpa ujung; scroll menggerakkan kartu turun. */
+  rings: 4,
+  cardsPerRing: 5,
   /** Putaran otomatis (derajat/detik). 0 = diam. */
-  autoSpeed: 6,
-  /** Latar scene WebGL = --navy di globals.css. */
-  bgColor: "#0b102d",
+  autoSpeed: 3,
+  /** Jumlah proker yang tampil di orbit. Sisanya tetap bisa dibuka dari detail divisi. */
+  featured: 20,
 } as const;
 
-/** ID video company profile YouTube. Diatur lewat env agar tidak hardcoded. */
-export const YOUTUBE_VIDEO_ID = process.env.NEXT_PUBLIC_YOUTUBE_VIDEO_ID ?? "";
+/** ID video company profile YouTube (https://www.youtube.com/watch?v=R5XbD1vjXlg). Bisa diganti lewat env. */
+export const YOUTUBE_VIDEO_ID = process.env.NEXT_PUBLIC_YOUTUBE_VIDEO_ID || "R5XbD1vjXlg";

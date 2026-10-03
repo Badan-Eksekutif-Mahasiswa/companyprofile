@@ -1,39 +1,47 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown } from "lucide-react";
+import "@/components/kabinet/project.css";
 import { HERO, SITE } from "@/config/site";
 import { clamp } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import type { DivisiSummary, HeroProker } from "@/types";
-import type { OrbitController, OrbitMode, Rect } from "./orbit/scene";
-import { ProkerViewer } from "./ProkerViewer";
+import type { HeroProker } from "@/types";
+import type { OrbitController, Rect } from "./orbit/scene";
+
+// Dimuat terpisah (GSAP + Lenis tidak ikut bundle awal); diunduh saat browser senggang.
+const loadDetail = () => import("./detail/HeroDetail");
+const loadFilosofi = () => import("./FilosofiLogo");
+const HeroDetail = dynamic(() => loadDetail().then((m) => m.HeroDetail), { ssr: false });
+const FilosofiLogo = dynamic(() => loadFilosofi().then((m) => m.FilosofiLogo), { ssr: false });
 
 const TOTAL_SLOTS = HERO.rings * HERO.cardsPerRing;
 
 /**
  * Hero beranda ala k95.it: logo BEM UI 3D di tengah dibungkus kartu proker yang berputar
- * otomatis (mode Rings/Spiral, WebGL). Scroll menambah putaran sampai batas
- * HERO.maxRotations, setelah itu halaman lanjut ke section berikutnya.
+ * otomatis di atas latar putih + grid, sama dengan halaman detail kabinet.
+ * Scroll menambah putaran sampai HERO.maxRotations, lalu halaman lanjut ke bawah.
+ * Klik kartu → detail proker (bisa ditukar ke detail biro/departemen); klik logo → filosofi logo.
  */
-export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Record<string, DivisiSummary> }) {
+export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: HeroProker[] }) {
   const wrapRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
   const ctrlRef = useRef<OrbitController | null>(null);
-  const modeRef = useRef<OrbitMode>("rings");
   const pointer = useRef({ down: false, x: 0, y: 0, moved: 0 });
   const lastFocus = useRef<HTMLElement | null>(null);
 
   const [status, setStatus] = useState<"loading" | "ready" | "failed">("loading");
-  const [mode, setMode] = useState<OrbitMode>("rings");
-  const [front, setFront] = useState(0);
-  const [turn, setTurn] = useState(1);
-  const [done, setDone] = useState(false);
-  const [viewer, setViewer] = useState<{ index: number; origin: Rect | null } | null>(null);
-  const [stageHidden, setStageHidden] = useState(false);
+  const [, setFront] = useState(0);
+  const [hover, setHover] = useState<number | "logo" | null>(null);
+  const [detail, setDetail] = useState<{ index: number; origin: Rect | null } | null>(null);
+  const [filosofi, setFilosofi] = useState(false);
+  // Klik "Beranda"/logo navbar saat panel terbuka → panel ditutup (pakai animasi tutupnya), lalu ke atas.
+  const [closeSignal, setCloseSignal] = useState(0);
+  const openRef = useRef(false);
+  const goTop = useRef(false);
+  openRef.current = detail !== null || filosofi;
 
   // Instance kartu → index proker. Langkah coprime agar kartu bertetangga tidak sama.
   const slots = useMemo(() => {
@@ -58,28 +66,22 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
           perRing: HERO.cardsPerRing,
           logoSrc: "/images/logo-bem-ui.png",
           logoBumpSrc: "/images/logo-bem-ui-height.png",
-          bgColor: HERO.bgColor,
           autoSpeed: HERO.autoSpeed,
           reduceMotion,
           onFront: setFront,
-          onHover: (item) => {
-            const stage = stageRef.current;
-            if (!stage) return;
-            if (item === null) {
-              delete stage.dataset.cursor;
-              stage.style.cursor = "";
-            } else {
-              stage.dataset.cursor = "Lihat";
-              stage.style.cursor = "pointer";
-            }
-          },
+          onHover: setHover,
         }),
       )
       .then((ctrl) => {
         if (disposed) return ctrl.dispose();
         ctrlRef.current = ctrl;
-        ctrl.setMode(modeRef.current);
+        ctrl.setScroll(0, window.scrollY);
         setStatus("ready");
+        const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1500));
+        idle(() => {
+          void loadDetail();
+          void loadFilosofi();
+        });
       })
       .catch(() => !disposed && setStatus("failed"));
 
@@ -90,26 +92,14 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
     };
   }, [items, slots]);
 
+  // Progress scroll di dalam hero yang "ditahan" (sticky) → putaran tambahan + parallax grid.
   useEffect(() => {
-    modeRef.current = mode;
-    ctrlRef.current?.setMode(mode);
-  }, [mode]);
-
-  // Progress scroll di dalam hero yang "ditahan" (sticky) → putaran tambahan.
-  useEffect(() => {
-    let lastTurn = -1;
-    let lastDone: boolean | null = null;
     const onScroll = () => {
       const wrap = wrapRef.current;
       if (!wrap) return;
       const rect = wrap.getBoundingClientRect();
       const progress = clamp(-rect.top / Math.max(1, rect.height - window.innerHeight), 0, 1);
-      ctrlRef.current?.setScrollTurns(progress * HERO.maxRotations);
-      if (barRef.current) barRef.current.style.transform = `scaleX(${progress})`;
-      const t = Math.min(HERO.maxRotations, Math.floor(progress * HERO.maxRotations) + 1);
-      if (t !== lastTurn) setTurn((lastTurn = t));
-      const d = progress >= 0.995;
-      if (d !== lastDone) setDone((lastDone = d));
+      ctrlRef.current?.setScroll(progress * HERO.maxRotations, window.scrollY);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -120,14 +110,48 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
     };
   }, [status]);
 
+  // Label "Lihat" / "Filosofi" mengikuti kursor (pola floating label halaman detail kabinet).
+  useEffect(() => {
+    if (hover === null) return;
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0, first = true;
+    const move = (e: MouseEvent) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      if (first) {
+        x = tx;
+        y = ty;
+        first = false;
+      }
+    };
+    const loop = () => {
+      x += (tx - x) * 0.1;
+      y += (ty - y) * 0.1;
+      if (labelRef.current) labelRef.current.style.transform = `translate(${x + 30}px, calc(${y}px - 50%))`;
+      raf = requestAnimationFrame(loop);
+    };
+    window.addEventListener("mousemove", move);
+    raf = requestAnimationFrame(loop);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      cancelAnimationFrame(raf);
+    };
+  }, [hover]);
+
   const openItem = useCallback((index: number, origin: Rect | null) => {
     lastFocus.current = document.activeElement as HTMLElement | null;
     ctrlRef.current?.setPaused(true);
-    setViewer({ index, origin });
-    setStageHidden(true);
+    setHover(null);
+    setDetail({ index: Math.max(0, allItems.findIndex((p) => p.slug === items[index]?.slug)), origin });
+  }, [items, allItems]);
+
+  const openFilosofi = useCallback(() => {
+    lastFocus.current = document.activeElement as HTMLElement | null;
+    ctrlRef.current?.setPaused(true);
+    setHover(null);
+    setFilosofi(true);
   }, []);
 
-  // Drag horizontal memutar orbit; klik tanpa geser membuka proker.
+  // Drag horizontal memutar orbit; klik tanpa geser membuka proker / filosofi logo.
   const onPointerDown = (e: React.PointerEvent) => {
     pointer.current = { down: true, x: e.clientX, y: e.clientY, moved: 0 };
   };
@@ -147,8 +171,10 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
     ctrlRef.current?.release();
     if (p.moved > 6) return;
     const ctrl = ctrlRef.current;
-    const inst = ctrl?.pick(e.clientX, e.clientY);
-    if (ctrl && inst != null) openItem(slots[inst], ctrl.rectOf(inst));
+    const hit = ctrl?.pick(e.clientX, e.clientY);
+    if (!ctrl || !hit) return;
+    if (hit.kind === "logo") openFilosofi();
+    else openItem(slots[hit.instance], ctrl.rectOf(hit.instance));
   };
   const onPointerCancel = () => {
     pointer.current.down = false;
@@ -157,32 +183,55 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
 
   const getReturnRect = useCallback(
     (slug: string): Rect | null => {
-      setStageHidden(false);
       const ctrl = ctrlRef.current;
       const item = items.findIndex((p) => p.slug === slug);
       const hit = ctrl && item >= 0 ? ctrl.findVisible(item) : null;
       if (!hit) return null;
-      ctrl!.setHidden(hit.instance); // disembunyikan sampai foto yang terbang mendarat
+      ctrl!.setHidden(hit.instance); // disembunyikan sampai kartu yang terbang mendarat
       return hit.rect;
     },
     [items],
   );
 
-  const closeViewer = useCallback(() => {
-    setViewer(null);
-    setStageHidden(false);
+  const resume = useCallback(() => {
     ctrlRef.current?.setHidden(null);
     ctrlRef.current?.setPaused(false);
     lastFocus.current?.focus?.({ preventScroll: true });
+    if (goTop.current) {
+      goTop.current = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, []);
 
-  const frontItem = items[front];
+  // Link ke beranda ("Beranda" / logo navbar) saat sudah di beranda: Next tidak berpindah halaman,
+  // jadi tangani sendiri → tutup panel yang terbuka lalu gulir ke atas.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
+      if (!a || (a.target && a.target !== "_self")) return;
+      const url = new URL(a.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname !== "/" || url.hash || window.location.pathname !== "/") return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (openRef.current) {
+        goTop.current = true;
+        setCloseSignal((n) => n + 1);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+
+  const hoverText = hover === "logo" ? "Filosofi" : hover !== null ? "Lihat" : null;
 
   return (
     <section
       ref={wrapRef}
       aria-label="Program kerja BEM UI 2026"
-      className="relative bg-navy text-white"
+      className="relative bg-white text-navy"
       style={{ height: `${100 + HERO.maxRotations * HERO.viewportsPerRotation * 100}svh` }}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden">
@@ -190,52 +239,51 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
           BEM UI 2026, {SITE.kabinet} {SITE.tagline}
         </h1>
 
-        {/* Panggung WebGL */}
-        <div
-          ref={stageRef}
-          className={cn("absolute inset-0 transition-opacity duration-slow", stageHidden ? "opacity-0" : "opacity-100")}
+        {/* Panggung WebGL: grid + logo + kartu */}
+        <canvas
+          ref={canvasRef}
+          aria-label="Logo BEM UI 3D dibungkus foto program kerja yang berputar. Klik logo untuk filosofi logo."
+          data-hover={hover !== null ? "" : undefined}
+          className={cn(
+            "absolute inset-0 h-full w-full touch-pan-y transition-opacity duration-700",
+            status === "ready" ? "opacity-100" : "opacity-0",
+            hover !== null && "cursor-pointer",
+          )}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
+          onPointerLeave={onPointerCancel}
+        />
+        {/* Logo statis: tampil selama scene dimuat / bila WebGL tidak didukung */}
+        <button
+          type="button"
+          onClick={openFilosofi}
+          aria-label="Lihat filosofi logo"
+          tabIndex={status === "ready" ? -1 : 0}
+          className={cn(
+            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-700",
+            status === "ready" ? "pointer-events-none opacity-0" : "opacity-100",
+          )}
         >
-          <canvas
-            ref={canvasRef}
-            aria-label="Logo BEM UI 3D dibungkus foto program kerja yang berputar"
-            className={cn(
-              "absolute inset-0 h-full w-full touch-pan-y transition-opacity duration-700",
-              status === "ready" ? "opacity-100" : "opacity-0",
-            )}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerCancel}
-            onPointerLeave={onPointerCancel}
+          <Image
+            src="/images/logo-bem-ui.png"
+            alt=""
+            width={876}
+            height={876}
+            priority
+            className={cn("h-auto w-[min(48vw,300px)]", status === "loading" && "animate-pulse")}
           />
-          {/* Logo statis: tampil selama scene dimuat / bila WebGL tidak didukung */}
-          <div
-            aria-hidden
-            className={cn(
-              "pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-700",
-              status === "ready" ? "opacity-0" : "opacity-100",
-            )}
-          >
-            <Image
-              src="/images/logo-bem-ui.png"
-              alt=""
-              width={876}
-              height={876}
-              priority
-              className={cn("h-auto w-[min(56vw,380px)]", status === "loading" && "animate-pulse")}
-            />
-          </div>
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_46%,transparent_55%,rgba(11,16,45,0.55)_100%)]"
-          />
-        </div>
+        </button>
 
-        {/* Daftar proker untuk keyboard / pembaca layar (muncul saat difokus) */}
+        {/* Akses keyboard / pembaca layar: daftar proker + filosofi logo (muncul saat difokus) */}
         <nav
           aria-label="Daftar program kerja"
-          className="sr-only focus-within:not-sr-only focus-within:absolute focus-within:left-5 focus-within:top-24 focus-within:z-30 focus-within:max-h-[60svh] focus-within:w-72 focus-within:overflow-y-auto focus-within:rounded-xl focus-within:bg-white focus-within:p-4 focus-within:text-navy focus-within:shadow-lg"
+          className="sr-only focus-within:not-sr-only focus-within:absolute focus-within:left-5 focus-within:top-24 focus-within:z-30 focus-within:max-h-[60svh] focus-within:w-72 focus-within:overflow-y-auto focus-within:rounded-xl focus-within:border focus-within:border-border focus-within:bg-white focus-within:p-4 focus-within:text-navy focus-within:shadow-lg"
         >
+          <button type="button" onClick={openFilosofi} className="mb-2 w-full text-left text-sm font-bold hover:text-accent">
+            Filosofi logo
+          </button>
           <ul className="space-y-1">
             {items.map((p, i) => (
               <li key={p.slug}>
@@ -247,73 +295,40 @@ export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Reco
           </ul>
         </nav>
 
-        {/* HUD bawah */}
-        <div
-          className={cn(
-            "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 px-5 pb-6 transition-opacity duration-base md:px-10 md:pb-8",
-            stageHidden && "opacity-0",
-          )}
-        >
-          <div className="pointer-events-auto flex flex-col items-start gap-3">
-            <p className="hidden text-xs font-bold uppercase tracking-[0.22em] text-white/70 sm:block">{SITE.kabinet}</p>
-            <div
-              role="group"
-              aria-label="Tata letak orbit"
-              className="flex rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-glass-md"
-            >
-              {(["rings", "spiral"] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  aria-pressed={mode === m}
-                  onClick={() => setMode(m)}
-                  className={cn(
-                    "rounded-full px-4 py-2 text-sm font-bold transition-all duration-base ease-out-expo focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pink-light sm:px-5",
-                    mode === m ? "bg-white text-navy shadow-sm" : "text-white/70 hover:text-white",
-                  )}
-                >
-                  {m === "rings" ? "Rings" : "Spiral"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="hidden flex-col items-center gap-1.5 pb-1 text-center md:flex">
-            <p aria-live="polite" className="text-sm font-bold">
-              {String(front + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}{" "}
-              <span className="font-medium text-white/70">Proker · {frontItem?.nama}</span>
-            </p>
-            <p className="text-xs font-semibold text-white/50">
-              {done ? "Scroll untuk lanjut" : "Scroll untuk memutar · klik foto untuk detail"}
-            </p>
-          </div>
-
-          <div className="pointer-events-auto flex w-40 flex-col items-end gap-2 text-right sm:w-56">
-            <p className="text-sm font-bold">
-              Putaran {turn} / {HERO.maxRotations}
-            </p>
-            <div className="h-1 w-full overflow-hidden rounded-full bg-white/15" aria-hidden>
-              <div ref={barRef} className="h-full origin-left rounded-full bg-accent" style={{ transform: "scaleX(0)" }} />
-            </div>
-            <a
-              href="#konten"
-              className="inline-flex items-center gap-1 text-xs font-bold text-white/70 transition-colors hover:text-pink-light"
-            >
-              Lewati <ArrowDown aria-hidden className="size-3.5" />
-            </a>
-          </div>
-        </div>
       </div>
 
-      {viewer && (
-        <ProkerViewer
-          items={items}
-          divisi={divisi}
-          index={viewer.index}
-          originRect={viewer.origin}
+      {/* Label glass mengikuti kursor (gaya .next__floating-label) */}
+      <div
+        ref={labelRef}
+        aria-hidden
+        className={cn(
+          "pointer-events-none fixed left-0 top-0 z-[60] whitespace-nowrap rounded-full border border-glass-border bg-glass-strong px-4 py-2.5 text-base uppercase text-navy shadow-glass-soft backdrop-blur-[10px] transition-[opacity,visibility] duration-300 [@media(hover:none)]:hidden",
+          hoverText ? "visible opacity-100" : "invisible opacity-0",
+        )}
+      >
+        {hoverText ?? "Lihat"}
+      </div>
+
+      {detail && (
+        <HeroDetail
+          items={allItems}
+          closeSignal={closeSignal}
+          initialIndex={detail.index}
+          originRect={detail.origin}
           getReturnRect={getReturnRect}
-          onIndexChange={(index) => setViewer((v) => (v ? { ...v, index } : v))}
-          onClose={closeViewer}
+          onClose={() => {
+            setDetail(null);
+            resume();
+          }}
+        />
+      )}
+      {filosofi && (
+        <FilosofiLogo
+          closeSignal={closeSignal}
+          onClose={() => {
+            setFilosofi(false);
+            resume();
+          }}
         />
       )}
     </section>

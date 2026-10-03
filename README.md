@@ -37,7 +37,7 @@ npm run dev                  # http://localhost:3000
 | Nama | Keterangan |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | URL publik website, untuk metadata/OG. |
-| `NEXT_PUBLIC_YOUTUBE_VIDEO_ID` | ID video company profile. Kosong = tampil tautan ke channel YouTube. |
+| `NEXT_PUBLIC_YOUTUBE_VIDEO_ID` | ID video company profile (default `R5XbD1vjXlg`). |
 
 ## Struktur folder
 
@@ -53,7 +53,7 @@ components/
   ui/                     Komponen design system (Button, Badge, Card, SiteNav, SiteFooter, ...)
   webgl/                  MeshGradient (ogl)
   home/                   Section beranda + hero orbit
-    orbit/scene.ts        Scene three.js: logo 3D + kartu proker (Rings/Spiral)
+    orbit/scene.ts        Scene three.js: logo 3D + cincin kartu proker
     ProkerViewer.tsx      Tampilan zoom proker + kartu yang bisa dibalik
     DivisiBack.tsx        Sisi belakang kartu: ringkasan biro/departemen
   kabinet/, kabinet-list/ Komponen halaman kabinet (tim kabinet)
@@ -75,12 +75,16 @@ Urutan section: **Hero orbit → Statistik → Tagline kabinet → Kabinet Kami 
 
 ### Hero orbit (ala k95.it/en)
 
-- Logo BEM UI 3D (ekstrusi dari siluet `components/home/orbit/logo-shapes.ts` + tekstur `public/images/logo-bem-ui.png`) dibungkus kartu proker yang berputar otomatis, mode **Rings** dan **Spiral**.
-- Scroll menambah putaran sampai batas `HERO.maxRotations` (default 2); setelah itu halaman lanjut ke section berikutnya. Ada tombol **Lewati**.
-- Klik kartu → foto membesar (viewer). Tab **Biro/Departemen** di sisi kartu **membalik kartu** dan menampilkan detail divisi di belakangnya, tanpa pindah halaman. Esc: balik kartu / tutup viewer. Panah kiri/kanan: pindah proker.
-- Pengaturan ada di `config/site.ts` (`HERO`): jumlah cincin, kartu per cincin, kecepatan, batas putaran, warna latar.
+Latar, ukuran kartu, dan motion hero **mengikuti halaman detail kabinet** (`components/kabinet`): latar putih + grid silinder, kartu rasio 1.4:1.9, reveal teks per kata, smooth scroll Lenis, gelombang gambar saat scroll, dan transisi kartu terbang `expo.inOut` 1.5s. Komponen tim kabinet dipakai ulang tanpa diubah.
 
-Efisiensi: three.js dimuat terpisah setelah halaman tampil (logo PNG statis tampil lebih dulu dan menjadi fallback bila WebGL tidak didukung); semua kartu dirender dalam satu draw call (InstancedMesh + atlas); render berhenti saat hero tidak terlihat, tab tersembunyi, atau viewer terbuka; ringkasan divisi untuk sisi belakang kartu dikirim dari server (teks saja, beberapa KB).
+- **Orbit**: logo BEM UI 3D (ekstrusi siluet `components/home/orbit/logo-shapes.ts` + tekstur `public/images/logo-bem-ui.png`) dibungkus **20 proker unggulan** (`HERO.featured`, dipilih di `pickFeaturedProker` — tempat rotasi harian nanti) yang berputar otomatis (pelan). Perspektif kuat ala k95 (kartu belakang kecil, dekat besar), kartu mengisi sampai tepi layar dan lewat di balik navbar glass. **Scroll menggerakkan kartu turun** (berulang tanpa ujung) dan membuatnya bergelombang (shader sama dengan `DistortManager`). Kartu yang melintas di belakang logo **digeser menjauh** (tidak hilang) agar selalu berjarak dari logo.
+- **Logo** hanya berputar (tidak mengikuti kursor). Klik logo → panel **filosofi logo** (`data/filosofi-logo.json`).
+- Selama hero ditahan, scroll menambah putaran (`HERO.maxRotations`) dan menggerakkan kartu turun, lalu halaman lanjut ke bawah.
+- **Klik kartu** → kartu terbang ke tengah dan tampil **detail proker** (`components/home/detail`). **Klik kartu tengah / tab di kirinya / nama unit** → tampilan ditukar ke **detail biro/departemen** (isi sama dengan `/kabinet/[slug]`), klik lagi untuk kembali. Penukaran ini hanya ada di hero; halaman kabinet tetap seperti aslinya.
+- Di bawah detail proker ada **Proker Selanjutnya** (transisi sama dengan "Divisi Selanjutnya"). Esc: kembali ke proker / tutup.
+- Pengaturan ada di `config/site.ts` (`HERO`): jumlah cincin, kartu per cincin, kecepatan, batas putaran. Ukuran orbit/kamera di `components/home/orbit/scene.ts`.
+
+Efisiensi: three.js dimuat setelah halaman tampil (logo PNG statis tampil lebih dulu dan jadi fallback tanpa WebGL); semua kartu + grid dalam satu WebGL context, kartu satu draw call (InstancedMesh + atlas); render berhenti saat hero tidak terlihat, tab tersembunyi, atau panel terbuka; tampilan detail (GSAP + Lenis) dan panel filosofi dimuat terpisah saat browser senggang; detail divisi diambil dari `/api/divisi/[slug]` (JSON statis hasil build) hanya saat dibutuhkan.
 
 ## Data
 
@@ -91,6 +95,7 @@ data/
   kabinet.json        info kabinet, ketua & wakil, misi (tim kabinet)
   divisi/[slug].json  detail tiap divisi: pengurus, staf, visi, misi (tim kabinet)
   proker.json         daftar proker; field `divisi` mengacu ke slug di divisi/ (beranda)
+  filosofi-logo.json  filosofi logo (panel saat logo hero diklik)
   stats.json          statistik beranda
   news.json           artikel (sementara, v2 dari Supabase)
 ```
@@ -110,14 +115,14 @@ Proker nantinya dikelola lewat **CRUD di sistem terpisah** (bukan di website ini
   "tanggal": "Maret 2026",
   "deskripsi": "Ringkasan satu kalimat.",
   "penjelasan": ["Paragraf 1", "Paragraf 2"],
-  "foto_url": "/images/proker/kajian-strategis-sekolah-advokasi-1.svg", // sampul, opsional
+  "foto_url": "/images/proker/kajian-strategis-sekolah-advokasi-cover.svg", // sampul 1.4:1.9, opsional
   "dokumentasi": [
     { "url": "/images/proker/kajian-strategis-sekolah-advokasi-1.svg", "caption": "Pembukaan kegiatan" }
   ]
 }
 ```
 
-**Semua foto proker & dokumentasi wajib rasio 4:3** (disarankan 1200×900) agar konsisten di orbit dan viewer. Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
+**Sampul proker (`foto_url`) rasio 1.4:1.9** (disarankan 1400×1900), sama dengan kartu detail kabinet; dipakai di orbit dan kartu tengah. **Foto dokumentasi wajib rasio 4:3** (disarankan 1200×900). Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
 
 > Seluruh isi data dan gambar di repo ini masih **dummy** (placeholder SVG). Ganti dengan konten resmi sebelum rilis.
 

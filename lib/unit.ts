@@ -1,5 +1,5 @@
 import type { Divisi } from "@/lib/kabinet";
-import type { DivisiSummary, UnitType } from "@/types";
+import type { UnitType } from "@/types";
 
 /**
  * Jenis unit diturunkan dari data divisi tim kabinet (skemanya belum punya field `type`):
@@ -11,16 +11,3 @@ export function unitType(d: Pick<Divisi, "slug" | "nama">): UnitType {
   return /^biro\b/i.test(d.nama) ? "Biro" : "Departemen";
 }
 
-export function toSummary(d: Divisi): DivisiSummary {
-  return {
-    slug: d.slug,
-    nama: d.nama,
-    singkatan: d.singkatan,
-    type: unitType(d),
-    description: d.description,
-    visi: d.visi,
-    misi: d.misi,
-    pengurus: d.bph.map((p) => ({ nama: p.nama, jabatan: p.jabatan, foto: p.foto.url })),
-    stafCount: d.staff.length,
-  };
-}

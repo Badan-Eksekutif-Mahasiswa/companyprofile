@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { SectionHeading } from "./SectionHeading";
 
 /**
- * Video company profile (PRD 3.1, nice to have). Pola "lite embed":
+ * Video profile (PRD 3.1, nice to have). Pola "lite embed":
  * iframe YouTube baru dimuat setelah tombol putar diklik, jadi tidak membebani LCP.
  */
 export function VideoSection() {
@@ -16,16 +16,16 @@ export function VideoSection() {
   const id = YOUTUBE_VIDEO_ID;
 
   return (
-    <section aria-labelledby="video-title" className="bg-navy py-20 sm:py-28">
+    <section aria-labelledby="video-title" className="bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-wrap px-5">
-        <SectionHeading id="video-title" eyebrow="Company Profile" title="Kenali BEM UI" invert />
+        <SectionHeading id="video-title" eyebrow="Video Profile" title="Kenali BEM UI" />
 
-        <div className="relative mt-10 aspect-video overflow-hidden rounded-2xl bg-white/5 shadow-xl">
+        <div className="relative mx-auto mt-10 aspect-video max-w-4xl overflow-hidden rounded-2xl bg-navy/5 shadow-xl">
           {id && play ? (
             <iframe
               className="absolute inset-0 h-full w-full"
               src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`}
-              title="Video company profile BEM UI 2026"
+              title="Video profile BEM UI 2026"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
@@ -33,9 +33,9 @@ export function VideoSection() {
             <button
               type="button"
               onClick={() => setPlay(true)}
-              data-cursor="Putar"
+              data-hover
               className="group absolute inset-0 flex items-center justify-center"
-              aria-label="Putar video company profile BEM UI"
+              aria-label="Putar video profile BEM UI"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -50,7 +50,7 @@ export function VideoSection() {
             </button>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
-              <p className="text-white/70">Video company profile segera hadir.</p>
+              <p className="text-secondary">Video profile segera hadir.</p>
               <a
                 href={SITE.social.youtube}
                 target="_blank"

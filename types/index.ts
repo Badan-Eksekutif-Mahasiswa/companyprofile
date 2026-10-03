@@ -23,28 +23,15 @@ export interface Proker {
   /** Penjelasan lengkap, satu string per paragraf. */
   penjelasan: string[];
   tanggal?: string;
-  /** Foto sampul 4:3. Bila kosong, pakai dokumentasi[0]. */
+  /** Sampul kartu, rasio 1.4:1.9 (sama dengan kartu detail kabinet). Bila kosong, pakai dokumentasi[0]. */
   foto_url?: string;
   dokumentasi: Dokumentasi[];
-}
-
-/** Ringkasan divisi untuk sisi belakang kartu proker di hero (dikirim dari server). */
-export interface DivisiSummary {
-  slug: string;
-  nama: string;
-  singkatan: string;
-  type: UnitType;
-  description: string;
-  visi: string;
-  misi: string[];
-  pengurus: { nama: string; jabatan: string; foto: string }[];
-  stafCount: number;
 }
 
 /** Proker yang tampil di hero orbit, lengkap dengan unit pemiliknya. */
 export interface HeroProker extends Proker {
   foto_url: string;
-  unit: Pick<DivisiSummary, "slug" | "nama" | "singkatan" | "type">;
+  unit: { slug: string; nama: string; singkatan: string; type: UnitType };
 }
 
 export type KategoriArtikel = "Kajian Strategis" | "Siaran Pers" | "Opini & Artikel" | "Kabar UI";
