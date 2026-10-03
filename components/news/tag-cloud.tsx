@@ -18,7 +18,7 @@ export function TagCloud({ tags, active, onSelect }: TagCloudProps) {
   };
 
   return (
-    <section aria-labelledby="topik-populer" className="mt-20 rounded-2xl border border-glass-border bg-glass p-8 shadow-glass-soft backdrop-blur-glass">
+    <section aria-labelledby="topik-populer" className="mt-20 rounded-2xl border border-border bg-navy-5 p-8">
       <h2 id="topik-populer" className="text-xl font-extrabold text-navy">
         Topik Populer
       </h2>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Badge } from "@/components/ui";
+import { MeshGradient } from "@/components/webgl";
 import { GlassHighlight } from "@/components/news/glass-highlight";
 import { CursorRing } from "@/components/news/cursor-ring";
 import { NewsBrowser } from "@/components/news/news-browser";
@@ -24,22 +26,32 @@ export default async function NewsPage() {
   const articles = await getNewsArticles();
 
   return (
-    <main id="main" className="relative mx-auto w-full max-w-wrap px-4 pb-24 pt-28 sm:px-6 lg:pt-36">
+    <main id="main">
       <CursorRing />
-      <header className="mb-12 border-b-2 border-navy pb-6">
-        <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-accent">Publikasi resmi BEM UI 2026</p>
-        <h1 tabIndex={-1} className="mt-2 text-5xl font-extrabold leading-[0.95] tracking-tight text-navy sm:text-6xl lg:text-8xl">
-          <span className="-mx-6 -mb-6 block overflow-hidden px-6 pb-10 pt-2">
-            <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita <GlassHighlight>&amp; Artikel</GlassHighlight></span>
-          </span>
-        </h1>
-        <p className="news-fade mt-3 text-base text-secondary [animation:news-fade_0.8s_0.35s_var(--ease-out)_both]">
-          Kajian, pernyataan sikap, dan kabar terbaru dari BEM UI 2026.
-        </p>
+      <header className="relative overflow-hidden pb-14 pt-32 md:pt-40">
+        <MeshGradient className="h-full" />
+        <div className="relative mx-auto max-w-wrap px-6">
+          <Badge className="mb-6 px-3.5 py-1.5 text-[13px]">Publikasi resmi BEM UI 2026</Badge>
+          <h1 tabIndex={-1} className="text-[clamp(48px,9vw,136px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
+            <span className="block overflow-hidden pb-3">
+              <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita</span>
+            </span>
+            <span className="-mt-3 -mb-8 block overflow-hidden pb-12">
+              <span className="news-rise block [animation:news-rise_0.9s_0.12s_var(--ease-out)_both]">
+                <GlassHighlight>&amp; Artikel</GlassHighlight>
+              </span>
+            </span>
+          </h1>
+          <p className="news-fade mt-6 max-w-xl text-[17px] font-medium leading-relaxed text-secondary [animation:news-fade_0.8s_0.4s_var(--ease-out)_both]">
+            Kajian, pernyataan sikap, dan kabar terbaru dari BEM UI 2026.
+          </p>
+        </div>
       </header>
-      <Suspense fallback={<NewsSkeleton />}>
-        <NewsBrowser articles={articles} />
-      </Suspense>
+      <div className="mx-auto max-w-wrap px-6 pb-24 md:pb-32">
+        <Suspense fallback={<NewsSkeleton />}>
+          <NewsBrowser articles={articles} />
+        </Suspense>
+      </div>
     </main>
   );
 }

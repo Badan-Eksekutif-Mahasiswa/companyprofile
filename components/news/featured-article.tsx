@@ -11,7 +11,7 @@ export function FeaturedArticle({ article }: { article: NewsArticle }) {
       <Cover
         kategori={article.kategori}
         src={article.heroImage}
-        className="aspect-[16/10] rounded-2xl lg:col-span-2 lg:aspect-[16/9]"
+        className="aspect-[16/10] rounded-2xl border border-border shadow-sm lg:col-span-2 lg:aspect-[16/9]"
         sizes="(min-width: 1024px) 66vw, 100vw"
       />
       <div className="flex flex-col justify-center gap-3">

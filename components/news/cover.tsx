@@ -22,7 +22,7 @@ export function Cover({ kategori, src, className, sizes = "(min-width: 1024px) 3
           alt=""
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-slow ease-out-expo group-hover:scale-105"
+          className="object-cover transition-transform duration-[900ms] ease-out-expo group-hover:scale-[1.06]"
         />
       ) : (
         <Icon

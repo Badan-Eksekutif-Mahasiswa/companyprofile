@@ -103,7 +103,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   return (
     <>
       <div className="flex flex-col gap-5">
-        <div role="search" className="max-w-xl rounded-lg bg-glass shadow-glass-soft backdrop-blur-glass-md">
+        <div role="search" className="max-w-xl ">
           <label htmlFor="news-search" className="sr-only">
             Cari artikel
           </label>
@@ -115,7 +115,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
-            className="border-glass-border bg-transparent"
+            
           />
         </div>
 
@@ -132,7 +132,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                   "shrink-0 rounded-full border-[1.5px] px-4 py-2 text-sm font-bold outline-none transition-colors duration-fast focus-visible:ring-4 focus-visible:ring-pink-pale",
                   on
                     ? "border-navy bg-navy text-white shadow-md"
-                    : "border-glass-border bg-glass text-navy shadow-glass-soft backdrop-blur-glass-md hover:bg-glass-strong hover:text-accent"
+                    : "border-border bg-white text-navy hover:border-accent hover:text-accent"
                 )}
               >
                 {c.label}
@@ -141,7 +141,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           })}
         </div>
 
-        <div role="group" aria-label="Tampilan" className="flex w-fit gap-1 rounded-full border border-glass-border bg-glass p-1 shadow-glass-soft backdrop-blur-glass-md">
+        <div role="group" aria-label="Tampilan" className="flex w-fit gap-1 rounded-full border border-border bg-white p-1">
           {[{ v: null, l: "Majalah" }, { v: "grid", l: "Grid" }, { v: "topik", l: "Topik" }].map((o) => {
             const on = (o.v ?? null) === (view === "grid" || view === "topik" ? view : null);
             return (
@@ -216,7 +216,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           {gridMode && <MasonryGrid articles={gridShown} />}
 
           {!gridMode && !topicMode && shown.length > 0 && (
-            <div className="mt-16 border-t-2 border-navy pt-3">
+            <div className="mt-16 border-t border-divider pt-6">
               <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-navy">
                 {searching ? `Hasil pencarian (${results.length})` : "Terbaru"}
               </h2>

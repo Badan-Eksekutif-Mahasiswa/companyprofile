@@ -16,7 +16,7 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
   const large = size === "large";
   if (size === "compact") {
     return (
-      <article data-cursor="Baca" className={cn("group relative grid grid-cols-[40%_1fr] gap-4 rounded-2xl border border-glass-border bg-glass p-3 shadow-glass-soft backdrop-blur-glass transition-[transform,box-shadow] duration-base ease-out-expo hover:-translate-y-1 hover:shadow-glass", className)}>
+      <article data-cursor="Baca" className={cn("group relative grid grid-cols-[40%_1fr] gap-4 rounded-2xl border border-border bg-white p-3 shadow-sm transition-[transform,box-shadow] duration-base ease-out-expo hover:-translate-y-1 hover:shadow-lg", className)}>
         <Cover kategori={article.kategori} src={article.heroImage} className="aspect-[4/3] rounded-xl" sizes="(min-width: 1024px) 20vw, 40vw" />
         <div className="flex flex-col gap-1.5">
           <Badge variant={CATEGORY_STYLE[article.kategori].badge} className="self-start">{categoryLabel(article.kategori)}</Badge>
@@ -37,7 +37,7 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
       <Cover
         kategori={article.kategori}
         src={article.heroImage}
-        className={cn("rounded-xl", large ? "aspect-[16/10]" : "aspect-[4/3]")}
+        className={cn("rounded-2xl border border-border bg-navy-5 shadow-sm transition-[transform,box-shadow] duration-base ease-out-expo group-hover:-translate-y-1 group-hover:shadow-lg", large ? "aspect-[16/10]" : "aspect-[4/3]")}
         sizes={large ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"}
       />
       <div className="mt-4 flex flex-1 flex-col gap-2">

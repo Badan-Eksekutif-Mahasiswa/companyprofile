@@ -13,7 +13,7 @@ export function MasonryGrid({ articles }: { articles: NewsArticle[] }) {
       {articles.map((a, i) => (
         <li key={a.slug}>
           <Reveal index={i % 4}>
-            <article data-cursor="Baca" className="group relative bg-navy-5 p-3 transition-colors duration-base hover:bg-navy-10">
+            <article data-cursor="Baca" className="group relative rounded-xl bg-navy-5 p-3 transition-colors duration-base hover:bg-navy-10">
               <Cover kategori={a.kategori} src={a.heroImage} className={cn("w-full", RATIOS[i % RATIOS.length])} sizes="(min-width: 1024px) 25vw, 50vw" />
               <div className="mt-3">
                 <h3 className="text-[13.5px] font-extrabold leading-snug text-navy">

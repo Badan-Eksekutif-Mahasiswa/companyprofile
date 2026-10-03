@@ -1,7 +1,7 @@
 export const MOTION = {
   /** cubic-bezier ease-out-expo, sama dengan --ease-out. */
   ease: [0.16, 1, 0.3, 1] as const,
-  duration: { fast: 0.15, base: 0.22, slow: 0.38, reveal: 0.8 },
+  duration: { fast: 0.15, base: 0.22, slow: 0.38, reveal: 0.9 },
   reveal: {
     /** Jarak geser awal (px) dan jeda antar elemen (ms). */
     y: 24,
