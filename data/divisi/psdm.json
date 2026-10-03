@@ -1,107 +1,181 @@
 {
-  "nama": "Departemen Pengembangan Sumber Daya Mahasiswa",
+  "_dummy": true,
+  "order": 4,
   "slug": "psdm",
+  "title": "Pengembangan Sumber Daya Mahasiswa | Kabinet Terus Terang",
+  "nama": "Pengembangan Sumber Daya Mahasiswa",
   "singkatan": "PSDM",
-  "type": "Departemen",
-  "cover_url": "/images/divisi/psdm-cover.svg",
-  "deskripsi": "Departemen Pengembangan Sumber Daya Mahasiswa (PSDM) merawat fungsionaris BEM UI: dari kaderisasi, peningkatan kapasitas, hingga menjaga budaya organisasi yang sehat.",
-  "visi": "Membentuk fungsionaris yang kompeten, berintegritas, dan saling menjaga.",
+  "tagline": "Placeholder tagline untuk Pengembangan Sumber Daya Mahasiswa.",
+  "year": "2026",
+  "categories": [
+    {
+      "name": "Internal",
+      "slug": "internal"
+    }
+  ],
+  "roles": [
+    "Branding",
+    "Media Sosial",
+    "Dokumentasi"
+  ],
+  "description": "Pengembangan Sumber Daya Mahasiswa bertugas mengembangkan kapasitas dan kebersamaan seluruh pengurus kabinet. Departemen ini bekerja bersama seluruh divisi Kabinet Terus Terang BEM UI 2026 agar setiap program berjalan terarah, terbuka, dan berdampak bagi mahasiswa.",
+  "cover": {
+    "url": "/api/placeholder?label=FOTO%20PSDM&w=1400&h=1900&tone=maroon&sub=COVER",
+    "alt": "Cover Pengembangan Sumber Daya Mahasiswa"
+  },
+  "logo": {
+    "url": "/api/placeholder?label=PSDM&w=1200&h=1200&tone=maroon&sub=LOGO&kind=logo",
+    "alt": "Logo Pengembangan Sumber Daya Mahasiswa"
+  },
+  "sections": [
+    {
+      "type": "media-single",
+      "position": "center",
+      "media": {
+        "url": "/api/placeholder?label=PSDM%20%E2%80%94%20UTAMA&w=2000&h=1100&tone=maroon&sub=FOTO%20KEGIATAN",
+        "alt": "Foto kegiatan utama"
+      }
+    },
+    {
+      "type": "text-block",
+      "subtitle": "Program Kerja",
+      "content": [
+        "Pengembangan Sumber Daya Mahasiswa merancang program kerja yang menjawab kebutuhan mahasiswa, dari perencanaan hingga evaluasi. Rincian program dan capaian akan diisi dari data asli."
+      ]
+    },
+    {
+      "type": "media-duo",
+      "media_left": {
+        "url": "/api/placeholder?label=PSDM%20%E2%80%94%20PROKER%201&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
+        "alt": "Program kerja 1",
+        "title": "Nama Program Kerja 1",
+        "desc": "Program kerja unggulan Pengembangan Sumber Daya Mahasiswa. Jelaskan tujuan, sasaran peserta, waktu pelaksanaan, dan hasil yang dicapai program ini."
+      },
+      "media_right": {
+        "url": "/api/placeholder?label=PSDM%20%E2%80%94%20PROKER%202&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
+        "alt": "Program kerja 2",
+        "title": "Nama Program Kerja 2",
+        "desc": "Program kerja kedua Pengembangan Sumber Daya Mahasiswa. Ceritakan bagaimana program dijalankan, siapa saja yang terlibat, dan dampaknya bagi mahasiswa."
+      }
+    }
+  ],
+  "collaborators": [
+    {
+      "name": "Nama Kepala Divisi",
+      "role": "Kepala Divisi"
+    },
+    {
+      "name": "Nama Wakil Kepala",
+      "role": "Wakil Kepala Divisi"
+    }
+  ],
+  "highlights": [
+    {
+      "title": "Proker Unggulan PSDM",
+      "date": "Maret 2026",
+      "image": "/api/placeholder?label=PSDM%20%E2%80%94%20PROKER%20UNGGULAN&w=1400&h=1000&tone=maroon&sub=FOTO%20PROKER"
+    }
+  ],
+  "visi": "Menjadi departemen yang andal dalam mengembangkan kapasitas, serta terbuka dan berpihak pada mahasiswa Universitas Indonesia.",
   "misi": [
-    "Menjalankan program kerja secara terbuka dan terukur.",
-    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
-    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+    "Menjalankan program kerja Pengembangan Sumber Daya Mahasiswa secara terencana dan transparan.",
+    "Berkolaborasi dengan departemen lain dan seluruh elemen kemahasiswaan.",
+    "Mengevaluasi dan mendokumentasikan setiap kegiatan agar terus berkembang."
   ],
-  "tupoksi": [
-    "Merancang dan mengeksekusi program kerja PSDM.",
-    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
-    "Menyusun laporan kinerja berkala secara transparan."
-  ],
-  "anggota": [
+  "bph": [
     {
-      "nama": "Nama Kepala",
+      "nama": "Nama Kepala Departemen",
       "jabatan": "Kepala Departemen",
-      "foto_url": "",
-      "linkedin": "https://www.linkedin.com/"
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20KEPALA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Kepala Departemen Pengembangan Sumber Daya Mahasiswa"
+      }
     },
     {
-      "nama": "Nama Wakil",
+      "nama": "Nama Wakil Kepala Departemen",
       "jabatan": "Wakil Kepala Departemen",
-      "foto_url": "",
-      "linkedin": ""
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20WAKIL%20KEPALA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Wakil Kepala Departemen Pengembangan Sumber Daya Mahasiswa"
+      }
     },
     {
-      "nama": "Nama Staf 1",
-      "jabatan": "Staf Ahli",
-      "foto_url": "",
-      "linkedin": "https://www.linkedin.com/"
-    },
-    {
-      "nama": "Nama Staf 2",
-      "jabatan": "Staf Ahli",
-      "foto_url": "",
-      "linkedin": ""
-    },
-    {
-      "nama": "Nama Staf 3",
-      "jabatan": "Staf",
-      "foto_url": "",
-      "linkedin": "https://www.linkedin.com/"
+      "nama": "Nama Sekretaris",
+      "jabatan": "Sekretaris",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20SEKRETARIS&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
+        "alt": "Sekretaris Pengembangan Sumber Daya Mahasiswa"
+      }
     }
   ],
-  "proker": [
+  "staff": [
     {
-      "slug": "psdm-leadership-camp",
-      "nama": "Leadership Camp",
-      "status": "upcoming",
-      "tanggal": "September 2026",
-      "deskripsi": "Pelatihan kepemimpinan intensif tiga hari untuk seluruh fungsionaris BEM UI.",
-      "penjelasan": [
-        "Pelatihan kepemimpinan intensif tiga hari untuk seluruh fungsionaris BEM UI. Leadership Camp dirancang oleh Departemen Pengembangan Sumber Daya Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
-        "Program ini dijadwalkan pada September 2026. Informasi pendaftaran dan detail teknis akan diumumkan melalui media sosial BEM UI.",
-        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
-      ],
-      "foto_url": "/images/proker/psdm-leadership-camp-1.svg",
-      "dokumentasi": [
-        {
-          "url": "/images/proker/psdm-leadership-camp-1.svg",
-          "caption": "Pembukaan kegiatan"
-        },
-        {
-          "url": "/images/proker/psdm-leadership-camp-2.svg",
-          "caption": "Sesi utama bersama peserta"
-        },
-        {
-          "url": "/images/proker/psdm-leadership-camp-3.svg",
-          "caption": "Foto bersama panitia"
-        }
-      ]
+      "nama": "Nama Staff 1",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%201&w=1200&h=1500&tone=pink&sub=FOTO%20STAFF",
+        "alt": "Staff 1 Pengembangan Sumber Daya Mahasiswa"
+      }
     },
     {
-      "slug": "psdm-kelas-fungsionaris",
-      "nama": "Kelas Fungsionaris",
-      "status": "done",
-      "tanggal": "Februari 2026",
-      "deskripsi": "Rangkaian onboarding dan kelas dasar organisasi bagi fungsionaris baru.",
-      "penjelasan": [
-        "Rangkaian onboarding dan kelas dasar organisasi bagi fungsionaris baru. Kelas Fungsionaris dirancang oleh Departemen Pengembangan Sumber Daya Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
-        "Program ini telah terlaksana (Februari 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
-        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
-      ],
-      "foto_url": "/images/proker/psdm-kelas-fungsionaris-1.svg",
-      "dokumentasi": [
-        {
-          "url": "/images/proker/psdm-kelas-fungsionaris-1.svg",
-          "caption": "Pembukaan kegiatan"
-        },
-        {
-          "url": "/images/proker/psdm-kelas-fungsionaris-2.svg",
-          "caption": "Sesi utama bersama peserta"
-        },
-        {
-          "url": "/images/proker/psdm-kelas-fungsionaris-3.svg",
-          "caption": "Foto bersama panitia"
-        }
-      ]
+      "nama": "Nama Staff 2",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%202&w=1200&h=1500&tone=blue&sub=FOTO%20STAFF",
+        "alt": "Staff 2 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 3",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%203&w=1200&h=1500&tone=navy&sub=FOTO%20STAFF",
+        "alt": "Staff 3 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 4",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%204&w=1200&h=1500&tone=maroon&sub=FOTO%20STAFF",
+        "alt": "Staff 4 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 5",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%205&w=1200&h=1500&tone=pink&sub=FOTO%20STAFF",
+        "alt": "Staff 5 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 6",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%206&w=1200&h=1500&tone=blue&sub=FOTO%20STAFF",
+        "alt": "Staff 6 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 7",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%207&w=1200&h=1500&tone=navy&sub=FOTO%20STAFF",
+        "alt": "Staff 7 Pengembangan Sumber Daya Mahasiswa"
+      }
+    },
+    {
+      "nama": "Nama Staff 8",
+      "jabatan": "Staff",
+      "foto": {
+        "url": "/api/placeholder?label=FOTO%20STAFF%208&w=1200&h=1500&tone=maroon&sub=FOTO%20STAFF",
+        "alt": "Staff 8 Pengembangan Sumber Daya Mahasiswa"
+      }
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20PSDM&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Pengembangan Sumber Daya Mahasiswa"
+  }
 }

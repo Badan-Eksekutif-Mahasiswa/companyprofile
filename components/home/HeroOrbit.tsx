@@ -6,7 +6,7 @@ import { ArrowDown } from "lucide-react";
 import { HERO, SITE } from "@/config/site";
 import { clamp } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import type { HeroProker } from "@/types";
+import type { DivisiSummary, HeroProker } from "@/types";
 import type { OrbitController, OrbitMode, Rect } from "./orbit/scene";
 import { ProkerViewer } from "./ProkerViewer";
 
@@ -17,7 +17,7 @@ const TOTAL_SLOTS = HERO.rings * HERO.cardsPerRing;
  * otomatis (mode Rings/Spiral, WebGL). Scroll menambah putaran sampai batas
  * HERO.maxRotations, setelah itu halaman lanjut ke section berikutnya.
  */
-export function HeroOrbit({ items }: { items: HeroProker[] }) {
+export function HeroOrbit({ items, divisi }: { items: HeroProker[]; divisi: Record<string, DivisiSummary> }) {
   const wrapRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -240,7 +240,7 @@ export function HeroOrbit({ items }: { items: HeroProker[] }) {
             {items.map((p, i) => (
               <li key={p.slug}>
                 <button type="button" onClick={() => openItem(i, null)} className="w-full text-left text-sm hover:text-accent">
-                  {p.nama} <span className="text-muted">({p.divisi.singkatan})</span>
+                  {p.nama} <span className="text-muted">({p.unit.singkatan})</span>
                 </button>
               </li>
             ))}
@@ -308,6 +308,7 @@ export function HeroOrbit({ items }: { items: HeroProker[] }) {
       {viewer && (
         <ProkerViewer
           items={items}
+          divisi={divisi}
           index={viewer.index}
           originRect={viewer.origin}
           getReturnRect={getReturnRect}

@@ -22,7 +22,7 @@ export const HERO = {
   viewportsPerRotation: 1.25,
   /** Jumlah cincin & kartu per cincin pada mode "Rings". */
   rings: 3,
-  cardsPerRing: 10,
+  cardsPerRing: 12,
   /** Putaran otomatis (derajat/detik). 0 = diam. */
   autoSpeed: 6,
   /** Latar scene WebGL = --navy di globals.css. */

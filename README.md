@@ -43,29 +43,30 @@ npm run dev                  # http://localhost:3000
 
 ```
 app/
-  (site)/                 halaman publik (punya navbar + kursor)
-    page.tsx              Beranda
-    kabinet/[slug]/       Detail biro/departemen
+  page.tsx                Beranda
+  kabinet/                Halaman kabinet + detail divisi (tim kabinet)
   design-system/          Dokumentasi visual design system
   api/stats/route.ts      GET /api/stats (v1 dummy)
+  api/placeholder/        Gambar placeholder dinamis (tim kabinet)
   globals.css             Token design system (warna, radius, shadow, motion, glass)
 components/
-  ui/                     Komponen design system (Button, Badge, Card, Navbar, ...)
+  ui/                     Komponen design system (Button, Badge, Card, SiteNav, SiteFooter, ...)
   webgl/                  MeshGradient (ogl)
   home/                   Section beranda + hero orbit
     orbit/scene.ts        Scene three.js: logo 3D + kartu proker (Rings/Spiral)
     ProkerViewer.tsx      Tampilan zoom proker + kartu yang bisa dibalik
     DivisiBack.tsx        Sisi belakang kartu: ringkasan biro/departemen
-  divisi/                 Konten halaman detail divisi
+  kabinet/, kabinet-list/ Komponen halaman kabinet (tim kabinet)
   proker/                 Komponen terkait proker (StatusBadge)
-  layout/                 SiteHeader, SiteFooter, CustomCursor
-config/site.ts            Navigasi, sosial media, pengaturan hero
+  layout/                 CustomCursor (hero beranda)
+config/site.ts            Sosial media, pengaturan hero
 data/                     Data v1 (lihat di bawah)
 lib/
-  data.ts                 Data access layer (server)
-  divisi-client.ts        Loader divisi on-demand di klien
-public/images/            Logo, foto proker, cover divisi, thumbnail berita
-types/                    Tipe data bersama
+  kabinet.ts              Data kabinet & divisi (tim kabinet)
+  data.ts                 Data beranda: proker, statistik, berita (server)
+  unit.ts                 Jenis unit (BPH/Departemen/Biro) + ringkasan divisi
+public/images/            Logo, foto dokumentasi proker, thumbnail berita
+types/                    Tipe data beranda
 ```
 
 ## Beranda
@@ -79,20 +80,22 @@ Urutan section: **Hero orbit → Statistik → Tagline kabinet → Kabinet Kami 
 - Klik kartu → foto membesar (viewer). Tab **Biro/Departemen** di sisi kartu **membalik kartu** dan menampilkan detail divisi di belakangnya, tanpa pindah halaman. Esc: balik kartu / tutup viewer. Panah kiri/kanan: pindah proker.
 - Pengaturan ada di `config/site.ts` (`HERO`): jumlah cincin, kartu per cincin, kecepatan, batas putaran, warna latar.
 
-Efisiensi: three.js dimuat terpisah setelah halaman tampil (logo PNG statis tampil lebih dulu dan menjadi fallback bila WebGL tidak didukung); semua kartu dirender dalam satu draw call (InstancedMesh + atlas); render berhenti saat hero tidak terlihat, tab tersembunyi, atau viewer terbuka; data divisi diunduh hanya saat kartu dibalik.
+Efisiensi: three.js dimuat terpisah setelah halaman tampil (logo PNG statis tampil lebih dulu dan menjadi fallback bila WebGL tidak didukung); semua kartu dirender dalam satu draw call (InstancedMesh + atlas); render berhenti saat hero tidak terlihat, tab tersembunyi, atau viewer terbuka; ringkasan divisi untuk sisi belakang kartu dikirim dari server (teks saja, beberapa KB).
 
 ## Data
 
-v1 memakai JSON di `data/`, dibaca lewat `lib/data.ts`. Untuk migrasi ke SIT API (v2) cukup ganti isi fungsi di `lib/data.ts` dan `lib/divisi-client.ts`; komponen UI tidak perlu diubah.
+v1 memakai JSON di `data/`. Untuk migrasi ke SIT API (v2) cukup ganti isi fungsi di `lib/kabinet.ts` dan `lib/data.ts`; komponen UI tidak perlu diubah.
 
 ```
 data/
-  kabinet.json        info kabinet (deskripsi, visi, misi, nilai utama, kata kabem)
-  struktur.json       daftar divisi + urutan (dipakai juga untuk prev/next)
+  kabinet.json        info kabinet, ketua & wakil, misi (tim kabinet)
+  divisi/[slug].json  detail tiap divisi: pengurus, staf, visi, misi (tim kabinet)
+  proker.json         daftar proker; field `divisi` mengacu ke slug di divisi/ (beranda)
   stats.json          statistik beranda
   news.json           artikel (sementara, v2 dari Supabase)
-  divisi/[slug].json  detail tiap divisi + anggota + proker
 ```
+
+Jenis unit untuk label tab (BPH / Departemen / Biro) diturunkan di `lib/unit.ts`: slug `bph` → BPH, nama berawalan "Biro" → Biro, selain itu Departemen. Bila data divisi kelak punya field `type`, cukup ubah satu fungsi itu.
 
 ### Skema proker
 
@@ -100,20 +103,21 @@ Proker nantinya dikelola lewat **CRUD di sistem terpisah** (bukan di website ini
 
 ```jsonc
 {
-  "slug": "kastrat-sekolah-advokasi",
+  "slug": "kajian-strategis-sekolah-advokasi",
+  "divisi": "kajian-strategis",   // slug di data/divisi/
   "nama": "Sekolah Advokasi",
   "status": "done",            // "upcoming" | "ongoing" | "done"
   "tanggal": "Maret 2026",
   "deskripsi": "Ringkasan satu kalimat.",
   "penjelasan": ["Paragraf 1", "Paragraf 2"],
-  "foto_url": "/images/proker/kastrat-sekolah-advokasi-1.svg", // sampul, opsional
+  "foto_url": "/images/proker/kajian-strategis-sekolah-advokasi-1.svg", // sampul, opsional
   "dokumentasi": [
-    { "url": "/images/proker/kastrat-sekolah-advokasi-1.svg", "caption": "Pembukaan kegiatan" }
+    { "url": "/images/proker/kajian-strategis-sekolah-advokasi-1.svg", "caption": "Pembukaan kegiatan" }
   ]
 }
 ```
 
-**Semua foto proker & dokumentasi wajib rasio 4:3** (disarankan 1200×900) agar konsisten di orbit, viewer, dan halaman divisi. Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
+**Semua foto proker & dokumentasi wajib rasio 4:3** (disarankan 1200×900) agar konsisten di orbit dan viewer. Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
 
 > Seluruh isi data dan gambar di repo ini masih **dummy** (placeholder SVG). Ganti dengan konten resmi sebelum rilis.
 
@@ -130,8 +134,7 @@ Token ada di `app/globals.css` (palet navy, blue, maroon, red, pink; radius; sha
 | Route | Status |
 | --- | --- |
 | `/` | Selesai (konten dummy) |
-| `/kabinet/[slug]` | Selesai (konten dummy) |
-| `/kabinet` | Belum |
+| `/kabinet`, `/kabinet/[slug]` | Selesai (konten dummy, tim kabinet) |
 | `/news`, `/news/[slug]` | Belum |
 
 ## Alur kerja Git

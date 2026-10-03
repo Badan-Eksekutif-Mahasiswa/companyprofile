@@ -5,9 +5,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { ChevronLeft, ChevronRight, RotateCw, X } from "lucide-react";
 import { Badge, Button } from "@/components/ui";
 import { StatusBadge } from "@/components/proker/StatusBadge";
-import { loadDivisi } from "@/lib/divisi-client";
 import { cn } from "@/lib/utils";
-import type { HeroProker } from "@/types";
+import type { DivisiSummary, HeroProker } from "@/types";
 import { DivisiBack } from "./DivisiBack";
 
 type Rect = { left: number; top: number; width: number; height: number };
@@ -19,6 +18,8 @@ const toRect = (r: DOMRect): Rect => ({ left: r.left, top: r.top, width: r.width
 
 interface Props {
   items: HeroProker[];
+  /** Ringkasan semua divisi (kunci = slug), untuk sisi belakang kartu. */
+  divisi: Record<string, DivisiSummary>;
   index: number;
   /** Posisi kartu yang diklik di layar, titik awal animasi zoom (null = fade). */
   originRect: Rect | null;
@@ -33,7 +34,7 @@ interface Props {
  * Kartu foto 4:3 bisa DIBALIK lewat tab unit (Biro/Departemen) untuk menampilkan
  * detail divisi di sisi belakangnya, tanpa pindah halaman.
  */
-export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexChange, onClose }: Props) {
+export function ProkerViewer({ items, divisi, index, originRect, getReturnRect, onIndexChange, onClose }: Props) {
   const item = items[index];
   const bgRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -123,7 +124,6 @@ export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexC
     if (i >= 0) onIndexChange(i);
   };
 
-  const prefetch = () => void loadDivisi(item.divisi.slug).catch(() => {});
   const toggleFlip = () => setFlipped((f) => !f);
 
   // Scroll lock + fokus awal.
@@ -166,10 +166,8 @@ export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexC
                   <motion.button
                     type="button"
                     onClick={toggleFlip}
-                    onPointerEnter={prefetch}
-                    onFocus={prefetch}
                     aria-pressed={flipped}
-                    aria-label={flipped ? "Balik kartu ke foto proker" : `Lihat detail ${item.divisi.nama}`}
+                    aria-label={flipped ? "Balik kartu ke foto proker" : `Lihat detail ${item.unit.nama}`}
                     data-cursor={flipped ? "Balik" : "Detail"}
                     className={cn(
                       "group absolute right-full top-6 z-10 flex flex-col items-center gap-3 rounded-l-xl border border-r-0 px-2 py-4 transition-colors duration-base sm:px-2.5 sm:py-5",
@@ -182,11 +180,11 @@ export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexC
                     transition={{ duration: 0.45, ease: EASE, delay: 0.1 }}
                   >
                     <span className="rotate-180 text-base font-extrabold tracking-tight [writing-mode:vertical-rl] sm:text-lg">
-                      {flipped ? "Proker" : item.divisi.type}
+                      {flipped ? "Proker" : item.unit.type}
                     </span>
                     {!flipped && (
                       <span className="rotate-180 text-[10px] font-bold uppercase tracking-[0.18em] text-accent [writing-mode:vertical-rl] sm:text-[11px]">
-                        {item.divisi.singkatan}
+                        {item.unit.singkatan}
                       </span>
                     )}
                     <RotateCw aria-hidden className="size-4 transition-transform duration-slow group-hover:rotate-90" />
@@ -222,7 +220,12 @@ export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexC
                         className="absolute inset-0 overflow-y-auto overscroll-contain rounded-xl bg-white text-navy shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)]"
                       >
                         {backMounted && (
-                          <DivisiBack slug={item.divisi.slug} currentProker={item.slug} onSelectProker={selectProker} />
+                          <DivisiBack
+                            divisi={divisi[item.unit.slug]}
+                            proker={items.filter((p) => p.unit.slug === item.unit.slug)}
+                            currentProker={item.slug}
+                            onSelectProker={selectProker}
+                          />
                         )}
                       </div>
                     </div>
@@ -289,14 +292,13 @@ export function ProkerViewer({ items, index, originRect, getReturnRect, onIndexC
               <button
                 type="button"
                 onClick={toggleFlip}
-                onPointerEnter={prefetch}
                 className="group mt-8 flex w-full items-center gap-4 rounded-xl border border-white/15 bg-white/5 p-4 text-left transition-colors duration-base hover:bg-white/10"
               >
                 <div className="min-w-0 flex-1">
                   <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">Diselenggarakan oleh</span>
                   <span className="mt-1.5 flex flex-wrap items-center gap-2">
-                    <Badge variant="pink">{item.divisi.type}</Badge>
-                    <span className="font-bold">{item.divisi.nama}</span>
+                    <Badge variant="pink">{item.unit.type}</Badge>
+                    <span className="font-bold">{item.unit.nama}</span>
                   </span>
                 </div>
                 <span className="flex shrink-0 items-center gap-1.5 text-sm font-bold text-pink-light">

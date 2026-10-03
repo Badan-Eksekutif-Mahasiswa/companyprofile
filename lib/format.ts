@@ -22,4 +22,4 @@ export function formatTanggal(iso: string) {
   return tanggalFmt.format(new Date(`${iso}T00:00:00`));
 }
 
-export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+export const clamp =(v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
