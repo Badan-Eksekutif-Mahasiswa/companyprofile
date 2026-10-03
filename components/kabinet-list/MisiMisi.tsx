@@ -1,20 +1,20 @@
 import type { Kabinet } from "@/lib/kabinet";
-import { Reveal } from "../Reveal";
+import { Reveal } from "./Reveal";
 import { cn } from "@/lib/utils";
-import { pad, plainText } from "./parse";
+import { pad, plainText } from "./parse-misi";
 
-/** Opsi C — satu kata kunci raksasa per misi, kalimat misi kecil di sisi berlawanan. Ganjil navy, genap pink. */
-export function MisiC({ misi }: { misi: Kabinet["misi"] }) {
+/** Misi: satu kata kunci besar per misi, kalimat misi kecil di sisi berlawanan. Ganjil navy, genap pink. */
+export function MisiMisi({ misi }: { misi: Kabinet["misi"] }) {
   return (
     <section className="mx-auto max-w-wrap px-6 py-24 md:py-36" aria-label="Misi">
       <div className="mb-10 text-[13px] font-bold uppercase tracking-[0.12em] text-accent-hover">(Misi)</div>
-      <div className="space-y-6 md:space-y-2">
+      <div className="space-y-10 md:space-y-8">
         {misi.map((m, i) => {
           const right = i % 2 === 1;
           return (
             <Reveal key={i} className={cn("flex flex-col", right ? "md:items-end" : "md:items-start")}>
               <div
-                className={cn("text-[clamp(44px,12.5vw,180px)] font-extrabold uppercase leading-[0.9] tracking-[-0.06em]", right ? "text-accent" : "text-navy")}
+                className={cn("text-[clamp(26px,6.25vw,90px)] font-extrabold uppercase leading-[0.9] tracking-[-0.06em]", right ? "text-accent" : "text-navy")}
               >
                 {m.kunci}
               </div>

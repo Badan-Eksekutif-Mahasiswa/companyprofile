@@ -129,5 +129,9 @@
       "date": "Maret 2026",
       "image": "/api/placeholder?label=RISTEK%20%E2%80%94%20PROKER%20UNGGULAN&w=1400&h=1000&tone=maroon&sub=FOTO%20PROKER"
     }
-  ]
+  ],
+  "foto_bph": {
+    "url": "/api/placeholder?label=FOTO%20BPH%20RISTEK&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20DEPARTEMEN",
+    "alt": "Foto BPH Riset dan Teknologi"
+  }
 }

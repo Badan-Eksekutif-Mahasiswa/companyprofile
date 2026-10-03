@@ -22,6 +22,8 @@ export type Divisi = {
   description: string;
   cover: Media;
   logo: Media;
+  /** Foto BPH (pengurus inti) departemen — dipakai di kartu grid /kabinet. */
+  foto_bph: Media;
   sections: Section[];
   collaborators?: { name: string; role: string }[];
   highlights?: { title: string; date: string; image: string }[];

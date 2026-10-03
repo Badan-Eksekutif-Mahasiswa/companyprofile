@@ -4,6 +4,7 @@ import { SiteFooter, SiteNav } from "@/components/ui";
 import { KabinetHero } from "@/components/kabinet-list/KabinetHero";
 import { Leaders } from "@/components/kabinet-list/Leaders";
 import { DivisiGrid } from "@/components/kabinet-list/DivisiGrid";
+import { MisiMisi } from "@/components/kabinet-list/MisiMisi";
 import { ProkerSpotlight } from "@/components/kabinet-list/ProkerSpotlight";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function KabinetPage() {
       <SiteNav />
       <main>
         <KabinetHero kabinet={kabinet} />
+        <MisiMisi misi={kabinet.misi} />
         <Leaders kabinet={kabinet} />
         <DivisiGrid divisi={divisi} />
         <ProkerSpotlight kabinet={kabinet} />
