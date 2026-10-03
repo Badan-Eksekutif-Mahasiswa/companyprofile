@@ -38,10 +38,10 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       <ReadingProgress />
       {banner}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <header className="relative overflow-hidden pb-16 pt-32 md:pt-40 print:pt-0">
-      <MeshGradient className="h-full print:hidden" />
+      <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
+      <MeshGradient className="h-full" />
       <div className="relative mx-auto max-w-wrap px-6">
-      <div className="mb-4 print:hidden"><BackToList /></div>
+      <div className="mb-4"><BackToList /></div>
       <Breadcrumb items={[{ label: "News", href: "/news" }, ...(a.kategori ? [{ label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }] : []), { label: a.judul }]} />
 
       <div className="mt-8 max-w-[860px]">
@@ -53,7 +53,6 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
           {a.penulis} · Terbit <time dateTime={a.tanggal}>{formatTanggal(a.tanggal)}</time>
           {a.diperbarui && <> · Diperbarui <time dateTime={a.diperbarui}>{formatTanggal(a.diperbarui)}</time></>} · {a.estimasiBaca} menit baca
         </p>
-        <p className="mt-2 hidden text-sm text-muted print:block">BEM UI 2026 · {SITE}/news/{a.slug}</p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {a.tag.map((t) => (
             <li key={t}>
@@ -63,7 +62,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
             </li>
           ))}
         </ul>
-        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 print:hidden">
+        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <ShareButtons title={a.judul} />
           <ReaderTools />
         </div>
@@ -72,14 +71,9 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       </header>
 
       <div className="mx-auto w-full max-w-wrap px-4 pb-24 pt-10 sm:px-6">
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px] print:block">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px]">
       <div className="min-w-0">
       <div className="max-w-[860px]">
-    {a.koreksi && (
-      <aside role="note" className="mt-6 rounded-2xl border-l-4 border-accent bg-pink-pale p-4 text-[14.5px] leading-relaxed text-navy">
-        <strong>Catatan koreksi{a.diperbarui ? ` (${formatTanggal(a.diperbarui)})` : ""}:</strong> {a.koreksi}
-      </aside>
-    )}
     {a.poinUtama && a.poinUtama.length > 0 && (
       <section aria-labelledby="poin-utama" className="mt-6 rounded-2xl border border-border bg-navy-5 p-5">
         <h2 id="poin-utama" className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent-hover">Poin penting</h2>
@@ -98,7 +92,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
         <article id="isi-artikel" className="mt-12">
           {showToc && <div className="mb-8 lg:hidden"><ArticleToc headings={headings} /></div>}
           <ArticleBody blocks={a.body} />
-          <div className="print:hidden"><Attachments items={a.lampiran} /></div>
+          <div><Attachments items={a.lampiran} /></div>
           {a.sumber.length > 0 && (
             <section aria-labelledby="sumber" className="mt-12 max-w-[720px]">
               <h2 id="sumber" className="text-xl font-extrabold text-navy">Sumber</h2>
@@ -117,19 +111,19 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
               </ul>
             </section>
           )}
-          <div className="mt-12 max-w-[720px] border-t border-divider pt-6 print:hidden">
+          <div className="mt-12 max-w-[720px] border-t border-divider pt-6">
             <ShareButtons title={a.judul} label="Bagikan artikel ini" />
           </div>
         </article>
         </div>
         {showToc ? (
-          <aside className="hidden lg:block print:hidden">
+          <aside className="hidden lg:block">
             <div className="sticky top-28">
               <ArticleToc headings={headings} />
             </div>
           </aside>
         ) : (
-        <aside aria-labelledby="terkait" className="lg:sticky lg:top-28 lg:self-start print:hidden">
+        <aside aria-labelledby="terkait" className="lg:sticky lg:top-28 lg:self-start">
           <h2 id="terkait" className="text-lg font-extrabold text-navy">Artikel Terkait</h2>
           <ul className="mt-4 space-y-4">
             {related.map((r) => (
@@ -142,7 +136,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
         )}
       </div>
 
-      <section aria-labelledby="baca-juga" className="mt-20 print:hidden border-t border-divider pt-10">
+      <section aria-labelledby="baca-juga" className="mt-20 border-t border-divider pt-10">
         <h2 id="baca-juga" className="text-[clamp(28px,3.5vw,48px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">Baca Juga</h2>
         <div className="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((r, i) => (

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SIZES = [
@@ -10,7 +9,7 @@ const SIZES = [
   { key: "lg", label: "A", title: "Huruf besar", cls: "text-[20px]" },
 ] as const;
 
-/** Ukuran huruf (tersimpan di perangkat) dan tombol cetak. */
+/** Ukuran huruf (tersimpan di perangkat). */
 export function ReaderTools() {
   const [fs, setFs] = React.useState<string>("md");
   React.useEffect(() => {
@@ -27,7 +26,7 @@ export function ReaderTools() {
     try { localStorage.setItem("news:fs", k); } catch {}
   };
   return (
-    <div className="flex flex-wrap items-center gap-3 print:hidden">
+    <div className="flex flex-wrap items-center gap-3">
       <div role="group" aria-label="Ukuran huruf" className="inline-flex overflow-hidden rounded-full border-[1.5px] border-border bg-white">
         {SIZES.map((s) => (
           <button
@@ -43,13 +42,6 @@ export function ReaderTools() {
           </button>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={() => window.print()}
-        className="inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-border bg-white px-4 py-2 text-sm font-bold text-navy outline-none transition-colors duration-fast hover:border-accent hover:text-accent focus-visible:ring-4 focus-visible:ring-pink-pale"
-      >
-        <Printer className="size-4" aria-hidden /> Cetak
-      </button>
     </div>
   );
 }

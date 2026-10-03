@@ -27,7 +27,7 @@ export function ReadingProgress() {
     };
   }, []);
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-[70] h-[3px] print:hidden">
+    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-[70] h-[3px]">
       <div ref={ref} data-testid="progress" className="h-full origin-left scale-x-0 bg-accent" />
     </div>
   );

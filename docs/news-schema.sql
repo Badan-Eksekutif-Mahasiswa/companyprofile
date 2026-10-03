@@ -18,7 +18,6 @@ create table if not exists public.articles (
   kategori       text not null default 'kabar-ui' check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),
   poin_utama     text[],                 -- opsional: 3-4 poin penting di atas artikel
   diperbarui     date,                   -- opsional: tanggal revisi
-  koreksi        text,                   -- opsional: catatan koreksi
   seo            jsonb,                  -- opsional {title, description, ogImage}
   published      boolean not null default false,
   created_at     timestamptz not null default now()
@@ -35,4 +34,4 @@ create policy "baca artikel terbit" on public.articles
   using (published = true);
 
 -- Bila tabel sudah ada:
--- alter table public.articles add column if not exists poin_utama text[], add column if not exists diperbarui date, add column if not exists koreksi text;
+-- alter table public.articles add column if not exists poin_utama text[], add column if not exists diperbarui date;

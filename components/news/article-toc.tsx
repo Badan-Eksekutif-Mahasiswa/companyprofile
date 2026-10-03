@@ -40,7 +40,7 @@ export function ArticleToc({ headings }: { headings: Heading[] }) {
   );
 
   return (
-    <nav aria-label="Daftar isi" className="print:hidden">
+    <nav aria-label="Daftar isi">
       <details className="rounded-2xl border border-border bg-white p-4 lg:hidden">
         <summary className="cursor-pointer text-sm font-extrabold text-navy">Daftar isi</summary>
         <div className="mt-3">{list}</div>

@@ -26,7 +26,7 @@ export function BackToList() {
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1.5 text-sm font-bold text-accent outline-none hover:underline focus-visible:ring-4 focus-visible:ring-pink-pale print:hidden"
+      className="inline-flex items-center gap-1.5 text-sm font-bold text-accent outline-none hover:underline focus-visible:ring-4 focus-visible:ring-pink-pale"
     >
       <ArrowLeft className="size-4" aria-hidden /> Kembali ke daftar
     </Link>

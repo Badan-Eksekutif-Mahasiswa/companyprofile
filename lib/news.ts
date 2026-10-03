@@ -27,8 +27,6 @@ export interface NewsArticle {
   poinUtama?: string[];
   /** Tanggal revisi terakhir (opsional). */
   diperbarui?: string;
-  /** Catatan koreksi/revisi (opsional). */
-  koreksi?: string;
   /** Sumber/rujukan artikel (boleh kosong). */
   sumber: NewsSource[];
   /** Lampiran (PDF dll). PDF bisa dipratinjau di halaman artikel. */
