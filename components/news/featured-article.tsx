@@ -7,7 +7,7 @@ import { Cover } from "./cover";
 
 export function FeaturedArticle({ article }: { article: NewsArticle }) {
   return (
-    <article className="group relative grid gap-6 lg:grid-cols-3 lg:gap-10">
+    <article data-cursor="Baca" className="group relative grid gap-6 lg:grid-cols-3 lg:gap-10">
       <Cover
         kategori={article.kategori}
         src={article.heroImage}

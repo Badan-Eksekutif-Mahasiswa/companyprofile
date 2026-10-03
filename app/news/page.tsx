@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { NewsBackdrop } from "@/components/news/backdrop";
+import { CursorRing } from "@/components/news/cursor-ring";
 import { NewsBrowser } from "@/components/news/news-browser";
 import { NewsSkeleton } from "@/components/news/news-skeleton";
 import { getNewsArticles } from "@/lib/news";
@@ -22,13 +24,17 @@ export default async function NewsPage() {
   const articles = await getNewsArticles();
 
   return (
-    <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-16 sm:px-6 lg:pt-24">
+    <main id="main" className="relative mx-auto w-full max-w-wrap px-4 pb-24 pt-16 sm:px-6 lg:pt-24">
+      <NewsBackdrop />
+      <CursorRing />
       <header className="mb-12 border-b-2 border-navy pb-6">
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-accent">Publikasi resmi BEM UI 2026</p>
         <h1 tabIndex={-1} className="mt-2 text-5xl font-extrabold leading-[0.95] tracking-tight text-navy sm:text-6xl lg:text-8xl">
-          Berita &amp; Artikel
+          <span className="block overflow-hidden pb-2">
+            <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita &amp; Artikel</span>
+          </span>
         </h1>
-        <p className="mt-3 text-base text-secondary">
+        <p className="news-fade mt-3 text-base text-secondary [animation:news-fade_0.8s_0.35s_var(--ease-out)_both]">
           Kajian, pernyataan sikap, dan kabar terbaru dari BEM UI 2026.
         </p>
       </header>

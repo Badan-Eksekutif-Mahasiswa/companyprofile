@@ -84,7 +84,10 @@ const config: Config = {
       maxWidth: { wrap: "1180px" },
     },
   },
-  plugins: [],
+  plugins: [
+    ({ addVariant }: { addVariant: (n: string, v: string) => void }) =>
+      addVariant("pointer-fine", "@media (pointer: fine)"),
+  ],
 };
 
 export default config;

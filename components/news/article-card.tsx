@@ -16,7 +16,7 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
   const large = size === "large";
   if (size === "compact") {
     return (
-      <article className={cn("group relative grid grid-cols-[40%_1fr] gap-4", className)}>
+      <article data-cursor="Baca" className={cn("group relative grid grid-cols-[40%_1fr] gap-4 rounded-2xl border border-glass-border bg-glass p-3 shadow-glass-soft backdrop-blur-glass transition-[transform,box-shadow] duration-base ease-out-expo hover:-translate-y-1 hover:shadow-glass", className)}>
         <Cover kategori={article.kategori} src={article.heroImage} className="aspect-[4/3] rounded-xl" sizes="(min-width: 1024px) 20vw, 40vw" />
         <div className="flex flex-col gap-1.5">
           <Badge variant={CATEGORY_STYLE[article.kategori].badge} className="self-start">{categoryLabel(article.kategori)}</Badge>
@@ -33,7 +33,7 @@ export function ArticleCard({ article, size = "small", className }: ArticleCardP
     );
   }
   return (
-    <article className={cn("group relative flex flex-col", className)}>
+    <article data-cursor="Baca" className={cn("group relative flex flex-col", className)}>
       <Cover
         kategori={article.kategori}
         src={article.heroImage}

@@ -18,7 +18,7 @@ export function TagCloud({ tags, active, onSelect }: TagCloudProps) {
   };
 
   return (
-    <section aria-labelledby="topik-populer" className="mt-16 border-t border-divider pt-10">
+    <section aria-labelledby="topik-populer" className="mt-20 rounded-2xl border border-glass-border bg-glass p-8 shadow-glass-soft backdrop-blur-glass">
       <h2 id="topik-populer" className="text-xl font-extrabold text-navy">
         Topik Populer
       </h2>
@@ -37,7 +37,7 @@ export function TagCloud({ tags, active, onSelect }: TagCloudProps) {
                   on ? "bg-accent text-white" : "bg-navy-5 text-navy hover:bg-pink-pale hover:text-accent"
                 )}
               >
-                #{t.label} <span className={cn("text-[0.75em] font-semibold", on ? "text-white/80" : "text-muted")}>{t.count}</span>
+                #{t.label} <span className={cn("text-[0.75em] font-semibold", on ? "text-white opacity-80" : "text-muted")}>{t.count}</span>
               </button>
             </li>
           );

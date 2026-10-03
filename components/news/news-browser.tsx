@@ -97,7 +97,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   return (
     <>
       <div className="flex flex-col gap-5">
-        <div role="search" className="max-w-xl">
+        <div role="search" className="max-w-xl rounded-lg bg-glass shadow-glass-soft backdrop-blur-glass-md">
           <label htmlFor="news-search" className="sr-only">
             Cari artikel
           </label>
@@ -109,6 +109,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
+            className="border-glass-border bg-transparent"
           />
         </div>
 
@@ -124,8 +125,8 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                 className={cn(
                   "shrink-0 rounded-full border-[1.5px] px-4 py-2 text-sm font-bold outline-none transition-colors duration-fast focus-visible:ring-4 focus-visible:ring-pink-pale",
                   on
-                    ? "border-navy bg-navy text-white"
-                    : "border-border bg-white text-navy hover:border-accent hover:text-accent"
+                    ? "border-navy bg-navy text-white shadow-md"
+                    : "border-glass-border bg-glass text-navy shadow-glass-soft backdrop-blur-glass-md hover:bg-glass-strong hover:text-accent"
                 )}
               >
                 {c.label}
