@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   TOKENS — palet resmi Kabinet (navy, blue, maroon, red, pink)
+   di atas base putih. Light mode only.
+   ============================================ */
+:root {
+  color-scheme: light;
+
+  /* base */
+  --white: #ffffff;
+  --off-white: #fafafa;
+  --bg: var(--white);
+
+  /* brand */
+  --navy: #0b102d;
+  --navy-80: rgba(11, 16, 45, 0.8);
+  --navy-70: rgba(11, 16, 45, 0.7);
+  --navy-50: rgba(11, 16, 45, 0.5);
+  --navy-30: rgba(11, 16, 45, 0.3);
+  --navy-10: rgba(11, 16, 45, 0.08);
+  --navy-05: rgba(11, 16, 45, 0.04);
+
+  --blue: #475ca3;
+  --blue-hover: #3a4c8c;
+  --blue-soft: #9cb3d3;
+  --blue-pale: #eef1f9;
+
+  --maroon: #5e121c;
+  --maroon-pale: #fbeeef;
+
+  --red: #82181a;
+  --red-hover: #651214;
+  --red-pale: #fdeeee;
+
+  --pink: #d64c6f;
+  --pink-light: #ffced8;
+  --pink-pale: #fff2f5;
+
+  --accent: var(--pink);
+  --accent-hover: #c13a5c;
+  --accent-pale: var(--pink-pale);
+
+  /* status */
+  --success: #1e9e5a;
+  --success-pale: #e7f7ef;
+  --warning: #b9790a;
+  --warning-pale: #fff6e0;
+
+  /* text */
+  --text-primary: var(--navy);
+  --text-secondary: var(--navy-70);
+  --text-muted: var(--navy-50);
+  --text-faint: var(--navy-30);
+
+  /* surfaces */
+  --card-bg: var(--white);
+  --border: #e7e7ec;
+  --border-soft: #f0f0f4;
+  --divider: #ececf1;
+
+  /* radius */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-full: 9999px;
+
+  /* shadow — navy-tinted, netral */
+  --shadow-xs: 0 1px 2px rgba(11, 16, 45, 0.05);
+  --shadow-sm: 0 1px 3px rgba(11, 16, 45, 0.09), 0 1px 2px -1px rgba(11, 16, 45, 0.09);
+  --shadow-md: 0 4px 14px rgba(11, 16, 45, 0.09), 0 2px 6px rgba(11, 16, 45, 0.06);
+  --shadow-lg: 0 20px 25px -5px rgba(11, 16, 45, 0.12), 0 8px 10px -6px rgba(11, 16, 45, 0.08);
+  --shadow-xl: 0 25px 50px -12px rgba(11, 16, 45, 0.2);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 380ms;
+
+  /* glass — recipe dari pintarly.id.
+     Hanya kelihatan kalau ada warna di belakangnya. */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-bg-soft: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --glass-blur: blur(20px);
+  --glass-blur-lg: blur(24px);
+  --glass-blur-md: blur(12px);
+  --glass-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 8px 32px rgba(94, 18, 28, 0.14),
+    inset 0 0 20px rgba(255, 255, 255, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.95);
+  --glass-shadow-soft: 0 0 0 1px rgba(255, 255, 255, 0.45), 0 20px 44px rgba(11, 16, 45, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--pink-light);
+    color: var(--maroon);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Fallback statis untuk MeshGradient (dan mesh-surface). Sama dengan mesh-bg referensi. */
+  .mesh-fallback {
+    background:
+      radial-gradient(42% 50% at 14% 20%, rgba(71, 92, 163, 0.5) 0%, rgba(71, 92, 163, 0) 70%),
+      radial-gradient(38% 46% at 86% 10%, rgba(255, 206, 216, 0.85) 0%, rgba(255, 206, 216, 0) 70%),
+      radial-gradient(46% 50% at 50% 48%, rgba(214, 76, 111, 0.38) 0%, rgba(214, 76, 111, 0) 70%),
+      radial-gradient(30% 36% at 30% 70%, rgba(156, 179, 211, 0.45) 0%, rgba(156, 179, 211, 0) 70%),
+      var(--white);
+  }
+  /* Fade bawah ke putih supaya tidak ada tepi keras di akhir hero. */
+  .mesh-mask {
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  }
+  .skeleton {
+    background: linear-gradient(90deg, var(--navy-05) 25%, var(--border-soft) 37%, var(--navy-05) 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.6s ease infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
