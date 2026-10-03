@@ -4,7 +4,6 @@ import { timingSafeEqual } from "node:crypto";
 import { ArticleView } from "@/components/news/article-view";
 import { getNewsPreviewBySlug, getRelatedArticles } from "@/lib/news-data";
 
-// Pratinjau selalu dirender per-request, tidak di-cache, dan tidak diindeks mesin pencari.
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 export const metadata: Metadata = { title: "Pratinjau artikel", robots: { index: false, follow: false } };
@@ -17,10 +16,6 @@ function tokenValid(given?: string): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-/**
- * Pratinjau artikel (termasuk draft): /news-preview/<slug>?token=<NEWS_PREVIEW_TOKEN>
- * Token salah / belum diatur -> 404 (keberadaan halaman tidak dibocorkan).
- */
 export default async function PreviewPage({
   params,
   searchParams,

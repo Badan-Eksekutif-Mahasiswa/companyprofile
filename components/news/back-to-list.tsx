@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { LIST_KEY, BACK_FLAG } from "./list-memory";
 
-/** Kembali ke daftar lengkap dengan filter dan posisi scroll terakhir. */
 export function BackToList() {
   const [href, setHref] = React.useState("/news");
   React.useEffect(() => {
@@ -13,8 +12,6 @@ export function BackToList() {
       const s = JSON.parse(sessionStorage.getItem(LIST_KEY) ?? "null");
       if (s?.url) setHref(s.url);
     } catch {}
-    // Selama artikel dibuka, "kembali" (tombol atau Back browser) memulihkan daftar.
-    // Klik tautan di navbar/footer berarti pembaca pergi ke tempat lain: jangan pulihkan.
     try { sessionStorage.setItem(BACK_FLAG, "1"); } catch {}
     const leave = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest("a");

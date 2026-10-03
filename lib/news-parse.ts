@@ -1,4 +1,3 @@
-/** Normalisasi data mentah dari database/JSON ke bentuk yang dipakai UI. Murni, tanpa akses jaringan. */
 import type { NewsAttachment, NewsBlock, NewsSource } from "@/lib/news";
 
 export function slugify(text: string): string {
@@ -11,13 +10,7 @@ export function slugify(text: string): string {
     .slice(0, 80);
 }
 
-/**
- * Isi berita -> blok. Menerima:
- *  - array blok ({type:"p"|"h2"|"h3"|"quote"|"ul"|"ol"}) atau string JSON dari array itu;
- *  - teks bertanda: paragraf dipisah baris kosong; "# "/"## " subjudul (h2), "###" ke atas sub-subjudul (h3);
- *    kutipan: "> ...", """ ... """ atau “...”; daftar: "- ", "* ", "• "; bernomor: "1. " atau "1) ".
- * HTML TIDAK diinterpretasi (tag tampil sebagai teks), jadi aman dari XSS.
- */
+// Isi berita (teks bertanda atau array blok) -> blok. HTML tidak dirender.
 export function parseBody(input: unknown): NewsBlock[] {
   if (Array.isArray(input)) return input as NewsBlock[];
   if (typeof input !== "string") return [];
@@ -26,9 +19,7 @@ export function parseBody(input: unknown): NewsBlock[] {
     try {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) return parsed as NewsBlock[];
-    } catch {
-      /* bukan JSON, perlakukan sebagai teks */
-    }
+    } catch {}
   }
   return parseText(raw);
 }
@@ -37,7 +28,7 @@ const BULLET = /^\s*[-*•–]\s+/;
 const NUMBER = /^\s*\d+[.)]\s+/;
 const HEADING = /^(#{1,6})\s+(.*)$/;
 
-/** Teks bertanda ke blok. Toleran: blok boleh menempel tanpa baris kosong, bullet -, *, •, nomor 1. atau 1). */
+// Maksimal 3 tingkat heading; blok boleh menempel tanpa baris kosong.
 function parseText(raw: string): NewsBlock[] {
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
   const out: NewsBlock[] = [];
@@ -55,7 +46,6 @@ function parseText(raw: string): NewsBlock[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) { flush(); continue; }
-    // Kutipan ber-"""…""" atau “…” (boleh beberapa baris)
     if (line.startsWith('"""')) {
       flush();
       const buf: string[] = [];
@@ -81,7 +71,6 @@ function parseText(raw: string): NewsBlock[] {
     const h = line.match(HEADING);
     if (h) {
       flush();
-      // Maksimal tiga tingkat: # dan ## jadi h2, ### dan seterusnya jadi h3.
       out.push({ type: h[1].length >= 3 ? "h3" : "h2", text: h[2].trim() });
       continue;
     }
@@ -105,7 +94,6 @@ function parseText(raw: string): NewsBlock[] {
   return out;
 }
 
-/** Estimasi menit baca (~200 kata/menit), minimal 1. */
 export function estimateReadMinutes(blocks: NewsBlock[]): number {
   const words = blocks
     .map((b) => ("items" in b ? b.items.join(" ") : b.text))
@@ -128,7 +116,6 @@ function parseMaybeJson(v: unknown): unknown {
   return v;
 }
 
-/** Sumber: string, array string, atau array {nama,url}. */
 export function normalizeSumber(input: unknown): NewsSource[] {
   const v = parseMaybeJson(input);
   const list = Array.isArray(v) ? v : v ? [v] : [];
@@ -146,7 +133,6 @@ export function normalizeSumber(input: unknown): NewsSource[] {
     .filter((x): x is NewsSource => x !== null);
 }
 
-/** Lampiran: array {nama,url,tipe?,ukuran?} atau array URL string. Hanya http(s) atau path relatif. */
 export function normalizeLampiran(input: unknown, resolveUrl: (p?: string | null) => string | undefined): NewsAttachment[] {
   const v = parseMaybeJson(input);
   const list = Array.isArray(v) ? v : v ? [v] : [];

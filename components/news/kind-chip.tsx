@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { JENIS_KONTEN, type NewsCategory } from "@/lib/news";
 
-/** Chip kaca di atas gambar (glass hanya di atas area berwarna/gambar, sama dengan Plate di Kabinet). */
 export function KindChip({ kategori, className }: { kategori: NewsCategory; className?: string }) {
   return (
     <span

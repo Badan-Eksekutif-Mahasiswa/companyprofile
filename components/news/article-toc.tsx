@@ -4,7 +4,6 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { Heading } from "@/lib/news";
 
-/** Daftar isi: lengket di desktop, lipat di mobile. Subjudul aktif ditandai saat scroll. */
 export function ArticleToc({ headings }: { headings: Heading[] }) {
   const [active, setActive] = React.useState(headings[0]?.id);
 

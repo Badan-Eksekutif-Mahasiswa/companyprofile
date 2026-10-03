@@ -1,6 +1,5 @@
 import { splitHighlight } from "@/lib/news";
 
-/** Menyorot kata kunci pencarian dengan <mark>. */
 export function Highlight({ text, q }: { text: string; q?: string }) {
   return (
     <>

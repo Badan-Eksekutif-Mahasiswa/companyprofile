@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Dirender per-request supaya daftar artikel (sesuai ?kategori/?tag/?q) ada di HTML awal untuk SEO.
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 

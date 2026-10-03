@@ -16,7 +16,6 @@ import { categoryLabel, extractHeadings, formatTanggal, tagKey, type NewsArticle
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-/** Tampilan artikel penuh, dipakai halaman publik dan halaman pratinjau. */
 export function ArticleView({ a, related, banner }: { a: NewsArticle; related: NewsArticle[]; banner?: React.ReactNode }) {
   const headings = extractHeadings(a.body);
   const showToc = headings.filter((h) => h.level === 2).length >= 3;

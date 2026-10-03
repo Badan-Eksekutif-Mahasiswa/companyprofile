@@ -7,7 +7,6 @@ export interface TagCloudProps {
   onSelect: (key: string | null) => void;
 }
 
-/** Ukuran font mengikuti frekuensi; jumlah artikel tetap ditulis supaya tidak bergantung pada ukuran saja. */
 export function TagCloud({ tags, active, onSelect }: TagCloudProps) {
   if (tags.length === 0) return null;
   const max = Math.max(...tags.map((t) => t.count));

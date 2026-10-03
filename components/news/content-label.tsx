@@ -9,7 +9,6 @@ const LOOK: Record<NewsCategory, { cls: string; Icon: typeof ShieldCheck }> = {
   "kabar-ui": { cls: "border-navy-5 bg-navy-5 text-navy", Icon: Newspaper },
 };
 
-/** Label jenis konten di halaman artikel: Pernyataan Resmi (solid) jelas beda dari Opini (garis). */
 export function ContentLabel({ kategori }: { kategori: NewsCategory }) {
   const { label, note } = JENIS_KONTEN[kategori];
   const { cls, Icon } = LOOK[kategori];

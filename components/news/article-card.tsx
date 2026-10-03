@@ -8,9 +8,7 @@ import { KindChip } from "./kind-chip";
 
 export interface ArticleCardProps {
   article: NewsArticle;
-  /** "large" = kartu besar (cover tinggi, excerpt); "small" = kartu ringkas. */
   size?: "large" | "small" | "compact";
-  /** Kata kunci pencarian untuk disorot. */
   q?: string;
   className?: string;
 }
@@ -23,7 +21,6 @@ const META = "text-[12.5px] font-bold uppercase tracking-[0.12em] text-accent-ho
 const STRETCH =
   "outline-none after:absolute after:inset-0 after:rounded-2xl focus-visible:after:ring-4 focus-visible:after:ring-pink-light";
 
-/** Kartu berita bergaya tile Kabinet: gambar rounded-2xl, chip kaca di atas gambar, meta kapital beraksen. */
 export function ArticleCard({ article, size = "small", className, q }: ArticleCardProps) {
   const large = size === "large";
   const compact = size === "compact";

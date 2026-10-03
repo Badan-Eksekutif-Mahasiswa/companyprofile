@@ -1,7 +1,4 @@
-/**
- * Akses data News (SERVER ONLY). Jangan diimpor dari komponen "use client";
- * komponen client cukup mengimpor tipe dan helper murni dari "@/lib/news".
- */
+// Hanya untuk server. Jangan diimpor dari komponen client.
 import { getSupabase, getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/server";
 import { mediaUrl } from "@/lib/media";
 import { isNewsCategory, tagKey, type NewsArticle, type NewsBlock } from "@/lib/news";
@@ -181,11 +178,6 @@ const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a, i) => ({
       : [],
 }));
 
-/**
- * Baris tabel `articles` (lihat docs/news-schema.sql). Nama kolom mengikuti data yang diterima:
- * judul, ringkasan, isi, gambar_utama, penulis, tag, tanggal, sumber, lampiran
- * (+ opsional: slug, kategori, gambar_caption, seo). Ubah di sini kalau nama kolom berbeda.
- */
 interface ArticleRow {
   slug: string | null;
   judul: string;
@@ -203,6 +195,7 @@ interface ArticleRow {
   seo: { title?: string; description?: string; ogImage?: string } | null;
 }
 
+// Baris tabel -> NewsArticle. Sesuaikan nama kolom di sini.
 function fromRow(r: ArticleRow): NewsArticle {
   const body = parseBody(r.isi);
   return {
@@ -224,7 +217,6 @@ function fromRow(r: ArticleRow): NewsArticle {
   };
 }
 
-/** Artikel terbit, terbaru lebih dulu. Supabase bila env terisi, kalau tidak data dummy. */
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   if (!isSupabaseConfigured()) {
     return [...DUMMY_ARTICLES].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
@@ -242,10 +234,6 @@ export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefin
   return (await getNewsArticles()).find((a) => a.slug === slug);
 }
 
-/**
- * Pratinjau: artikel apa pun (termasuk draft) berdasarkan slug. Hanya dipanggil dari
- * route pratinjau yang sudah memeriksa token. Butuh SUPABASE_SERVICE_ROLE_KEY (server only).
- */
 export async function getNewsPreviewBySlug(slug: string): Promise<NewsArticle | undefined> {
   if (!isSupabaseConfigured()) return DUMMY_ARTICLES.find((a) => a.slug === slug);
   const { data, error } = await getSupabaseAdmin().from("articles").select("*").eq("slug", slug).maybeSingle();
@@ -253,7 +241,6 @@ export async function getNewsPreviewBySlug(slug: string): Promise<NewsArticle | 
   return data ? fromRow(data as ArticleRow) : undefined;
 }
 
-/** Artikel terkait: tag/kategori sama dulu, sisanya terbaru. Selalu `limit` artikel (bila cukup). */
 export async function getRelatedArticles(slug: string, limit = 3): Promise<NewsArticle[]> {
   const all = await getNewsArticles();
   const cur = all.find((a) => a.slug === slug);

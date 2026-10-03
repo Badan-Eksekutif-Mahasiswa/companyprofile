@@ -24,10 +24,6 @@ import { LIST_KEY, BACK_FLAG } from "./list-memory";
 
 const PAGE_SIZE = 6;
 
-/**
- * Seluruh state filter hidup di URL (?kategori=, ?tag=, ?q=) supaya bisa
- * dibagikan, di-bookmark, dan tombol Back berfungsi.
- */
 export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const pathname = usePathname();
   const params = useSearchParams();
@@ -43,8 +39,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const [visible, setVisible] = React.useState(PAGE_SIZE);
   const headingRef = React.useRef<HTMLHeadingElement>(null);
 
-  // Sinkronkan kotak pencarian bila URL berubah dari luar (Back/Forward).
-  
+
   const setParam = React.useCallback(
     (patch: Record<string, string | null>) => {
       const next = new URLSearchParams(window.location.search);
@@ -53,13 +48,11 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
         else next.delete(k);
       }
       const qs = next.toString();
-      // History API native (Next 14.1+): URL & useSearchParams ikut update tanpa request ke server.
       window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
     },
     [pathname]
   );
 
-  // Hasil pencarian dihitung dari `query` (state lokal) supaya instan; URL menyusul setelah jeda.
   const lastPushed = React.useRef(q);
   React.useEffect(() => {
     const t = setTimeout(() => {
@@ -72,7 +65,6 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
     return () => clearTimeout(t);
   }, [query, setParam]);
 
-  // Sinkron dari URL hanya bila berubah dari luar (mis. tombol Back).
   React.useEffect(() => {
     if (q !== lastPushed.current) {
       lastPushed.current = q;
@@ -87,7 +79,6 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
     if (sig.current !== now) { sig.current = now; setVisible(PAGE_SIZE); }
   }, [kategori, tag, query, tahun, bulan]);
 
-  // Ingat daftar (URL, scroll, jumlah kartu) saat pembaca membuka artikel.
   const visibleRef = React.useRef(visible);
   visibleRef.current = visible;
   React.useEffect(() => {
@@ -107,11 +98,10 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
     };
   }, []);
 
-  // Pulihkan posisi hanya bila datang dari "kembali" (tombol atau Back browser).
   React.useEffect(() => {
     try {
+      // Pulihkan posisi hanya saat kembali dari artikel.
       if (sessionStorage.getItem(BACK_FLAG) !== "1") return;
-      // Flag dihapus setelah jeda: komponen bisa terpasang ulang (Suspense) saat navigasi Back.
       setTimeout(() => { try { sessionStorage.removeItem(BACK_FLAG); } catch {} }, 2500);
       const s = JSON.parse(sessionStorage.getItem(LIST_KEY) ?? "null");
       if (!s || s.url !== location.pathname + location.search) return;
@@ -162,7 +152,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
-            
+
           />
         </div>
 

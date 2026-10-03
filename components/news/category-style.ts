@@ -4,7 +4,6 @@ import type { NewsCategory } from "@/lib/news";
 
 export interface CategoryStyle {
   badge: BadgeProps["variant"];
-  /** Kelas gradient placeholder cover (token design system). */
   gradient: string;
   Icon: LucideIcon;
 }

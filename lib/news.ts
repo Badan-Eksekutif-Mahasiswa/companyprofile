@@ -17,17 +17,11 @@ export interface NewsArticle {
   estimasiBaca: number;
   excerpt: string;
   heroImage?: string;
-  /** Keterangan di bawah hero image. */
   caption?: string;
-  /** Isi artikel sebagai blok terstruktur (aman disimpan di database/JSON, tanpa HTML mentah). */
   body: NewsBlock[];
-  /** Kosong = pakai judul/excerpt artikel. */
   seo?: { title?: string; description?: string; ogImage?: string };
-  /** Tanggal revisi terakhir (opsional). */
   diperbarui?: string;
-  /** Sumber/rujukan artikel (boleh kosong). */
   sumber: NewsSource[];
-  /** Lampiran (PDF dll). PDF bisa dipratinjau di halaman artikel. */
   lampiran: NewsAttachment[];
 }
 
@@ -39,9 +33,7 @@ export interface NewsSource {
 export interface NewsAttachment {
   nama: string;
   url: string;
-  /** "pdf" -> ada tombol pratinjau. */
   tipe?: string;
-  /** Teks bebas, mis. "1,2 MB". */
   ukuran?: string;
 }
 
@@ -55,7 +47,6 @@ export function isNewsCategory(value: string | null | undefined): value is NewsC
   return NEWS_CATEGORIES.some((c) => c.value === value);
 }
 
-/** Label jenis konten yang tegas; yang pertama dicek pembaca (jurnalis). */
 export const JENIS_KONTEN: Record<NewsCategory, { label: string; note?: string }> = {
   "siaran-pers": { label: "Pernyataan Resmi", note: "Sikap resmi BEM UI 2026." },
   "opini-artikel": { label: "Opini", note: "Pendapat penulis; tidak mewakili sikap resmi BEM UI 2026." },
@@ -73,7 +64,6 @@ function slugHeading(t: string) {
   return t.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "bagian";
 }
 
-/** Daftar subjudul + id unik (dipakai TOC dan ArticleBody supaya id sama). */
 export function extractHeadings(blocks: NewsBlock[]): Heading[] {
   const used = new Map<string, number>();
   const out: Heading[] = [];
@@ -87,7 +77,6 @@ export function extractHeadings(blocks: NewsBlock[]): Heading[] {
   return out;
 }
 
-/** Pecah teks menurut kata kunci (untuk sorotan). */
 export function splitHighlight(text: string, q?: string): { t: string; hit: boolean }[] {
   const needle = q?.trim();
   if (!needle) return [{ t: text, hit: false }];
@@ -114,11 +103,9 @@ export function formatTanggal(iso: string): string {
 
 export interface NewsFilters {
   kategori?: NewsCategory | null;
-  /** Kunci tag (huruf kecil). */
   tag?: string | null;
   q?: string;
   tahun?: string | null;
-  /** 1–12 */
   bulan?: string | null;
 }
 

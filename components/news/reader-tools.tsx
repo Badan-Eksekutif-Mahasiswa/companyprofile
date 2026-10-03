@@ -9,7 +9,6 @@ const SIZES = [
   { key: "lg", label: "A", title: "Huruf besar", cls: "text-[20px]" },
 ] as const;
 
-/** Ukuran huruf (tersimpan di perangkat). */
 export function ReaderTools() {
   const [fs, setFs] = React.useState<string>("md");
   React.useEffect(() => {

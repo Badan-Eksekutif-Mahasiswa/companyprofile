@@ -5,11 +5,6 @@ import { Download, ExternalLink, FileText } from "lucide-react";
 import { buttonVariants } from "@/components/ui";
 import type { NewsAttachment } from "@/lib/news";
 
-/**
- * Lampiran artikel. PDF bisa dipratinjau di halaman (dimuat hanya setelah tombol ditekan,
- * supaya halaman tetap ringan). Browser yang tidak bisa menampilkan PDF inline (mis. banyak
- * browser HP) mendapat tautan "Buka di tab baru".
- */
 export function Attachments({ items }: { items: NewsAttachment[] }) {
   const [open, setOpen] = React.useState<string | null>(items.find((i) => i.tipe === "pdf")?.url ?? null);
   if (items.length === 0) return null;

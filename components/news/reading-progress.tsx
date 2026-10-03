@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-/** Bar progres baca di atas layar; mengikuti elemen #isi-artikel. */
 export function ReadingProgress() {
   const ref = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {

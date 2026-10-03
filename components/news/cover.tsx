@@ -5,13 +5,11 @@ import { styleOf } from "./category-style";
 
 export interface CoverProps {
   kategori?: NewsCategory;
-  /** Gambar hero artikel. Kosong = placeholder gradient + ikon kategori. */
   src?: string;
   className?: string;
   sizes?: string;
 }
 
-/** Cover dekoratif (alt kosong): judul artikel sudah menjelaskan konteksnya. */
 export function Cover({ kategori, src, className, sizes = "(min-width: 1024px) 33vw, 100vw" }: CoverProps) {
   const { gradient, Icon } = styleOf(kategori);
   return (

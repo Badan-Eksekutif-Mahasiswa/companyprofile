@@ -16,7 +16,6 @@ export function ShareButtons({ title, label = "Bagikan" }: { title: string; labe
     try {
       await navigator.clipboard.writeText(url);
     } catch {
-      // Fallback untuk browser tanpa Clipboard API / konteks tidak aman.
       const ta = document.createElement("textarea");
       ta.value = url;
       ta.style.position = "fixed";

@@ -1,6 +1,5 @@
 import { SiteFooter, SiteNav } from "@/components/ui";
 
-/** SiteNav/SiteFooter dipakai bersama halaman lain. */
 export default function NewsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">

@@ -1,6 +1,5 @@
 import { extractHeadings, type NewsBlock } from "@/lib/news";
 
-/** Render blok artikel. Teks selalu di-escape React; tidak ada HTML mentah. Subjudul punya id + tautan langsung. */
 export function ArticleBody({ blocks }: { blocks: NewsBlock[] }) {
   const heads = extractHeadings(blocks);
   let h = 0;

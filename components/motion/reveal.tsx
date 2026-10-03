@@ -7,15 +7,9 @@ import { MOTION } from "@/lib/motion";
 export interface RevealProps {
   children: React.ReactNode;
   className?: string;
-  /** Urutan dalam grup, dikali MOTION.reveal.stagger untuk jeda. */
   index?: number;
 }
 
-/**
- * Reveal-on-scroll (fade + geser) ala K95. Hanya transform/opacity.
- * Elemen yang sudah terlihat saat mount, atau tanpa IntersectionObserver, langsung tampil.
- * Reduced-motion ditangani global di globals.css.
- */
 export function Reveal({ children, className, index = 0 }: RevealProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [hidden, setHidden] = React.useState(false);

@@ -3,10 +3,6 @@
 import * as React from "react";
 import { MOTION, prefersReducedMotion } from "@/lib/motion";
 
-/**
- * Kursor ring ala K95: mengikuti pointer dengan lerp, membesar + label "Baca"
- * di atas elemen [data-cursor]. Hanya di perangkat pointer halus; kursor asli tetap tampil.
- */
 export function CursorRing() {
   const ring = React.useRef<HTMLDivElement>(null);
   const [label, setLabel] = React.useState<string | null>(null);

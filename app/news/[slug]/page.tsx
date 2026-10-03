@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ArticleView } from "@/components/news/article-view";
 import { getNewsArticles, getNewsBySlug, getRelatedArticles } from "@/lib/news-data";
 
-// Halaman artikel dibuat ulang paling lambat tiap 60 detik, jadi artikel baru/edit muncul tanpa deploy.
 export const revalidate = 60;
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
