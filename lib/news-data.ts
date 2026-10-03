@@ -171,10 +171,6 @@ const DUMMY_INPUT: DummyInput[] = [
 
 const DUMMY_ARTICLES: NewsArticle[] = DUMMY_INPUT.map((a, i) => ({
   ...a,
-  poinUtama:
-    a.kategori === "kajian-strategis" || a.kategori === "siaran-pers"
-      ? ["Poin penting pertama (placeholder).", "Poin penting kedua (placeholder).", "Poin penting ketiga (placeholder)."]
-      : undefined,
   diperbarui: i % 4 === 0 ? "2026-04-02" : undefined,
   caption: "Keterangan foto placeholder. Sumber: dokumentasi BEM UI 2026.",
   body: dummyBody(a.excerpt),
@@ -203,7 +199,6 @@ interface ArticleRow {
   sumber: unknown;
   lampiran: unknown;
   kategori: string | null;
-  poin_utama: string[] | null;
   diperbarui: string | null;
   seo: { title?: string; description?: string; ogImage?: string } | null;
 }
@@ -214,7 +209,6 @@ function fromRow(r: ArticleRow): NewsArticle {
     slug: r.slug || slugify(r.judul),
     judul: r.judul,
     kategori: isNewsCategory(r.kategori) ? r.kategori : "kabar-ui",
-    poinUtama: r.poin_utama?.filter(Boolean).slice(0, 4),
     diperbarui: r.diperbarui ? String(r.diperbarui).slice(0, 10) : undefined,
     tag: r.tag ?? [],
     tanggal: String(r.tanggal).slice(0, 10),

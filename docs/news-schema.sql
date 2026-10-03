@@ -16,7 +16,6 @@ create table if not exists public.articles (
   sumber         jsonb not null default '[]',   -- ["Teks"] atau [{"nama":"Kompas","url":"https://..."}]
   lampiran       jsonb not null default '[]',   -- [{"nama":"Kajian UKT.pdf","url":"news/ukt/kajian.pdf","tipe":"pdf","ukuran":"1,2 MB"}]
   kategori       text not null default 'kabar-ui' check (kategori in ('kajian-strategis','siaran-pers','opini-artikel','kabar-ui')),
-  poin_utama     text[],                 -- opsional: 3-4 poin penting di atas artikel
   diperbarui     date,                   -- opsional: tanggal revisi
   seo            jsonb,                  -- opsional {title, description, ogImage}
   published      boolean not null default false,
@@ -34,4 +33,4 @@ create policy "baca artikel terbit" on public.articles
   using (published = true);
 
 -- Bila tabel sudah ada:
--- alter table public.articles add column if not exists poin_utama text[], add column if not exists diperbarui date;
+-- alter table public.articles add column if not exists diperbarui date;

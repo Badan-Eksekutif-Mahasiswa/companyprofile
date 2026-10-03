@@ -74,14 +74,6 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px]">
       <div className="min-w-0">
       <div className="max-w-[860px]">
-    {a.poinUtama && a.poinUtama.length > 0 && (
-      <section aria-labelledby="poin-utama" className="mt-6 rounded-2xl border border-border bg-navy-5 p-5">
-        <h2 id="poin-utama" className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent-hover">Poin penting</h2>
-        <ul className="mt-3 list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-primary marker:text-accent">
-          {a.poinUtama.map((p, i) => <li key={i}>{p}</li>)}
-        </ul>
-      </section>
-    )}
       </div>
 
       <figure className="mt-8 max-w-[720px]">

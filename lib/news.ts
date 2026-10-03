@@ -23,8 +23,6 @@ export interface NewsArticle {
   body: NewsBlock[];
   /** Kosong = pakai judul/excerpt artikel. */
   seo?: { title?: string; description?: string; ogImage?: string };
-  /** 3–4 poin penting di atas artikel (opsional, ditulis redaksi). */
-  poinUtama?: string[];
   /** Tanggal revisi terakhir (opsional). */
   diperbarui?: string;
   /** Sumber/rujukan artikel (boleh kosong). */

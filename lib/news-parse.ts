@@ -14,8 +14,8 @@ export function slugify(text: string): string {
 /**
  * Isi berita -> blok. Menerima:
  *  - array blok ({type:"p"|"h2"|"h3"|"quote"|"ul"|"ol"}) atau string JSON dari array itu;
- *  - teks biasa: paragraf dipisah baris kosong; "## " subjudul, "### " sub-subjudul,
- *    "> " kutipan, "- " / "* " daftar, "1. " daftar bernomor.
+ *  - teks bertanda: paragraf dipisah baris kosong; "# "/"## " subjudul (h2), "###" ke atas sub-subjudul (h3);
+ *    kutipan: "> ...", """ ... """ atau “...”; daftar: "- ", "* ", "• "; bernomor: "1. " atau "1) ".
  * HTML TIDAK diinterpretasi (tag tampil sebagai teks), jadi aman dari XSS.
  */
 export function parseBody(input: unknown): NewsBlock[] {
@@ -30,20 +30,79 @@ export function parseBody(input: unknown): NewsBlock[] {
       /* bukan JSON, perlakukan sebagai teks */
     }
   }
-  const blocks: NewsBlock[] = [];
-  for (const chunk of raw.replace(/\r\n/g, "\n").split(/\n{2,}/)) {
-    const lines = chunk.split("\n").map((l) => l.trimEnd()).filter(Boolean);
-    if (lines.length === 0) continue;
-    const first = lines[0];
-    if (first.startsWith("### ")) blocks.push({ type: "h3", text: first.slice(4).trim() });
-    else if (first.startsWith("## ")) blocks.push({ type: "h2", text: first.slice(3).trim() });
-    else if (first.startsWith("# ")) blocks.push({ type: "h2", text: first.slice(2).trim() });
-    else if (lines.every((l) => l.startsWith(">"))) blocks.push({ type: "quote", text: lines.map((l) => l.replace(/^>\s?/, "")).join(" ") });
-    else if (lines.every((l) => /^[-*]\s+/.test(l))) blocks.push({ type: "ul", items: lines.map((l) => l.replace(/^[-*]\s+/, "")) });
-    else if (lines.every((l) => /^\d+[.)]\s+/.test(l))) blocks.push({ type: "ol", items: lines.map((l) => l.replace(/^\d+[.)]\s+/, "")) });
-    else blocks.push({ type: "p", text: lines.join(" ") });
+  return parseText(raw);
+}
+
+const BULLET = /^\s*[-*•–]\s+/;
+const NUMBER = /^\s*\d+[.)]\s+/;
+const HEADING = /^(#{1,6})\s+(.*)$/;
+
+/** Teks bertanda ke blok. Toleran: blok boleh menempel tanpa baris kosong, bullet -, *, •, nomor 1. atau 1). */
+function parseText(raw: string): NewsBlock[] {
+  const lines = raw.replace(/\r\n/g, "\n").split("\n");
+  const out: NewsBlock[] = [];
+  let para: string[] = [];
+  let list: { type: "ul" | "ol"; items: string[] } | null = null;
+  let quote: string[] | null = null;
+  const flush = () => {
+    if (para.length) out.push({ type: "p", text: para.join(" ") });
+    if (list) out.push(list);
+    if (quote?.length) out.push({ type: "quote", text: quote.join(" ") });
+    para = [];
+    list = null;
+    quote = null;
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) { flush(); continue; }
+    // Kutipan ber-"""…""" atau “…” (boleh beberapa baris)
+    if (line.startsWith('"""')) {
+      flush();
+      const buf: string[] = [];
+      const rest = line.slice(3);
+      if (rest.endsWith('"""') && rest.length >= 3) buf.push(rest.slice(0, -3));
+      else {
+        if (rest) buf.push(rest);
+        for (i++; i < lines.length; i++) {
+          const l = lines[i].trim();
+          if (l.endsWith('"""')) { if (l.slice(0, -3)) buf.push(l.slice(0, -3)); break; }
+          if (l) buf.push(l);
+        }
+      }
+      const text = buf.join(" ").trim();
+      if (text) out.push({ type: "quote", text });
+      continue;
+    }
+    if (line.startsWith("\u201C") && line.endsWith("\u201D") && line.length > 2 && !para.length) {
+      flush();
+      out.push({ type: "quote", text: line.slice(1, -1).trim() });
+      continue;
+    }
+    const h = line.match(HEADING);
+    if (h) {
+      flush();
+      // Maksimal tiga tingkat: # dan ## jadi h2, ### dan seterusnya jadi h3.
+      out.push({ type: h[1].length >= 3 ? "h3" : "h2", text: h[2].trim() });
+      continue;
+    }
+    if (line.startsWith(">")) {
+      if (!quote) { flush(); quote = []; }
+      quote.push(line.replace(/^>\s?/, ""));
+      continue;
+    }
+    const isUl = BULLET.test(line);
+    const isOl = NUMBER.test(line);
+    if (isUl || isOl) {
+      const type = isUl ? "ul" : "ol";
+      if (!list || list.type !== type) { flush(); list = { type, items: [] }; }
+      list.items.push(line.replace(isUl ? BULLET : NUMBER, ""));
+      continue;
+    }
+    if (list || quote) flush();
+    para.push(line);
   }
-  return blocks;
+  flush();
+  return out;
 }
 
 /** Estimasi menit baca (~200 kata/menit), minimal 1. */
