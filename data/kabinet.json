@@ -1,0 +1,71 @@
+{
+  "_dummy": true,
+  "nama": "Kabinet Terus Terang",
+  "periode": "BEM UI 2026",
+  "deskripsi": "Placeholder deskripsi: Kabinet Terus Terang adalah kabinet BEM UI 2026 yang berkomitmen menyampaikan kebenaran dengan jelas dan bergerak bersama mahasiswa.",
+  "visi": "Placeholder visi: Mewujudkan BEM UI yang terbuka, berani menyuarakan kebenaran, dan menjadi rumah bersama bagi seluruh mahasiswa Universitas Indonesia.",
+  "misi": [
+    {
+      "teks": "Membangun komunikasi yang **jujur dan terbuka** dengan seluruh mahasiswa.",
+      "kunci": "Terbuka"
+    },
+    {
+      "teks": "Memperkuat advokasi dan kajian yang **berpihak pada mahasiswa**.",
+      "kunci": "Berpihak"
+    },
+    {
+      "teks": "Menumbuhkan **kolaborasi lintas fakultas** dan organisasi kemahasiswaan.",
+      "kunci": "Kolaborasi"
+    },
+    {
+      "teks": "Menghadirkan program kerja yang **berdampak nyata** bagi masyarakat.",
+      "kunci": "Berdampak"
+    }
+  ],
+  "ketua": {
+    "nama": "Nama Ketua BEM",
+    "jabatan": "Ketua BEM UI 2026",
+    "fakultas": "Fakultas — Angkatan",
+    "kutipan": "Placeholder kutipan Ketua BEM tentang semangat Kabinet Terus Terang.",
+    "foto": {
+      "url": "/api/placeholder?label=FOTO%20KETUA&w=1200&h=1500&tone=pink&sub=PORTRAIT",
+      "alt": "Foto Ketua BEM UI"
+    }
+  },
+  "wakil": {
+    "nama": "Nama Wakil Ketua",
+    "jabatan": "Wakil Ketua BEM UI 2026",
+    "fakultas": "Fakultas — Angkatan",
+    "kutipan": "Placeholder kutipan Wakil Ketua BEM tentang semangat Kabinet Terus Terang.",
+    "foto": {
+      "url": "/api/placeholder?label=FOTO%20WAKIL%20KETUA&w=1200&h=1500&tone=blue&sub=PORTRAIT",
+      "alt": "Foto Wakil Ketua BEM UI"
+    }
+  },
+  "stats": {
+    "divisi": 17,
+    "anggota": 900,
+    "proker": 120,
+    "fakultas": 18
+  },
+  "proker": [
+    {
+      "divisi": "kominfo",
+      "title": "Placeholder Proker Terbaru 1",
+      "date": "Mei 2026",
+      "image": "/api/placeholder?label=FOTO%20PROKER%201&w=1400&h=1800&tone=pink&sub=PROKER"
+    },
+    {
+      "divisi": "pengabdian-masyarakat",
+      "title": "Placeholder Proker Terbaru 2",
+      "date": "April 2026",
+      "image": "/api/placeholder?label=FOTO%20PROKER%202&w=1400&h=1000&tone=blue&sub=PROKER"
+    },
+    {
+      "divisi": "seni-budaya",
+      "title": "Placeholder Proker Terbaru 3",
+      "date": "Maret 2026",
+      "image": "/api/placeholder?label=FOTO%20PROKER%203&w=1200&h=1200&tone=maroon&sub=PROKER"
+    }
+  ]
+}

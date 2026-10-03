@@ -14,11 +14,13 @@ const config: Config = {
       full: "var(--r-full)",
     },
     extend: {
+      // Warna dasar memakai hex literal (sinkron dengan globals.css) supaya modifier opacity
+      // Tailwind (text-white/65, from-navy/85, dst.) bisa dibuat. Warna lain tetap lewat CSS var.
       colors: {
-        white: "var(--white)",
+        white: "#FFFFFF",
         "off-white": "var(--off-white)",
         navy: {
-          DEFAULT: "var(--navy)",
+          DEFAULT: "#0B102D",
           80: "var(--navy-80)",
           70: "var(--navy-70)",
           50: "var(--navy-50)",
@@ -27,16 +29,16 @@ const config: Config = {
           5: "var(--navy-05)",
         },
         blue: {
-          DEFAULT: "var(--blue)",
+          DEFAULT: "#475CA3",
           hover: "var(--blue-hover)",
-          soft: "var(--blue-soft)",
+          soft: "#9CB3D3",
           pale: "var(--blue-pale)",
         },
-        maroon: { DEFAULT: "var(--maroon)", pale: "var(--maroon-pale)" },
-        red: { DEFAULT: "var(--red)", hover: "var(--red-hover)", pale: "var(--red-pale)" },
-        pink: { DEFAULT: "var(--pink)", light: "var(--pink-light)", pale: "var(--pink-pale)" },
+        maroon: { DEFAULT: "#5E121C", pale: "var(--maroon-pale)" },
+        red: { DEFAULT: "#82181A", hover: "var(--red-hover)", pale: "var(--red-pale)" },
+        pink: { DEFAULT: "#D64C6F", light: "#FFCED8", pale: "var(--pink-pale)" },
         accent: {
-          DEFAULT: "var(--accent)",
+          DEFAULT: "#D64C6F",
           hover: "var(--accent-hover)",
           pale: "var(--accent-pale)",
         },
