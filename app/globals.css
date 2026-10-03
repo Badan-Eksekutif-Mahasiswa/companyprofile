@@ -182,3 +182,4 @@
   h1, h2, h3 { break-after: avoid; }
   blockquote, li { break-inside: avoid; }
 }
+@media print { canvas { display: none !important; } }

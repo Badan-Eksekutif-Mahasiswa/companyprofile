@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Breadcrumb } from "@/components/ui";
+import { MeshGradient } from "@/components/webgl";
 import { ArticleBody } from "./article-body";
 import { ArticleCard } from "./article-card";
 import { Cover } from "./cover";
@@ -33,16 +34,19 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
   };
 
   return (
-    <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-28 sm:px-6 lg:pt-32">
+    <main id="main">
       <ReadingProgress />
       {banner}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <header className="relative overflow-hidden pb-12 pt-28 lg:pt-32 print:pt-0">
+      <MeshGradient className="h-full print:hidden" />
+      <div className="relative mx-auto max-w-wrap px-4 sm:px-6">
       <div className="mb-4 print:hidden"><BackToList /></div>
       <Breadcrumb items={[{ label: "News", href: "/news" }, ...(a.kategori ? [{ label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }] : []), { label: a.judul }]} />
 
-      <header className="mt-8 max-w-[860px]">
+      <div className="mt-8 max-w-[860px]">
         <ContentLabel kategori={a.kategori} />
-        <h1 tabIndex={-1} className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-navy sm:text-4xl lg:text-5xl">
+        <h1 tabIndex={-1} className="mt-4 text-[clamp(30px,4.6vw,60px)] font-extrabold leading-[1.05] tracking-[-0.035em] text-navy">
           {a.judul}
         </h1>
         <p className="mt-4 text-sm text-muted">
@@ -53,7 +57,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
         <ul className="mt-3 flex flex-wrap gap-2">
           {a.tag.map((t) => (
             <li key={t}>
-              <Link href={`/news/tag/${encodeURIComponent(tagKey(t))}`} className="rounded-full bg-navy-5 px-3 py-1 text-[13px] font-bold text-navy transition-colors duration-fast hover:bg-pink-pale hover:text-accent">
+              <Link href={`/news/tag/${encodeURIComponent(tagKey(t))}`} className="rounded-full border border-glass-border bg-glass px-3 py-1 text-[13px] font-bold text-navy shadow-glass-soft backdrop-blur-glass transition-colors duration-fast hover:text-accent">
                 #{t}
               </Link>
             </li>
@@ -63,23 +67,29 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
           <ShareButtons title={a.judul} />
           <ReaderTools />
         </div>
-        {a.koreksi && (
-          <aside role="note" className="mt-6 rounded-2xl border-l-4 border-accent bg-pink-pale p-4 text-[14.5px] leading-relaxed text-navy">
-            <strong>Catatan koreksi{a.diperbarui ? ` (${formatTanggal(a.diperbarui)})` : ""}:</strong> {a.koreksi}
-          </aside>
-        )}
-        {a.poinUtama && a.poinUtama.length > 0 && (
-          <section aria-labelledby="poin-utama" className="mt-6 rounded-2xl border border-border bg-navy-5 p-5">
-            <h2 id="poin-utama" className="text-sm font-extrabold uppercase tracking-[0.14em] text-navy">Poin penting</h2>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-primary marker:text-accent">
-              {a.poinUtama.map((p, i) => <li key={i}>{p}</li>)}
-            </ul>
-          </section>
-        )}
+      </div>
+      </div>
       </header>
 
+      <div className="mx-auto w-full max-w-wrap px-4 pb-24 pt-10 sm:px-6">
+      <div className="max-w-[860px]">
+    {a.koreksi && (
+      <aside role="note" className="mt-6 rounded-2xl border-l-4 border-accent bg-pink-pale p-4 text-[14.5px] leading-relaxed text-navy">
+        <strong>Catatan koreksi{a.diperbarui ? ` (${formatTanggal(a.diperbarui)})` : ""}:</strong> {a.koreksi}
+      </aside>
+    )}
+    {a.poinUtama && a.poinUtama.length > 0 && (
+      <section aria-labelledby="poin-utama" className="mt-6 rounded-2xl border border-border bg-navy-5 p-5">
+        <h2 id="poin-utama" className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent-hover">Poin penting</h2>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-primary marker:text-accent">
+          {a.poinUtama.map((p, i) => <li key={i}>{p}</li>)}
+        </ul>
+      </section>
+    )}
+      </div>
+
       <figure className="mt-8 max-w-[720px]">
-        <Cover kategori={a.kategori} src={a.heroImage} className="aspect-[21/9] w-full rounded-xl" sizes="(min-width: 768px) 720px, 100vw" />
+        <Cover kategori={a.kategori} src={a.heroImage} className="aspect-[21/9] w-full rounded-2xl border border-border shadow-md" sizes="(min-width: 768px) 720px, 100vw" />
         {a.caption && <figcaption className="mt-3 text-[13px] text-muted">{a.caption}</figcaption>}
       </figure>
 
@@ -131,7 +141,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       </div>
 
       <section aria-labelledby="baca-juga" className="mt-20 print:hidden border-t border-divider pt-10">
-        <h2 id="baca-juga" className="text-2xl font-extrabold text-navy">Baca Juga</h2>
+        <h2 id="baca-juga" className="text-[clamp(28px,3.5vw,48px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">Baca Juga</h2>
         <div className="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((r, i) => (
             <Reveal key={r.slug} index={i}>
@@ -140,6 +150,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
           ))}
         </div>
       </section>
+      </div>
     </main>
   );
 }
