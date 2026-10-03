@@ -38,7 +38,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       <ReadingProgress />
       {banner}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
+      <header className="relative overflow-hidden pb-6 pt-24 md:pt-28">
       <MeshGradient className="h-full" />
       <div className="relative mx-auto max-w-wrap px-6">
       <div className="mb-4"><BackToList /></div>
@@ -70,18 +70,15 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       </div>
       </header>
 
-      <div className="mx-auto w-full max-w-wrap px-4 pb-24 pt-10 sm:px-6">
+      <div className="mx-auto w-full max-w-wrap px-4 pb-24 pt-6 sm:px-6">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_220px]">
       <div className="min-w-0">
-      <div className="max-w-[860px]">
-      </div>
-
-      <figure className="mt-8 max-w-[720px]">
+      <figure className="max-w-[720px]">
         <Cover kategori={a.kategori} src={a.heroImage} className="aspect-[21/9] w-full rounded-2xl border border-border shadow-md" sizes="(min-width: 768px) 720px, 100vw" />
         {a.caption && <figcaption className="mt-3 text-[13px] text-muted">{a.caption}</figcaption>}
       </figure>
 
-        <article id="isi-artikel" className="mt-12">
+        <article id="isi-artikel" className="mt-8">
           {showToc && <div className="mb-8 lg:hidden"><ArticleToc headings={headings} /></div>}
           <ArticleBody blocks={a.body} />
           <div><Attachments items={a.lampiran} /></div>
