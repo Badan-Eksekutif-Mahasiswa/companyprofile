@@ -266,10 +266,13 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           )}
 
           {shown.length > 0 && (
-            <div className="mt-16 border-t border-divider pt-6">
-              <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-navy">
-                {searching ? `Hasil pencarian (${results.length})` : "Terbaru"}
-              </h2>
+            <div className="mt-20">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <h2 className="text-[clamp(32px,4.5vw,64px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">
+                  {searching ? "Hasil pencarian" : "Artikel terbaru"}
+                </h2>
+                <p className="max-w-[320px] text-[15px] leading-relaxed text-secondary">{results.length} artikel. Klik kartu untuk membaca selengkapnya.</p>
+              </div>
               <div className="mt-8 grid gap-x-8 gap-y-12 lg:grid-cols-12">
                 {Array.from({ length: Math.ceil(shown.length / 6) }, (_, c) => shown.slice(c * 6, c * 6 + 6)).map((blok, c) => (
                   <React.Fragment key={c}>

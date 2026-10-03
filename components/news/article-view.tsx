@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { Breadcrumb, Badge } from "@/components/ui";
+import { Breadcrumb } from "@/components/ui";
 import { ArticleBody } from "./article-body";
 import { ArticleCard } from "./article-card";
-import { styleOf } from "./category-style";
 import { Cover } from "./cover";
 import { ShareButtons } from "./share-buttons";
 import { Attachments } from "./attachments";
