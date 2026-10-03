@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BackgroundGrid } from "./BackgroundGrid";
 import { Cursor } from "./Cursor";
-import { ProjectNav } from "./ProjectNav";
+import { SiteNav } from "@/components/ui/site-nav";
 import { DistortManager } from "./distort-manager";
 import { ShellContext, type ShellCtx } from "./shell-context";
 import "./project.css";
@@ -62,7 +62,7 @@ export function ProjectShell({ children }: { children: React.ReactNode }) {
         {state.ready && <BackgroundGrid />}
         <canvas ref={canvasRef} className="kd-distort-canvas" aria-hidden="true" />
         <Cursor />
-        <ProjectNav />
+        <SiteNav />
         {children}
       </div>
     </ShellContext.Provider>

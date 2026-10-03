@@ -12,6 +12,8 @@ export * from "./modal";
 export * from "./navbar";
 export * from "./pagination";
 export * from "./progress";
+export * from "./site-footer";
+export * from "./site-nav";
 export * from "./skeleton";
 export * from "./stat-card";
 export * from "./tabs";
