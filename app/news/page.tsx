@@ -6,7 +6,7 @@ import { GlassHighlight } from "@/components/news/glass-highlight";
 import { CursorRing } from "@/components/news/cursor-ring";
 import { NewsBrowser } from "@/components/news/news-browser";
 import { NewsSkeleton } from "@/components/news/news-skeleton";
-import { getNewsArticles } from "@/lib/news";
+import { getNewsArticles } from "@/lib/news-data";
 
 export const metadata: Metadata = {
   title: "Berita & Artikel — BEM UI 2026",
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 
 // Dirender per-request supaya daftar artikel (sesuai ?kategori/?tag/?q) ada di HTML awal untuk SEO.
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default async function NewsPage() {
   const articles = await getNewsArticles();
