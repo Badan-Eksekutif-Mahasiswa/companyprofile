@@ -24,7 +24,7 @@
     "alt": "Cover Olahraga"
   },
   "logo": {
-    "url": "/api/placeholder?label=OR&w=600&h=600&tone=blue&sub=LOGO",
+    "url": "/api/placeholder?label=OR&w=1200&h=1200&tone=blue&sub=LOGO&kind=logo",
     "alt": "Logo Olahraga"
   },
   "sections": [

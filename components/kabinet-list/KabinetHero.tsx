@@ -1,4 +1,4 @@
-import type { Kabinet } from "@/lib/kabinet";
+import { plain, type Kabinet } from "@/lib/kabinet";
 import { Badge } from "@/components/ui";
 import { MeshGradient } from "@/components/webgl";
 import { Reveal } from "./Reveal";
@@ -41,7 +41,7 @@ export function KabinetHero({ kabinet }: { kabinet: Kabinet }) {
             {kabinet.misi.map((m, i) => (
               <Reveal as="li" key={i} delay={i * 80} className="grid grid-cols-[auto_1fr] items-center gap-x-6 border-b border-navy-30/60 py-6 md:grid-cols-12 md:gap-x-0">
                 <span className="text-[clamp(32px,4vw,56px)] font-extrabold leading-none tracking-[-0.03em] text-accent md:col-span-2">{String(i + 1).padStart(2, "0")}</span>
-                <p className="text-[clamp(17px,1.5vw,21px)] font-medium leading-snug md:col-span-8 md:col-start-3">{m}</p>
+                <p className="text-[clamp(17px,1.5vw,21px)] font-medium leading-snug md:col-span-8 md:col-start-3">{plain(m.teks)}</p>
               </Reveal>
             ))}
           </ol>

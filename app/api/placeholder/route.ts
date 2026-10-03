@@ -18,15 +18,17 @@ export function GET(req: NextRequest) {
   const label = esc(q.get("label") || "FOTO");
   const sub = esc(q.get("sub") || "PLACEHOLDER");
   const [a, b, ink] = TONES[q.get("tone") || "grey"] ?? TONES.grey;
-  const fs = Math.round(Math.min(w, h) * 0.07);
+  const logo = q.get("kind") === "logo";
+  const base = Math.min(w, h);
+  const fs = Math.round(logo ? base * Math.min(0.15, 0.62 / (Math.max(label.length, 1) * 0.66)) : base * 0.07);
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
 <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>
 <rect width="${w}" height="${h}" fill="url(#g)"/>
-<g fill="none" stroke="${ink}" stroke-opacity=".18" stroke-width="2"><path d="M0 0L${w} ${h}M${w} 0L0 ${h}"/></g>
+${logo ? `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) * 0.34}" fill="none" stroke="${ink}" stroke-opacity=".35" stroke-width="${Math.round(Math.min(w, h) * 0.012)}"/>` : `<g fill="none" stroke="${ink}" stroke-opacity=".18" stroke-width="2"><path d="M0 0L${w} ${h}M${w} 0L0 ${h}"/></g>`}
 <g font-family="system-ui,-apple-system,sans-serif" font-weight="800" fill="${ink}" text-anchor="middle">
-<text x="${w / 2}" y="${h / 2}" font-size="${fs}" letter-spacing="2">${label}</text>
-<text x="${w / 2}" y="${h / 2 + fs * 1.1}" font-size="${Math.round(fs * 0.4)}" font-weight="600" fill-opacity=".6" letter-spacing="4">${sub} · ${w}×${h}</text>
+<text x="${w / 2}" y="${logo ? h / 2 + fs * 0.2 : h / 2}" font-size="${fs}" letter-spacing="2">${label}</text>
+${logo ? `<text x="${w / 2}" y="${h / 2 + fs * 0.9}" font-size="${Math.round(fs * 0.22)}" font-weight="600" fill-opacity=".6" letter-spacing="6">LOGO</text>` : `<text x="${w / 2}" y="${h / 2 + fs * 1.1}" font-size="${Math.round(fs * 0.4)}" font-weight="600" fill-opacity=".6" letter-spacing="4">${sub} · ${w}×${h}</text>`}
 </g></svg>`;
 
   return new Response(svg, {

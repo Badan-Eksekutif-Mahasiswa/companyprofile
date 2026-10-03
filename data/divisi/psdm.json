@@ -24,7 +24,7 @@
     "alt": "Cover Pengembangan Sumber Daya Mahasiswa"
   },
   "logo": {
-    "url": "/api/placeholder?label=PSDM&w=600&h=600&tone=maroon&sub=LOGO",
+    "url": "/api/placeholder?label=PSDM&w=1200&h=1200&tone=maroon&sub=LOGO&kind=logo",
     "alt": "Logo Pengembangan Sumber Daya Mahasiswa"
   },
   "sections": [

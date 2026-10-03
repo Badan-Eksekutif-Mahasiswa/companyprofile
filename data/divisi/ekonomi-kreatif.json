@@ -24,7 +24,7 @@
     "alt": "Cover Ekonomi Kreatif"
   },
   "logo": {
-    "url": "/api/placeholder?label=EKRAF&w=600&h=600&tone=pink&sub=LOGO",
+    "url": "/api/placeholder?label=EKRAF&w=1200&h=1200&tone=pink&sub=LOGO&kind=logo",
     "alt": "Logo Ekonomi Kreatif"
   },
   "sections": [

@@ -24,7 +24,7 @@
     "alt": "Cover Minat dan Bakat"
   },
   "logo": {
-    "url": "/api/placeholder?label=MINBAT&w=600&h=600&tone=pink&sub=LOGO",
+    "url": "/api/placeholder?label=MINBAT&w=1200&h=1200&tone=pink&sub=LOGO&kind=logo",
     "alt": "Logo Minat dan Bakat"
   },
   "sections": [

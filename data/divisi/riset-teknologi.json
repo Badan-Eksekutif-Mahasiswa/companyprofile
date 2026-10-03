@@ -24,7 +24,7 @@
     "alt": "Cover Riset dan Teknologi"
   },
   "logo": {
-    "url": "/api/placeholder?label=RISTEK&w=600&h=600&tone=maroon&sub=LOGO",
+    "url": "/api/placeholder?label=RISTEK&w=1200&h=1200&tone=maroon&sub=LOGO&kind=logo",
     "alt": "Logo Riset dan Teknologi"
   },
   "sections": [

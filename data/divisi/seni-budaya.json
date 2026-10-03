@@ -24,7 +24,7 @@
     "alt": "Cover Seni dan Budaya"
   },
   "logo": {
-    "url": "/api/placeholder?label=SENBUD&w=600&h=600&tone=navy&sub=LOGO",
+    "url": "/api/placeholder?label=SENBUD&w=1200&h=1200&tone=navy&sub=LOGO&kind=logo",
     "alt": "Logo Seni dan Budaya"
   },
   "sections": [

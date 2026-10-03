@@ -24,7 +24,7 @@
     "alt": "Cover Sosial Politik"
   },
   "logo": {
-    "url": "/api/placeholder?label=SOSPOL&w=600&h=600&tone=blue&sub=LOGO",
+    "url": "/api/placeholder?label=SOSPOL&w=1200&h=1200&tone=blue&sub=LOGO&kind=logo",
     "alt": "Logo Sosial Politik"
   },
   "sections": [

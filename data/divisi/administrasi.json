@@ -24,7 +24,7 @@
     "alt": "Cover Biro Administrasi"
   },
   "logo": {
-    "url": "/api/placeholder?label=ADM&w=600&h=600&tone=blue&sub=LOGO",
+    "url": "/api/placeholder?label=ADM&w=1200&h=1200&tone=blue&sub=LOGO&kind=logo",
     "alt": "Logo Biro Administrasi"
   },
   "sections": [

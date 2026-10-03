@@ -40,7 +40,8 @@ export type Kabinet = {
   periode: string;
   deskripsi: string;
   visi: string;
-  misi: string[];
+  /** `teks` boleh memuat **frasa kunci**; `kunci` = satu kata untuk tampilan tipografi besar. */
+  misi: { teks: string; kunci: string }[];
   ketua: Tokoh;
   wakil: Tokoh;
   stats: { divisi: number; anggota: number; proker: number; fakultas: number };
@@ -75,3 +76,6 @@ export function getNextDivisi(slug: string): Divisi | null {
   const i = all.findIndex((d) => d.slug === slug);
   return i === -1 || all.length < 2 ? null : all[(i + 1) % all.length];
 }
+
+/** Buang penanda **frasa kunci** → teks biasa. */
+export const plain = (s: string) => s.replace(/\*\*/g, "");

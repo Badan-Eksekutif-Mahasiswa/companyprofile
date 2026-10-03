@@ -24,7 +24,7 @@
     "alt": "Cover Kajian Strategis"
   },
   "logo": {
-    "url": "/api/placeholder?label=KASTRAT&w=600&h=600&tone=navy&sub=LOGO",
+    "url": "/api/placeholder?label=KASTRAT&w=1200&h=1200&tone=navy&sub=LOGO&kind=logo",
     "alt": "Logo Kajian Strategis"
   },
   "sections": [

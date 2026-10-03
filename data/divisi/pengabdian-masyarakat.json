@@ -24,7 +24,7 @@
     "alt": "Cover Pengabdian Masyarakat"
   },
   "logo": {
-    "url": "/api/placeholder?label=PENGMAS&w=600&h=600&tone=maroon&sub=LOGO",
+    "url": "/api/placeholder?label=PENGMAS&w=1200&h=1200&tone=maroon&sub=LOGO&kind=logo",
     "alt": "Logo Pengabdian Masyarakat"
   },
   "sections": [

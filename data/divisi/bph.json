@@ -24,7 +24,7 @@
     "alt": "Cover Badan Pengurus Harian"
   },
   "logo": {
-    "url": "/api/placeholder?label=BPH&w=600&h=600&tone=pink&sub=LOGO",
+    "url": "/api/placeholder?label=BPH&w=1200&h=1200&tone=pink&sub=LOGO&kind=logo",
     "alt": "Logo Badan Pengurus Harian"
   },
   "sections": [

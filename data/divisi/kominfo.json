@@ -24,7 +24,7 @@
     "alt": "Cover Komunikasi & Informasi"
   },
   "logo": {
-    "url": "/api/placeholder?label=KOMINFO&w=600&h=600&tone=navy&sub=LOGO",
+    "url": "/api/placeholder?label=KOMINFO&w=1200&h=1200&tone=navy&sub=LOGO&kind=logo",
     "alt": "Logo Komunikasi & Informasi"
   },
   "sections": [
