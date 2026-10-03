@@ -13,11 +13,17 @@ export function SmoothScroll() {
       anchors: true,
       prevent: (node) => !!node.closest?.('[role="dialog"]'),
     });
+    // Panel detail/filosofi mengunci scroll halaman (overflow: hidden) → Lenis halaman ikut berhenti.
+    const html = document.documentElement;
+    const sync = () => (html.style.overflow === "hidden" ? lenis.stop() : lenis.start());
+    const mo = new MutationObserver(sync);
+    mo.observe(html, { attributes: true, attributeFilter: ["style"] });
     let raf = requestAnimationFrame(function loop(t) {
       lenis.raf(t);
       raf = requestAnimationFrame(loop);
     });
     return () => {
+      mo.disconnect();
       cancelAnimationFrame(raf);
       lenis.destroy();
     };

@@ -170,10 +170,20 @@
 :root[data-fs="sm"] .reader-body { font-size: 15px; }
 :root[data-fs="lg"] .reader-body { font-size: 20px; }
 
-=======
 /* Scrollbar disembunyikan (scroll tetap jalan); smooth scroll beranda pakai Lenis. */
 html { scrollbar-width: none; }
 html::-webkit-scrollbar { display: none; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
+
+/* Kursor titik → cincin (sama dgn beranda & detail kabinet); dipakai juga di /kabinet dan /news. */
+.kd-cursor {
+  position: fixed; top: 0; left: 0; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--accent); border: 1px solid transparent; pointer-events: none;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  will-change: transform; z-index: 2147483647;
+}
+.kd-cursor.is-hovering { background: transparent; border-color: var(--accent); width: 45px; height: 45px; }
+@media (hover: none) { .kd-cursor { display: none; } }

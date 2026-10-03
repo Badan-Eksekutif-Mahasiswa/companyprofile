@@ -24,6 +24,8 @@ import type { HeroProker } from "@/types";
 import { DivisiView, FloatingLabel, ProkerView, type EnterMode } from "./DetailViews";
 
 type Rect = { left: number; top: number; width: number; height: number };
+/** 4 sudut kartu di layar: kiri-atas, kanan-atas, kanan-bawah, kiri-bawah. */
+type Quad = [number, number][];
 type View = "proker" | "divisi";
 
 const FLY = { duration: 1.5, ease: "expo.inOut" } as const; // sama dgn "Divisi Selanjutnya"
@@ -32,15 +34,39 @@ interface Props {
   items: HeroProker[];
   initialIndex: number;
   /** Posisi kartu orbit yang diklik (null = tanpa animasi terbang, mis. dari keyboard). */
-  originRect: Rect | null;
+  originRect: Quad | null;
   /** Posisi kartu orbit tujuan saat ditutup (null = memudar saja). */
-  getReturnRect: (slug: string) => Rect | null;
+  getReturnRect: (slug: string) => Quad | null;
   /** Bertambah saat diminta menutup dari luar (mis. klik "Beranda"). */
   closeSignal: number;
   onClose: () => void;
 }
 
-const px = (r: Rect) => ({ left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+const quadOf = (r: Rect): Quad => [
+  [r.left, r.top],
+  [r.left + r.width, r.top],
+  [r.left + r.width, r.top + r.height],
+  [r.left, r.top + r.height],
+];
+/**
+ * matrix3d yang memetakan kotak W×H (di 0,0) ke 4 sudut `q` (homografi persegi → segi empat, Heckbert).
+ * Dengan ini klon bisa berangkat persis dari kartu orbit yang miring/berperspektif lalu meluruskan diri.
+ */
+function quadMatrix(q: Quad, W: number, H: number): string {
+  const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = q;
+  const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3;
+  const dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
+  let g = 0, h = 0;
+  const den = dx1 * dy2 - dx2 * dy1;
+  if ((Math.abs(dx3) > 1e-6 || Math.abs(dy3) > 1e-6) && Math.abs(den) > 1e-9) {
+    g = (dx3 * dy2 - dx2 * dy3) / den;
+    h = (dx1 * dy3 - dx3 * dy1) / den;
+  }
+  const a = x1 - x0 + g * x1, b = x3 - x0 + h * x3;
+  const d = y1 - y0 + g * y1, e = y3 - y0 + h * y3;
+  return `matrix3d(${a / W},${d / W},0,${g / W},${b / H},${e / H},0,${h / H},0,0,1,0,${x0},${y0},0,1)`;
+}
+const lerpQuad = (a: Quad, b: Quad, t: number): Quad => a.map(([x, y], i) => [x + (b[i][0] - x) * t, y + (b[i][1] - y) * t]);
 const rectOf = (el: Element): Rect => {
   const r = el.getBoundingClientRect();
   return { left: r.left, top: r.top, width: r.width, height: r.height };
@@ -93,7 +119,7 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       lenis.on("scroll", ScrollTrigger.update);
       tick = (t) => lenis!.raf(t * 1000);
       gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0); // sama dgn ProjectShell
+      gsap.ticker.lagSmoothing(500, 33); // frame berat saat panel dipasang tidak membuat kartu terbang meloncat
     }
     const desktop = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1025px)").matches;
     if (desktop && !reduced && distortCanvas.current) distort.init(distortCanvas.current, lenis);
@@ -102,8 +128,19 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
     const html = document.documentElement;
     const prevOverflow = html.style.overflow;
     html.style.overflow = "hidden";
+    const canvas = distortCanvas.current;
     return () => {
       distort.dispose();
+      // renderer.dispose() tidak melepas konteks WebGL. Tanpa ini, setiap buka-tutup panel menambah konteks
+      // baru sampai browser membuang yang paling lama — yaitu milik orbit → hero jadi putih kosong.
+      // Ditunda 1 tick: di StrictMode efek dipasang ulang pada kanvas yang sama (masih terpasang di DOM).
+      if (canvas) {
+        setTimeout(() => {
+          if (canvas.isConnected) return;
+          const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+          gl?.getExtension("WEBGL_lose_context")?.loseContext();
+        }, 0);
+      }
       if (tick) gsap.ticker.remove(tick);
       lenis?.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
@@ -124,12 +161,31 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
   }, [item.unit.slug]);
 
   /* ---- kartu terbang dari `from` ke kartu tengah, lalu kloningnya memudar (pola ProjectPage) ---- */
-  const flyTo = React.useCallback((src: string, from: Rect, to: Rect) => {
+  // Klon berukuran kartu tengah; posisinya murni lewat matrix3d dari 4 sudut, jadi gambar tidak pernah terpotong.
+  const placeFlyer = React.useCallback((src: string, q: Quad) => {
     const flyer = flyerRef.current!;
-    flyerImg.current!.src = src;
-    Object.assign(flyer.style, px(from), { opacity: "1", visibility: "visible" });
-    return gsap.to(flyer, { left: to.left, top: to.top, width: to.width, height: to.height, ...FLY });
+    const { width, height } = heroPanelRect();
+    if (flyerImg.current!.getAttribute("src") !== src) flyerImg.current!.src = src;
+    Object.assign(flyer.style, { left: "0px", top: "0px", width: `${width}px`, height: `${height}px`, opacity: "1", visibility: "visible" });
+    flyer.style.transform = quadMatrix(q, width, height);
+    return { width, height };
   }, []);
+
+  const flyTo = React.useCallback(
+    (src: string, from: Quad, to: Quad) => {
+      const flyer = flyerRef.current!;
+      const { width, height } = placeFlyer(src, from);
+      const st = { p: 0 };
+      return gsap.to(st, {
+        p: 1,
+        ...FLY,
+        onUpdate: () => {
+          flyer.style.transform = quadMatrix(lerpQuad(from, to, st.p), width, height);
+        },
+      });
+    },
+    [placeFlyer],
+  );
 
   const land = React.useCallback(() => {
     setPanelHidden(false);
@@ -157,10 +213,19 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       busy.current = false;
       return;
     }
-    const tw = flyTo(item.foto_url, originRect, rectOf(panel));
-    tw.then(land);
+    // Mulai terbang setelah 2 frame: kerja berat saat mount (kanvas distorsi, Lenis) selesai dulu.
+    const from = originRect;
+    placeFlyer(item.foto_url, from);
+    let tw: gsap.core.Tween | null = null;
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        tw = flyTo(item.foto_url, from, quadOf(rectOf(panel)));
+        tw.then(land);
+      }),
+    );
     return () => {
-      tw.kill();
+      cancelAnimationFrame(raf);
+      tw?.kill();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -248,7 +313,7 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       .to(root.querySelectorAll(".hero__row, .info, .section, .next__left, .next__right"), { opacity: 0, duration: 0.35, ease: "power2.out" }, 0)
       // kanvas distorsi hanya membaca opacity elemen gambar itu sendiri, jadi pudarkan langsung
       .to(root.querySelectorAll(".media-item__inner"), { opacity: 0, duration: 0.35, ease: "power2.out" }, 0)
-      .add(flyTo(next.foto_url, from, to), 0);
+      .add(flyTo(next.foto_url, quadOf(from), quadOf(to)), 0);
   }, [next, index, items.length, shell.lenis, flyTo, land]);
 
   /* ---- tutup: kartu tengah terbang kembali ke orbit ---- */
@@ -266,7 +331,7 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       const from = rectOf(panel);
       setPanelHidden(true);
       gsap.to(root.querySelectorAll(".hero__row > :not(.hero__col--cover), .hero-tab, .info, .section, .next-project"), { opacity: 0, duration: 0.3 });
-      await Promise.all([flyTo(item.foto_url, from, back).duration(1.2), fadeWrap]);
+      await Promise.all([flyTo(item.foto_url, quadOf(from), back).duration(1.2), fadeWrap]);
     } else {
       await fadeWrap;
     }
@@ -317,7 +382,7 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       </div>
 
       {/* klon kartu yang terbang (orbit ⇄ tengah, Proker Selanjutnya) */}
-      <div ref={flyerRef} aria-hidden className="pointer-events-none fixed z-[45] overflow-hidden" style={{ visibility: "hidden" }}>
+      <div ref={flyerRef} aria-hidden className="pointer-events-none fixed z-[45] overflow-hidden will-change-transform" style={{ visibility: "hidden", transformOrigin: "0 0" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img ref={flyerImg} alt="" className="block size-full object-cover" />
       </div>

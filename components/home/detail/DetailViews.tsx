@@ -21,6 +21,17 @@ import type { HeroProker } from "@/types";
 export type EnterMode = "fly" | "toggle";
 
 /* ---------- media: <img> tetap di DOM, di desktop digambar kanvas distorsi (sama dgn ProjectPage) ---------- */
+/** CharRoll per kata: spasi CharRoll tidak bisa patah baris, jadi nama unit yang panjang menabrak kolom sebelah. */
+function WordRoll({ text }: { text: string }) {
+  return (
+    <span className="kd-wordroll" aria-label={text}>
+      {text.split(/\s+/).map((w, i) => (
+        <CharRoll key={i} text={w} topClass="cat-char-top" botClass="cat-char-bot" charClass="cat-char" />
+      ))}
+    </span>
+  );
+}
+
 function MediaAsset({ src, alt, className = "media-item__el" }: { src: string; alt: string; className?: string }) {
   const { distort } = useShell();
   const ref = React.useRef<HTMLDivElement>(null);
@@ -92,7 +103,7 @@ function CardPanel({
           onMouseLeave={() => onHoverLabel(null)}
           data-hover
           aria-label={hoverText}
-          className="hero__panel block p-0"
+          className={`hero__panel block p-0${hidden ? " kd-panel-hidden" : ""}`}
           style={{ visibility: hidden ? "hidden" : "visible", border: 0, cursor: "pointer", background: "transparent" }}
         >
           <MediaAsset src={src} alt={alt} className="hero__panel-img" />
@@ -270,7 +281,7 @@ export function ProkerView({
             <h3 className="label_info info__label project--reveal-pending">Diselenggarakan oleh</h3>
             <div>
               <button type="button" onClick={p.onToggle} className="info__category project--reveal-pending text-left" data-hover>
-                <CharRoll text={item.unit.nama} topClass="cat-char-top" botClass="cat-char-bot" charClass="cat-char" />
+                <WordRoll text={item.unit.nama} />
               </button>
             </div>
           </div>
@@ -401,7 +412,7 @@ export function DivisiView({
             <div>
               {divisi.categories.map((c) => (
                 <span key={c.slug} className="info__category project--reveal-pending">
-                  <CharRoll text={c.name} topClass="cat-char-top" botClass="cat-char-bot" charClass="cat-char" />
+                  <WordRoll text={c.name} />
                 </span>
               ))}
             </div>

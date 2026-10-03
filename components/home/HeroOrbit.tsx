@@ -8,7 +8,7 @@ import { HERO, SITE } from "@/config/site";
 import { clamp } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { HeroProker } from "@/types";
-import type { OrbitController, Rect } from "./orbit/scene";
+import type { OrbitController, Quad } from "./orbit/scene";
 
 // Dimuat terpisah (GSAP + Lenis tidak ikut bundle awal); diunduh saat browser senggang.
 const loadDetail = () => import("./detail/HeroDetail");
@@ -35,7 +35,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
   const [status, setStatus] = useState<"loading" | "ready" | "failed">("loading");
   const [, setFront] = useState(0);
   const [hover, setHover] = useState<number | "logo" | null>(null);
-  const [detail, setDetail] = useState<{ index: number; origin: Rect | null } | null>(null);
+  const [detail, setDetail] = useState<{ index: number; origin: Quad | null } | null>(null);
   const [filosofi, setFilosofi] = useState(false);
   // Klik "Beranda"/logo navbar saat panel terbuka → panel ditutup (pakai animasi tutupnya), lalu ke atas.
   const [closeSignal, setCloseSignal] = useState(0);
@@ -100,6 +100,8 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
       const rect = wrap.getBoundingClientRect();
       const progress = clamp(-rect.top / Math.max(1, rect.height - window.innerHeight), 0, 1);
       ctrlRef.current?.setScroll(progress * HERO.maxRotations, window.scrollY);
+      // Kursor diam saat halaman discroll → tidak ada pointermove; label jangan ikut terbawa keluar hero.
+      if (rect.bottom < window.innerHeight) setHover(null);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -137,7 +139,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
     };
   }, [hover]);
 
-  const openItem = useCallback((index: number, origin: Rect | null) => {
+  const openItem = useCallback((index: number, origin: Quad | null) => {
     lastFocus.current = document.activeElement as HTMLElement | null;
     ctrlRef.current?.setPaused(true);
     setHover(null);
@@ -174,7 +176,10 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
     const hit = ctrl?.pick(e.clientX, e.clientY);
     if (!ctrl || !hit) return;
     if (hit.kind === "logo") openFilosofi();
-    else openItem(slots[hit.instance], ctrl.rectOf(hit.instance));
+    else {
+      ctrl.setHidden(hit.instance); // kartu asli disembunyikan selama klonnya terbang
+      openItem(slots[hit.instance], ctrl.quadOf(hit.instance));
+    }
   };
   const onPointerCancel = () => {
     pointer.current.down = false;
@@ -182,13 +187,13 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
   };
 
   const getReturnRect = useCallback(
-    (slug: string): Rect | null => {
+    (slug: string): Quad | null => {
       const ctrl = ctrlRef.current;
       const item = items.findIndex((p) => p.slug === slug);
       const hit = ctrl && item >= 0 ? ctrl.findVisible(item) : null;
       if (!hit) return null;
       ctrl!.setHidden(hit.instance); // disembunyikan sampai kartu yang terbang mendarat
-      return hit.rect;
+      return hit.quad;
     },
     [items],
   );
