@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllDivisi, getDivisi, getNextDivisi } from "@/lib/kabinet";
 import { ProjectShell } from "@/components/kabinet/ProjectShell";
 import { ProjectPage } from "@/components/kabinet/ProjectPage";
+import { SiteFooter } from "@/components/ui/site-footer";
 
 type Props = { params: { slug: string } };
 
@@ -21,6 +22,9 @@ export default function DivisiPage({ params }: Props) {
   return (
     <ProjectShell key={divisi.slug}>
       <ProjectPage divisi={divisi} next={getNextDivisi(divisi.slug)} />
+      <div className="relative z-[1]">
+        <SiteFooter />
+      </div>
     </ProjectShell>
   );
 }
