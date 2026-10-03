@@ -4,6 +4,7 @@ import { NewsPreview } from "@/components/home/NewsPreview";
 import { StatsSection } from "@/components/home/StatsSection";
 import { TaglineSection } from "@/components/home/TaglineSection";
 import { VideoSection } from "@/components/home/VideoSection";
+import { SmoothScroll } from "@/components/home/SmoothScroll";
 import { Cursor } from "@/components/kabinet/Cursor";
 import { SiteFooter, SiteNav } from "@/components/ui";
 import { HERO } from "@/config/site";
@@ -39,6 +40,7 @@ export default async function HomePage() {
         </div>
       </main>
       <SiteFooter />
+      <SmoothScroll />
       <Cursor />
     </>
   );

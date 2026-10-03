@@ -150,3 +150,10 @@
   0% { background-position: 100% 0; }
   100% { background-position: 0 0; }
 }
+
+/* Scrollbar disembunyikan (scroll tetap jalan); smooth scroll beranda pakai Lenis. */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
