@@ -24,12 +24,12 @@ export default async function NewsPage() {
   const articles = await getNewsArticles();
 
   return (
-    <main id="main" className="relative mx-auto w-full max-w-wrap px-4 pb-24 pt-16 sm:px-6 lg:pt-24">
+    <main id="main" className="relative mx-auto w-full max-w-wrap px-4 pb-24 pt-28 sm:px-6 lg:pt-36">
       <CursorRing />
       <header className="mb-12 border-b-2 border-navy pb-6">
         <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-accent">Publikasi resmi BEM UI 2026</p>
         <h1 tabIndex={-1} className="mt-2 text-5xl font-extrabold leading-[0.95] tracking-tight text-navy sm:text-6xl lg:text-8xl">
-          <span className="block overflow-hidden py-2">
+          <span className="-mx-6 -mb-6 block overflow-hidden px-6 pb-10 pt-2">
             <span className="news-rise block [animation:news-rise_0.9s_var(--ease-out)_both]">Berita <GlassHighlight>&amp; Artikel</GlassHighlight></span>
           </span>
         </h1>

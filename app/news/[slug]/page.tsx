@@ -65,7 +65,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   };
 
   return (
-    <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-12 sm:px-6 lg:pt-16">
+    <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-28 sm:px-6 lg:pt-32">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <Breadcrumb items={[{ label: "News", href: "/news" }, { label: categoryLabel(a.kategori), href: `/news?kategori=${a.kategori}` }, { label: a.judul }]} />
 
