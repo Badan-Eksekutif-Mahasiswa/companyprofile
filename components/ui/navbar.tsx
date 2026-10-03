@@ -26,7 +26,7 @@ export interface NavbarProps extends Omit<React.HTMLAttributes<HTMLElement>, "ch
  * halaman) — backdrop-blur tidak kelihatan di atas putih polos.
  */
 export function Navbar({ logo = <NavbarLogo />, links = [], actions, className, ...props }: NavbarProps) {
-  // Di paling atas halaman navbar melebar hampir selebar layar; mulai scroll → memendek jadi pill 720px (maks. 1340px di atas).
+  // Di paling atas: pill maks. 880px. Mulai scroll → memendek jadi 620px (mobile: menyempit 32px), logo & teks mengecil.
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
   const [atTop, setAtTop] = React.useState(true);
@@ -41,10 +41,11 @@ export function Navbar({ logo = <NavbarLogo />, links = [], actions, className, 
     <header className="sticky top-4 z-50 flex justify-center px-5">
       <nav
         aria-label="Utama"
-        style={{ maxWidth: atTop ? "min(1340px, 100%)" : "min(720px, calc(100% - 24px))" }}
+        data-compact={!atTop}
+        style={{ maxWidth: atTop ? "min(880px, 100%)" : "min(620px, calc(100% - 32px))" }}
         className={cn(
-          "flex w-full items-center justify-between gap-3 rounded-full sm:gap-7 border border-glass-border bg-glass-strong py-1.5 pl-4 pr-2 shadow-glass-soft backdrop-blur-glass transition-[max-width,padding,box-shadow] duration-[700ms] ease-out-expo motion-reduce:transition-none",
-          atTop ? "py-2 sm:pl-8 sm:pr-3" : "",
+          "group/nav flex w-full items-center justify-between gap-3 rounded-full sm:gap-7 border border-glass-border bg-glass-strong py-1.5 pl-4 pr-2 shadow-glass-soft backdrop-blur-glass transition-[max-width,padding,box-shadow] duration-[700ms] ease-out-expo motion-reduce:transition-none",
+          atTop ? "py-2 sm:pl-6 sm:pr-3" : "py-1 sm:pl-5",
           className
         )}
         {...props}
@@ -71,15 +72,17 @@ function NavLinks({ links, isActive }: { links: { label: string; href: string }[
       setBar(el ? { left: el.offsetLeft, width: el.offsetWidth } : null);
     };
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    // Ukuran font berubah saat navbar memendek → ukur ulang garis bawah.
+    const ro = new ResizeObserver(measure);
+    if (listRef.current) ro.observe(listRef.current);
+    return () => ro.disconnect();
   }, [target, links]);
 
   return (
     <ul
       ref={listRef}
       onMouseLeave={() => setHovered(null)}
-      className="relative flex items-center gap-4 text-[15px] font-semibold text-secondary sm:gap-8 sm:text-[17px]"
+      className="relative flex items-center gap-4 text-[15px] font-semibold text-secondary transition-[font-size] duration-500 ease-out-expo sm:gap-8 sm:text-[17px] group-data-[compact=true]/nav:text-[14px] sm:group-data-[compact=true]/nav:gap-6 sm:group-data-[compact=true]/nav:text-[15px]"
     >
       {links.map((l, i) => (
         <li key={l.href + l.label}>
