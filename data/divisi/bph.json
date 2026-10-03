@@ -1,0 +1,125 @@
+{
+  "nama": "Badan Pengurus Harian",
+  "slug": "bph",
+  "singkatan": "BPH",
+  "type": "BPH",
+  "cover_url": "/images/divisi/bph-cover.svg",
+  "deskripsi": "Badan Pengurus Harian (BPH) adalah jantung koordinasi BEM UI. BPH memastikan setiap kemenkoan, departemen, dan biro bergerak searah dengan visi Kabinet TerusTerang, sekaligus menjadi wajah BEM UI di hadapan mahasiswa, rektorat, dan publik.",
+  "visi": "Menjadi poros koordinasi yang terbuka, cepat, dan bertanggung jawab atas seluruh gerak BEM UI 2026.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja BPH.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Ketua BEM UI",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Ketua BEM UI",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 4",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 5",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 6",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    }
+  ],
+  "proker": [
+    {
+      "slug": "bph-rapat-kerja-bem-ui-2026",
+      "nama": "Rapat Kerja BEM UI 2026",
+      "status": "done",
+      "tanggal": "Februari 2026",
+      "deskripsi": "Penyusunan arah gerak dan target kinerja seluruh unit untuk satu periode kepengurusan.",
+      "penjelasan": [
+        "Penyusunan arah gerak dan target kinerja seluruh unit untuk satu periode kepengurusan. Rapat Kerja BEM UI 2026 dirancang oleh Badan Pengurus Harian sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini telah terlaksana (Februari 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/bph-rapat-kerja-bem-ui-2026-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/bph-rapat-kerja-bem-ui-2026-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/bph-rapat-kerja-bem-ui-2026-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/bph-rapat-kerja-bem-ui-2026-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "bph-laporan-kinerja-terbuka",
+      "nama": "Laporan Kinerja Terbuka",
+      "status": "upcoming",
+      "tanggal": "Desember 2026",
+      "deskripsi": "Forum pertanggungjawaban publik di mana BEM UI memaparkan capaian dan kegagalan secara terus terang.",
+      "penjelasan": [
+        "Forum pertanggungjawaban publik di mana BEM UI memaparkan capaian dan kegagalan secara terus terang. Laporan Kinerja Terbuka dirancang oleh Badan Pengurus Harian sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini dijadwalkan pada Desember 2026. Informasi pendaftaran dan detail teknis akan diumumkan melalui media sosial BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/bph-laporan-kinerja-terbuka-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/bph-laporan-kinerja-terbuka-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/bph-laporan-kinerja-terbuka-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/bph-laporan-kinerja-terbuka-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "nama": "Departemen Kajian dan Aksi Strategis",
+  "slug": "kastrat",
+  "singkatan": "Kastrat",
+  "type": "Departemen",
+  "cover_url": "/images/divisi/kastrat-cover.svg",
+  "deskripsi": "Departemen Kajian dan Aksi Strategis (Kastrat) bertanggung jawab mengawal isu-isu strategis di tingkat kampus, regional, nasional, hingga internasional. Melalui riset yang komprehensif, propaganda yang masif, dan aksi nyata, Kastrat hadir sebagai poros pergerakan mahasiswa untuk menyuarakan kebenaran dan membela kepentingan publik.",
+  "visi": "Terwujudnya pergerakan mahasiswa yang progresif, inklusif, dan berdampak nyata berlandaskan kajian yang empiris dan strategis.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja Kastrat.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Kepala Departemen",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Kepala Departemen",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 4",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 5",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 6",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    }
+  ],
+  "proker": [
+    {
+      "slug": "kastrat-sekolah-advokasi",
+      "nama": "Sekolah Advokasi",
+      "status": "done",
+      "tanggal": "Maret 2026",
+      "deskripsi": "Pelatihan komprehensif bagi mahasiswa UI terkait teknik dasar advokasi, analisis kebijakan publik, dan manajemen aksi massa.",
+      "penjelasan": [
+        "Pelatihan komprehensif bagi mahasiswa UI terkait teknik dasar advokasi, analisis kebijakan publik, dan manajemen aksi massa. Sekolah Advokasi dirancang oleh Departemen Kajian dan Aksi Strategis sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini telah terlaksana (Maret 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kastrat-sekolah-advokasi-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kastrat-sekolah-advokasi-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kastrat-sekolah-advokasi-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kastrat-sekolah-advokasi-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "kastrat-kajian-rutin-kantin",
+      "nama": "Kajian Rutin (Kantin)",
+      "status": "ongoing",
+      "tanggal": "Setiap dua minggu",
+      "deskripsi": "Diskusi dwi-mingguan membahas isu strategis terkini bersama pakar, dosen, dan aktivis untuk merumuskan sikap lembaga.",
+      "penjelasan": [
+        "Diskusi dwi-mingguan membahas isu strategis terkini bersama pakar, dosen, dan aktivis untuk merumuskan sikap lembaga. Kajian Rutin (Kantin) dirancang oleh Departemen Kajian dan Aksi Strategis sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Setiap dua minggu). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kastrat-kajian-rutin-kantin-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kastrat-kajian-rutin-kantin-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kastrat-kajian-rutin-kantin-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kastrat-kajian-rutin-kantin-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "kastrat-ui-bergerak",
+      "nama": "UI Bergerak",
+      "status": "upcoming",
+      "tanggal": "Mei 2026",
+      "deskripsi": "Konsolidasi akbar dan aksi mimbar bebas merespons isu kebangsaan jelang peringatan Hari Pendidikan Nasional.",
+      "penjelasan": [
+        "Konsolidasi akbar dan aksi mimbar bebas merespons isu kebangsaan jelang peringatan Hari Pendidikan Nasional. UI Bergerak dirancang oleh Departemen Kajian dan Aksi Strategis sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini dijadwalkan pada Mei 2026. Informasi pendaftaran dan detail teknis akan diumumkan melalui media sosial BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kastrat-ui-bergerak-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kastrat-ui-bergerak-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kastrat-ui-bergerak-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kastrat-ui-bergerak-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "kastrat-policy-brief-publik",
+      "nama": "Policy Brief Publik",
+      "status": "ongoing",
+      "tanggal": "Berkala",
+      "deskripsi": "Publikasi hasil riset mendalam terkait RUU kontroversial berupa kertas kebijakan yang disebarluaskan ke publik.",
+      "penjelasan": [
+        "Publikasi hasil riset mendalam terkait RUU kontroversial berupa kertas kebijakan yang disebarluaskan ke publik. Policy Brief Publik dirancang oleh Departemen Kajian dan Aksi Strategis sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Berkala). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kastrat-policy-brief-publik-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kastrat-policy-brief-publik-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kastrat-policy-brief-publik-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kastrat-policy-brief-publik-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}

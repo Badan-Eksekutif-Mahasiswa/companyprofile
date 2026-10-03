@@ -1,0 +1,125 @@
+{
+  "nama": "Biro Kesekretariatan",
+  "slug": "biro-sekretaris",
+  "singkatan": "Sekretariat",
+  "type": "Biro",
+  "cover_url": "/images/divisi/biro-sekretaris-cover.svg",
+  "deskripsi": "Biro Kesekretariatan menjaga ketertiban administrasi BEM UI, dari persuratan, notulensi, hingga pengarsipan dokumen organisasi.",
+  "visi": "Administrasi yang rapi sebagai fondasi organisasi yang akuntabel.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja Sekretariat.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Kepala Biro",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Kepala Biro",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 4",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 5",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 6",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    }
+  ],
+  "proker": [
+    {
+      "slug": "biro-sekretaris-arsip-digital-bem-ui",
+      "nama": "Arsip Digital BEM UI",
+      "status": "ongoing",
+      "tanggal": "Sepanjang tahun",
+      "deskripsi": "Digitalisasi seluruh dokumen dan arsip organisasi agar mudah diakses.",
+      "penjelasan": [
+        "Digitalisasi seluruh dokumen dan arsip organisasi agar mudah diakses. Arsip Digital BEM UI dirancang oleh Biro Kesekretariatan sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Sepanjang tahun). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/biro-sekretaris-arsip-digital-bem-ui-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/biro-sekretaris-arsip-digital-bem-ui-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/biro-sekretaris-arsip-digital-bem-ui-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/biro-sekretaris-arsip-digital-bem-ui-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "biro-sekretaris-sop-persuratan",
+      "nama": "SOP Persuratan",
+      "status": "done",
+      "tanggal": "Februari 2026",
+      "deskripsi": "Standardisasi alur persuratan internal dan eksternal BEM UI.",
+      "penjelasan": [
+        "Standardisasi alur persuratan internal dan eksternal BEM UI. SOP Persuratan dirancang oleh Biro Kesekretariatan sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini telah terlaksana (Februari 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/biro-sekretaris-sop-persuratan-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/biro-sekretaris-sop-persuratan-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/biro-sekretaris-sop-persuratan-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/biro-sekretaris-sop-persuratan-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}

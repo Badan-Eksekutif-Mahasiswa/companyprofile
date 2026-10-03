@@ -1,0 +1,152 @@
+{
+  "nama": "Departemen Advokasi dan Kesejahteraan Mahasiswa",
+  "slug": "adkesma",
+  "singkatan": "Adkesma",
+  "type": "Departemen",
+  "cover_url": "/images/divisi/adkesma-cover.svg",
+  "deskripsi": "Departemen Advokasi dan Kesejahteraan Mahasiswa (Adkesma) menjadi tempat mahasiswa UI mengadu dan didampingi, mulai dari persoalan UKT, beasiswa, hingga fasilitas kampus.",
+  "visi": "Memastikan tidak ada mahasiswa UI yang berhenti kuliah karena persoalan kesejahteraan.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja Adkesma.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Kepala Departemen",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Kepala Departemen",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 4",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 5",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 6",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    }
+  ],
+  "proker": [
+    {
+      "slug": "adkesma-pusat-advokasi-ukt",
+      "nama": "Pusat Advokasi UKT",
+      "status": "ongoing",
+      "tanggal": "Sepanjang tahun",
+      "deskripsi": "Layanan pendampingan banding dan penyesuaian UKT bagi mahasiswa yang membutuhkan.",
+      "penjelasan": [
+        "Layanan pendampingan banding dan penyesuaian UKT bagi mahasiswa yang membutuhkan. Pusat Advokasi UKT dirancang oleh Departemen Advokasi dan Kesejahteraan Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Sepanjang tahun). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/adkesma-pusat-advokasi-ukt-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/adkesma-pusat-advokasi-ukt-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/adkesma-pusat-advokasi-ukt-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/adkesma-pusat-advokasi-ukt-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "adkesma-beasiswa-hub",
+      "nama": "Beasiswa Hub",
+      "status": "ongoing",
+      "tanggal": "Sepanjang tahun",
+      "deskripsi": "Kurasi informasi dan pendampingan pendaftaran beasiswa internal maupun eksternal.",
+      "penjelasan": [
+        "Kurasi informasi dan pendampingan pendaftaran beasiswa internal maupun eksternal. Beasiswa Hub dirancang oleh Departemen Advokasi dan Kesejahteraan Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Sepanjang tahun). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/adkesma-beasiswa-hub-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/adkesma-beasiswa-hub-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/adkesma-beasiswa-hub-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/adkesma-beasiswa-hub-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "adkesma-audiensi-rektorat",
+      "nama": "Audiensi Rektorat",
+      "status": "done",
+      "tanggal": "April 2026",
+      "deskripsi": "Penyampaian hasil survei kesejahteraan mahasiswa langsung kepada pimpinan universitas.",
+      "penjelasan": [
+        "Penyampaian hasil survei kesejahteraan mahasiswa langsung kepada pimpinan universitas. Audiensi Rektorat dirancang oleh Departemen Advokasi dan Kesejahteraan Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini telah terlaksana (April 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/adkesma-audiensi-rektorat-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/adkesma-audiensi-rektorat-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/adkesma-audiensi-rektorat-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/adkesma-audiensi-rektorat-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}

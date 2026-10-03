@@ -1,0 +1,24 @@
+{
+  "nama_kabinet": "Kabinet TerusTerang",
+  "tagline": "#TerusTerang",
+  "deskripsi": "BEM UI adalah badan eksekutif tingkat universitas yang menjadi wadah utama pergerakan mahasiswa Universitas Indonesia. Kabinet TerusTerang hadir dengan satu janji sederhana: bekerja terbuka, berani bersikap, dan menyampaikan apa adanya kepada seluruh mahasiswa.",
+  "visi": "BEM UI yang terbuka, berani, dan berdampak nyata bagi mahasiswa dan masyarakat.",
+  "misi": [
+    "Mengawal isu kampus dan nasional berbasis kajian yang empiris.",
+    "Membuka seluruh proses kerja dan anggaran kepada mahasiswa.",
+    "Menghadirkan program yang menjawab kebutuhan nyata mahasiswa."
+  ],
+  "nilai_utama": [
+    "Konvergen",
+    "Akuntabel",
+    "Resiliensi"
+  ],
+  "filosofi_logo": "Penjelasan filosofi logo Kabinet TerusTerang.",
+  "foto_logo_url": "/images/logo-bem-ui.png",
+  "kata_kabem": {
+    "kutipan": "Teks kutipan Ketua BEM UI 2026.",
+    "nama": "Nama Ketua BEM",
+    "jabatan": "Ketua BEM UI 2026",
+    "foto_url": ""
+  }
+}

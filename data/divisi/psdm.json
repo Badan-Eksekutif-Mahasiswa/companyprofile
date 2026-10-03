@@ -1,0 +1,107 @@
+{
+  "nama": "Departemen Pengembangan Sumber Daya Mahasiswa",
+  "slug": "psdm",
+  "singkatan": "PSDM",
+  "type": "Departemen",
+  "cover_url": "/images/divisi/psdm-cover.svg",
+  "deskripsi": "Departemen Pengembangan Sumber Daya Mahasiswa (PSDM) merawat fungsionaris BEM UI: dari kaderisasi, peningkatan kapasitas, hingga menjaga budaya organisasi yang sehat.",
+  "visi": "Membentuk fungsionaris yang kompeten, berintegritas, dan saling menjaga.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja PSDM.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Kepala Departemen",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Kepala Departemen",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    }
+  ],
+  "proker": [
+    {
+      "slug": "psdm-leadership-camp",
+      "nama": "Leadership Camp",
+      "status": "upcoming",
+      "tanggal": "September 2026",
+      "deskripsi": "Pelatihan kepemimpinan intensif tiga hari untuk seluruh fungsionaris BEM UI.",
+      "penjelasan": [
+        "Pelatihan kepemimpinan intensif tiga hari untuk seluruh fungsionaris BEM UI. Leadership Camp dirancang oleh Departemen Pengembangan Sumber Daya Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini dijadwalkan pada September 2026. Informasi pendaftaran dan detail teknis akan diumumkan melalui media sosial BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/psdm-leadership-camp-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/psdm-leadership-camp-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/psdm-leadership-camp-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/psdm-leadership-camp-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "psdm-kelas-fungsionaris",
+      "nama": "Kelas Fungsionaris",
+      "status": "done",
+      "tanggal": "Februari 2026",
+      "deskripsi": "Rangkaian onboarding dan kelas dasar organisasi bagi fungsionaris baru.",
+      "penjelasan": [
+        "Rangkaian onboarding dan kelas dasar organisasi bagi fungsionaris baru. Kelas Fungsionaris dirancang oleh Departemen Pengembangan Sumber Daya Mahasiswa sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini telah terlaksana (Februari 2026). Seluruh rangkaian kegiatan didokumentasikan dan laporannya dibuka untuk publik sebagai bentuk akuntabilitas.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/psdm-kelas-fungsionaris-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/psdm-kelas-fungsionaris-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/psdm-kelas-fungsionaris-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/psdm-kelas-fungsionaris-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}

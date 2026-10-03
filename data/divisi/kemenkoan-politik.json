@@ -1,0 +1,113 @@
+{
+  "nama": "Kemenkoan Politik dan Advokasi",
+  "slug": "kemenkoan-politik",
+  "singkatan": "Kemenko Polad",
+  "type": "Kemenkoan",
+  "cover_url": "/images/divisi/kemenkoan-politik-cover.svg",
+  "deskripsi": "Kemenkoan Politik dan Advokasi mengoordinasikan departemen yang bergerak di ranah kajian, aksi, dan advokasi kesejahteraan mahasiswa agar sikap BEM UI selalu berbasis data dan konsisten.",
+  "visi": "Menyatukan kajian dan aksi menjadi gerakan advokasi yang terukur.",
+  "misi": [
+    "Menjalankan program kerja secara terbuka dan terukur.",
+    "Melibatkan mahasiswa UI seluas-luasnya dalam setiap agenda.",
+    "Berkolaborasi lintas unit untuk dampak yang lebih besar."
+  ],
+  "tupoksi": [
+    "Merancang dan mengeksekusi program kerja Kemenko Polad.",
+    "Berkoordinasi dengan kemenkoan dan BPH terkait arah gerak.",
+    "Menyusun laporan kinerja berkala secara transparan."
+  ],
+  "anggota": [
+    {
+      "nama": "Nama Kepala",
+      "jabatan": "Menteri Koordinator",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Wakil",
+      "jabatan": "Wakil Menteri Koordinator",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 1",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 2",
+      "jabatan": "Staf Ahli",
+      "foto_url": "",
+      "linkedin": ""
+    },
+    {
+      "nama": "Nama Staf 3",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": "https://www.linkedin.com/"
+    },
+    {
+      "nama": "Nama Staf 4",
+      "jabatan": "Staf",
+      "foto_url": "",
+      "linkedin": ""
+    }
+  ],
+  "proker": [
+    {
+      "slug": "kemenkoan-politik-forum-koordinasi-isu-nasional",
+      "nama": "Forum Koordinasi Isu Nasional",
+      "status": "ongoing",
+      "tanggal": "Maret–November 2026",
+      "deskripsi": "Ruang konsolidasi rutin antar-BEM se-UI untuk merespons isu nasional dengan satu suara.",
+      "penjelasan": [
+        "Ruang konsolidasi rutin antar-BEM se-UI untuk merespons isu nasional dengan satu suara. Forum Koordinasi Isu Nasional dirancang oleh Kemenkoan Politik dan Advokasi sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Saat ini program sedang berjalan (Maret–November 2026). Mahasiswa UI dapat ikut terlibat dan memantau perkembangannya melalui kanal informasi resmi BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kemenkoan-politik-forum-koordinasi-isu-nasional-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kemenkoan-politik-forum-koordinasi-isu-nasional-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kemenkoan-politik-forum-koordinasi-isu-nasional-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kemenkoan-politik-forum-koordinasi-isu-nasional-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    },
+    {
+      "slug": "kemenkoan-politik-sekolah-politik-mahasiswa",
+      "nama": "Sekolah Politik Mahasiswa",
+      "status": "upcoming",
+      "tanggal": "Agustus 2026",
+      "deskripsi": "Kelas intensif literasi politik dan kebijakan publik untuk mahasiswa UI lintas fakultas.",
+      "penjelasan": [
+        "Kelas intensif literasi politik dan kebijakan publik untuk mahasiswa UI lintas fakultas. Sekolah Politik Mahasiswa dirancang oleh Kemenkoan Politik dan Advokasi sebagai bagian dari komitmen Kabinet TerusTerang untuk bekerja terbuka dan berdampak nyata.",
+        "Program ini dijadwalkan pada Agustus 2026. Informasi pendaftaran dan detail teknis akan diumumkan melalui media sosial BEM UI.",
+        "Catatan: teks dan foto ini adalah contoh (dummy). Penjelasan lengkap, dokumentasi, dan status proker nantinya dikelola melalui sistem CRUD terpisah."
+      ],
+      "foto_url": "/images/proker/kemenkoan-politik-sekolah-politik-mahasiswa-1.svg",
+      "dokumentasi": [
+        {
+          "url": "/images/proker/kemenkoan-politik-sekolah-politik-mahasiswa-1.svg",
+          "caption": "Pembukaan kegiatan"
+        },
+        {
+          "url": "/images/proker/kemenkoan-politik-sekolah-politik-mahasiswa-2.svg",
+          "caption": "Sesi utama bersama peserta"
+        },
+        {
+          "url": "/images/proker/kemenkoan-politik-sekolah-politik-mahasiswa-3.svg",
+          "caption": "Foto bersama panitia"
+        }
+      ]
+    }
+  ]
+}
