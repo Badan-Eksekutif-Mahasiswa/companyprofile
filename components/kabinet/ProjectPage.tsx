@@ -61,6 +61,16 @@ function TeamSection({ title, people }: { title: string; people: Person[] }) {
   );
 }
 
+function Caption({ m }: { m: Media }) {
+  if (!m.title && !m.desc) return null;
+  return (
+    <div className="media-caption">
+      {m.title && <div className="label_info">{m.title}</div>}
+      {m.desc && <p>{m.desc}</p>}
+    </div>
+  );
+}
+
 function renderSection(s: Section, i: number) {
   switch (s.type) {
     case "media-single":
@@ -77,9 +87,11 @@ function renderSection(s: Section, i: number) {
           <div className="duo">
             <div className="media-item col-6">
               <MediaAsset media={s.media_left} />
+              <Caption m={s.media_left} />
             </div>
             <div className="media-item col-6 col-start-7">
               <MediaAsset media={s.media_right} />
+              <Caption m={s.media_right} />
             </div>
           </div>
         </section>
@@ -157,6 +169,9 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
         gsap.fromTo(n, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 88%", once: true } });
       });
 
+      q(".media-caption").forEach((n) => {
+        gsap.fromTo(n, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.05, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
+      });
       q(".person-card").forEach((n) => {
         gsap.fromTo(n, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
       });

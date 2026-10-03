@@ -47,11 +47,15 @@
       "type": "media-duo",
       "media_left": {
         "url": "/api/placeholder?label=RISTEK%20%E2%80%94%20PROKER%201&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
-        "alt": "Program kerja 1"
+        "alt": "Program kerja 1",
+        "title": "Nama Program Kerja 1",
+        "desc": "Program kerja unggulan Riset dan Teknologi. Jelaskan tujuan, sasaran peserta, waktu pelaksanaan, dan hasil yang dicapai program ini."
       },
       "media_right": {
         "url": "/api/placeholder?label=RISTEK%20%E2%80%94%20PROKER%202&w=1200&h=1500&tone=maroon&sub=FOTO%20PROKER",
-        "alt": "Program kerja 2"
+        "alt": "Program kerja 2",
+        "title": "Nama Program Kerja 2",
+        "desc": "Program kerja kedua Riset dan Teknologi. Ceritakan bagaimana program dijalankan, siapa saja yang terlibat, dan dampaknya bagi mahasiswa."
       }
     }
   ],
@@ -101,14 +105,6 @@
       "foto": {
         "url": "/api/placeholder?label=FOTO%20SEKRETARIS&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
         "alt": "Sekretaris Riset dan Teknologi"
-      }
-    },
-    {
-      "nama": "Nama Bendahara",
-      "jabatan": "Bendahara",
-      "foto": {
-        "url": "/api/placeholder?label=FOTO%20BENDAHARA&w=1200&h=1500&tone=maroon&sub=FOTO%20BPH%20INDIVIDU",
-        "alt": "Bendahara Riset dan Teknologi"
       }
     }
   ],
