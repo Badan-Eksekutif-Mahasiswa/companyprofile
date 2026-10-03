@@ -1,0 +1,133 @@
+{
+  "_dummy": true,
+  "order": 6,
+  "slug": "sosial-politik",
+  "title": "Sosial Politik | Kabinet Terus Terang",
+  "nama": "Sosial Politik",
+  "singkatan": "SOSPOL",
+  "tagline": "Placeholder tagline untuk Sosial Politik.",
+  "year": "2026",
+  "categories": [
+    {
+      "name": "Eksternal",
+      "slug": "eksternal"
+    }
+  ],
+  "roles": [
+    "Riset",
+    "Advokasi",
+    "Publikasi"
+  ],
+  "description": "Placeholder deskripsi Sosial Politik. Ganti dengan penjelasan singkat tentang peran divisi, fokus kerja, dan kontribusinya untuk Kabinet Terus Terang BEM UI 2026. Teks ini sengaja dibuat cukup panjang supaya layout dua belas kolom dapat dinilai dengan benar, termasuk pemotongan baris dan animasi reveal per kata saat masuk viewport.",
+  "cover": {
+    "url": "/api/placeholder?label=FOTO%20SOSPOL&w=1400&h=1900&tone=blue&sub=COVER",
+    "alt": "Cover Sosial Politik"
+  },
+  "logo": {
+    "url": "/api/placeholder?label=SOSPOL&w=600&h=600&tone=blue&sub=LOGO",
+    "alt": "Logo Sosial Politik"
+  },
+  "sections": [
+    {
+      "type": "media-single",
+      "position": "center",
+      "media": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20UTAMA&w=2000&h=1100&tone=blue&sub=FOTO%20KEGIATAN",
+        "alt": "Foto kegiatan utama"
+      }
+    },
+    {
+      "type": "text-block",
+      "subtitle": "Konsep",
+      "content": [
+        "Placeholder konsep Sosial Politik: jelaskan gagasan besar di balik kerja divisi ini, bagaimana program dirancang, dan nilai yang ingin disampaikan kepada mahasiswa.",
+        "Paragraf kedua menjelaskan pendekatan pelaksanaan, kolaborasi dengan divisi lain, serta dampak yang diharapkan sepanjang masa kepengurusan 2026."
+      ]
+    },
+    {
+      "type": "media-duo",
+      "media_left": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20PROKER%201&w=1200&h=1500&tone=blue&sub=FOTO%20PROKER",
+        "alt": "Program kerja 1"
+      },
+      "media_right": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20PROKER%202&w=1200&h=1500&tone=blue&sub=FOTO%20PROKER",
+        "alt": "Program kerja 2"
+      }
+    },
+    {
+      "type": "media-single",
+      "position": "center",
+      "media": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20DOKUMENTASI%201&w=2000&h=1100&tone=blue&sub=FOTO%20DOKUMENTASI",
+        "alt": "Dokumentasi 1"
+      }
+    },
+    {
+      "type": "media-duo",
+      "media_left": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20PROKER%203&w=1200&h=1500&tone=blue&sub=FOTO%20PROKER",
+        "alt": "Program kerja 3"
+      },
+      "media_right": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20PROKER%204&w=1200&h=1500&tone=blue&sub=FOTO%20PROKER",
+        "alt": "Program kerja 4"
+      }
+    },
+    {
+      "type": "media-trio",
+      "media_1": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20GALERI%201&w=900&h=1200&tone=blue&sub=FOTO%20GALERI",
+        "alt": "Galeri 1"
+      },
+      "media_2": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20GALERI%202&w=900&h=1200&tone=blue&sub=FOTO%20GALERI",
+        "alt": "Galeri 2"
+      },
+      "media_3": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20GALERI%203&w=900&h=1200&tone=blue&sub=FOTO%20GALERI",
+        "alt": "Galeri 3"
+      }
+    },
+    {
+      "type": "media-single",
+      "position": "center",
+      "media": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20DOKUMENTASI%202&w=2000&h=1100&tone=blue&sub=FOTO%20DOKUMENTASI",
+        "alt": "Dokumentasi 2"
+      }
+    },
+    {
+      "type": "text-block",
+      "subtitle": "Program Kerja",
+      "content": [
+        "Placeholder ringkasan program kerja Sosial Politik beserta capaian utamanya. Daftar lengkap dan tanggal akan diisi dari data asli."
+      ]
+    },
+    {
+      "type": "media-single",
+      "position": "center",
+      "media": {
+        "url": "/api/placeholder?label=SOSPOL%20%E2%80%94%20DOKUMENTASI%203&w=2000&h=1100&tone=blue&sub=FOTO%20DOKUMENTASI",
+        "alt": "Dokumentasi 3"
+      }
+    }
+  ],
+  "collaborators": [
+    {
+      "name": "Nama Kepala Divisi",
+      "role": "Kepala Divisi"
+    },
+    {
+      "name": "Nama Wakil Kepala",
+      "role": "Wakil Kepala Divisi"
+    }
+  ],
+  "highlights": [
+    {
+      "title": "Proker Unggulan SOSPOL",
+      "date": "Maret 2026",
+      "image": "/api/placeholder?label=SOSPOL%20%E2%80%94%20PROKER%20UNGGULAN&w=1400&h=1000&tone=blue&sub=FOTO%20PROKER"
+    }
+  ]
+}
