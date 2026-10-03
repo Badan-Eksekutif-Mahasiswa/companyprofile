@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { SearchX, Search } from "lucide-react";
 import { Button, EmptyState, InputWithIcon } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,6 @@ const PAGE_SIZE = 6;
  * dibagikan, di-bookmark, dan tombol Back berfungsi.
  */
 export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
-  const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -40,43 +39,59 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
   const headingRef = React.useRef<HTMLHeadingElement>(null);
 
   // Sinkronkan kotak pencarian bila URL berubah dari luar (Back/Forward).
-  React.useEffect(() => setQuery(q), [q]);
-
+  
   const setParam = React.useCallback(
     (patch: Record<string, string | null>) => {
-      const next = new URLSearchParams(params.toString());
+      const next = new URLSearchParams(window.location.search);
       for (const [k, v] of Object.entries(patch)) {
         if (v) next.set(k, v);
         else next.delete(k);
       }
       const qs = next.toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+      // History API native (Next 14.1+): URL & useSearchParams ikut update tanpa request ke server.
+      window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
     },
-    [params, pathname, router]
+    [pathname]
   );
 
-  // Pencarian ditunda 300ms agar URL tidak berubah di tiap ketikan.
+  // Hasil pencarian dihitung dari `query` (state lokal) supaya instan; URL menyusul setelah jeda.
+  const lastPushed = React.useRef(q);
   React.useEffect(() => {
     const t = setTimeout(() => {
-      if (query.trim() !== q.trim()) setParam({ q: query.trim() || null });
+      const v = query.trim();
+      if (v !== lastPushed.current.trim()) {
+        lastPushed.current = v;
+        setParam({ q: v || null });
+      }
     }, 300);
     return () => clearTimeout(t);
-  }, [query, q, setParam]);
+  }, [query, setParam]);
 
-  React.useEffect(() => setVisible(PAGE_SIZE), [kategori, tag, q]);
+  // Sinkron dari URL hanya bila berubah dari luar (mis. tombol Back).
+  React.useEffect(() => {
+    if (q !== lastPushed.current) {
+      lastPushed.current = q;
+      setQuery(q);
+    }
+  }, [q]);
 
-  const results = React.useMemo(() => filterArticles(articles, { kategori, tag, q }), [articles, kategori, tag, q]);
+  React.useEffect(() => setVisible(PAGE_SIZE), [kategori, tag, query]);
+
+  const results = React.useMemo(() => filterArticles(articles, { kategori, tag, q: query }), [articles, kategori, tag, query]);
   const tags = React.useMemo(() => collectTags(articles), [articles]);
   const tagLabel = tags.find((t) => t.key === tag)?.label;
 
-  const filtered = Boolean(kategori || tag || q.trim());
-  const featured = results[0];
-  const rest = results.slice(1);
+  const searching = query.trim().length > 0;
+  const filtered = Boolean(kategori || tag || searching);
+  const featured = searching ? undefined : results[0];
+  const rest = searching ? results : results.slice(1);
   const shown = rest.slice(0, visible);
 
   const reset = () => {
     setQuery("");
-    router.replace(pathname, { scroll: false });
+    lastPushed.current = "";
+    window.history.replaceState(null, "", pathname);
+    setParam({});
   };
 
   return (
@@ -145,8 +160,8 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           <EmptyState
             icon={<SearchX />}
             title={
-              q.trim()
-                ? `Tidak ada artikel untuk “${q.trim()}”`
+              query.trim()
+                ? `Tidak ada artikel untuk “${query.trim()}”`
                 : kategori
                   ? `Belum ada artikel di ${categoryLabel(kategori)}`
                   : "Tidak ada artikel yang cocok"
@@ -170,15 +185,33 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           )}
 
           {shown.length > 0 && (
-            <div className="mt-14 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-12">
-              {shown.map((a, i) => {
-                const large = i % 6 < 2; // pola: 2 besar + 4 kecil per baris
-                return (
-                  <Reveal key={a.slug} index={i % 3} className={large ? "lg:col-span-6" : "lg:col-span-3"}>
-                    <ArticleCard article={a} size={large ? "large" : "small"} className="h-full" />
-                  </Reveal>
-                );
-              })}
+            <div className="mt-16 border-t-2 border-navy pt-3">
+              <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-navy">
+                {searching ? `Hasil pencarian (${results.length})` : "Terbaru"}
+              </h2>
+              <div className="mt-8 grid gap-x-8 gap-y-12 lg:grid-cols-12">
+                {Array.from({ length: Math.ceil(shown.length / 6) }, (_, c) => shown.slice(c * 6, c * 6 + 6)).map((blok, c) => (
+                  <React.Fragment key={c}>
+                    <Reveal className="lg:col-span-7">
+                      <ArticleCard article={blok[0]} size="large" className="h-full" />
+                    </Reveal>
+                    {blok.length > 1 && (
+                      <div className="flex flex-col gap-8 lg:col-span-5">
+                        {blok.slice(1, 3).map((a, i) => (
+                          <Reveal key={a.slug} index={i + 1}>
+                            <ArticleCard article={a} size="compact" />
+                          </Reveal>
+                        ))}
+                      </div>
+                    )}
+                    {blok.slice(3).map((a, i) => (
+                      <Reveal key={a.slug} index={i} className="lg:col-span-4">
+                        <ArticleCard article={a} size="small" className="h-full" />
+                      </Reveal>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           )}
 

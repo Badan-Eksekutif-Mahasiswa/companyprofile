@@ -23,8 +23,9 @@ export default async function NewsPage() {
 
   return (
     <main id="main" className="mx-auto w-full max-w-wrap px-4 pb-24 pt-16 sm:px-6 lg:pt-24">
-      <header className="mb-10 max-w-2xl">
-        <h1 tabIndex={-1} className="text-4xl font-extrabold tracking-tight text-navy lg:text-5xl">
+      <header className="mb-12 border-b-2 border-navy pb-6">
+        <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-accent">Publikasi resmi BEM UI 2026</p>
+        <h1 tabIndex={-1} className="mt-2 text-5xl font-extrabold leading-[0.95] tracking-tight text-navy sm:text-6xl lg:text-8xl">
           Berita &amp; Artikel
         </h1>
         <p className="mt-3 text-base text-secondary">

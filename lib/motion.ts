@@ -1,11 +1,3 @@
-/**
- * Spesifikasi motion terpusat (acuan: feel K95).
- *
- * Semua nilai gerak halaman News dibaca dari sini, jadi tuning
- * setelah dibandingkan side-by-side dengan K95 cukup edit satu file.
- * Nilai awal = tebakan, BELUM diukur dari K95 (source K95 tidak bisa dibaca).
- * Selaras dengan token CSS di globals.css (--ease-out, --dur-*).
- */
 export const MOTION = {
   /** cubic-bezier ease-out-expo, sama dengan --ease-out. */
   ease: [0.16, 1, 0.3, 1] as const,

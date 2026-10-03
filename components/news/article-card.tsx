@@ -8,12 +8,30 @@ import { Cover } from "./cover";
 export interface ArticleCardProps {
   article: NewsArticle;
   /** "large" = kartu besar (cover tinggi, excerpt); "small" = kartu ringkas. */
-  size?: "large" | "small";
+  size?: "large" | "small" | "compact";
   className?: string;
 }
 
 export function ArticleCard({ article, size = "small", className }: ArticleCardProps) {
   const large = size === "large";
+  if (size === "compact") {
+    return (
+      <article className={cn("group relative grid grid-cols-[40%_1fr] gap-4", className)}>
+        <Cover kategori={article.kategori} src={article.heroImage} className="aspect-[4/3] rounded-xl" sizes="(min-width: 1024px) 20vw, 40vw" />
+        <div className="flex flex-col gap-1.5">
+          <Badge variant={CATEGORY_STYLE[article.kategori].badge} className="self-start">{categoryLabel(article.kategori)}</Badge>
+          <h3 className="text-base font-extrabold leading-snug text-navy transition-colors duration-fast group-hover:text-accent">
+            <Link href={`/news/${article.slug}`} className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-4 focus-visible:after:ring-pink-pale">
+              {article.judul}
+            </Link>
+          </h3>
+          <p className="mt-auto text-[12.5px] text-muted">
+            <time dateTime={article.tanggal}>{formatTanggal(article.tanggal)}</time> · {article.estimasiBaca} mnt
+          </p>
+        </div>
+      </article>
+    );
+  }
   return (
     <article className={cn("group relative flex flex-col", className)}>
       <Cover
