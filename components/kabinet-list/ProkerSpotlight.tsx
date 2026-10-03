@@ -27,6 +27,7 @@ function Proker({ p, i, className, aspect }: { p: Kabinet["proker"][number]; i: 
 /** Alternatif B: kalimat berangka inline + kolase proker asimetris (bukan stat card). */
 export function ProkerSpotlight({ kabinet }: { kabinet: Kabinet }) {
   const { stats, proker } = kabinet;
+  const [p1, p2, p3] = proker;
   return (
     <section className="mx-auto max-w-wrap px-6 pb-32" aria-labelledby="spot-title">
       <Reveal>
@@ -35,21 +36,30 @@ export function ProkerSpotlight({ kabinet }: { kabinet: Kabinet }) {
         </h2>
       </Reveal>
 
-      <div className="mt-6 text-[13px] font-bold uppercase tracking-[0.12em] text-muted">Program kerja terbaru</div>
+      {/* Kolase butuh data proker; kabinet yang baru terbit di SIT bisa belum punya proker. */}
+      {p1 && (
+        <>
+          <div className="mt-6 text-[13px] font-bold uppercase tracking-[0.12em] text-muted">Program kerja terbaru</div>
 
-      <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-12">
-        <Reveal className="md:col-span-7">
-          <Proker p={proker[0]} i={0} aspect="aspect-[4/5]" />
-        </Reveal>
-        <div className="space-y-14 md:col-span-5 md:pt-24">
-          <Reveal delay={120}>
-            <Proker p={proker[1]} i={1} aspect="aspect-[7/5]" />
-          </Reveal>
-          <Reveal delay={200} className="md:ml-16">
-            <Proker p={proker[2]} i={2} aspect="aspect-square" />
-          </Reveal>
-        </div>
-      </div>
+          <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-12">
+            <Reveal className="md:col-span-7">
+              <Proker p={p1} i={0} aspect="aspect-[4/5]" />
+            </Reveal>
+            {p2 && (
+              <div className="space-y-14 md:col-span-5 md:pt-24">
+                <Reveal delay={120}>
+                  <Proker p={p2} i={1} aspect="aspect-[7/5]" />
+                </Reveal>
+                {p3 && (
+                  <Reveal delay={200} className="md:ml-16">
+                    <Proker p={p3} i={2} aspect="aspect-square" />
+                  </Reveal>
+                )}
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </section>
   );
 }
