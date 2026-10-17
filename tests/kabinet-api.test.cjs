@@ -108,6 +108,22 @@ test("BPH academic subtitle comes from the SIT field without replacing the role"
   assert.equal(adapter().toDivisi({ ...unit, leaders: [{ ...leader, description: "" }] }, 1, cabinet.name).bph[0].jurusanAngkatan, "");
 });
 
+test("group cover and wide main photo stay separate from individual portraits", () => {
+  const group = { url: "https://sit.example/media/group/" };
+  const individual = { url: "https://sit.example/media/person/" };
+  const mapped = adapter().toDivisi({ ...unit, cover_photo: group,
+    leaders: [{ ...cabinet.leaders[0], photo: individual }] }, 1, cabinet.name);
+  assert.equal(mapped.cover.url, group.url);
+  assert.equal(mapped.foto_bph.url, group.url);
+  assert.equal(mapped.sections[0].media.url, media.url);
+  assert.equal(mapped.bph[0].foto.url, individual.url);
+  assert.equal(adapter().toDivisi(unit, 1, cabinet.name).cover.url, media.url);
+  assert.match(adapter().toDivisi({ ...unit, cover_photo: null }, 1, cabinet.name).cover.url, /placeholder/);
+  const empty = adapter().toDivisi({ ...unit, main_photo: null, cover_photo: group, programs: [] }, 1, cabinet.name);
+  assert.equal(empty.sections.length, 0);
+  assert.equal(empty.cover.url, group.url);
+});
+
 test("local chairman sequence is attached only to the same CMS person", () => {
   const profile = JSON.parse(readFileSync(path.join(__dirname, "../config/leader-portraits.json"), "utf8")).ketua;
   const api = adapter();

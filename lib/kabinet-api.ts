@@ -51,6 +51,7 @@ interface ApiUnit {
   vision: string;
   missions: string[];
   main_photo: ApiMedia | null;
+  cover_photo?: ApiMedia | null;
   leaders: ApiLeader[];
   staff: { id: number; name: string; photo: ApiMedia | null }[];
   programs: ApiProgram[];
@@ -138,6 +139,10 @@ function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
     }),
   );
   const out: Section[] = [];
+  if (unit.main_photo?.url) {
+    out.push({ type: "media-single", position: "center",
+      media: media(unit.main_photo, `Foto utama ${unit.name}`, "") });
+  }
   for (let i = 0; i < kartu.length; i += 2) {
     out.push(
       kartu[i + 1]
@@ -150,7 +155,8 @@ function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
 
 export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Divisi {
   const singkat = unit.abbreviation || singkatan(unit.name);
-  const cover = media(unit.main_photo, `Foto ${unit.name}`, placeholder(`FOTO ${singkat}`, 1200, 1600, "navy", "COVER"));
+  const cover = media(Object.hasOwn(unit, "cover_photo") ? unit.cover_photo : unit.main_photo,
+    `Foto bersama ${unit.name}`, placeholder(`FOTO ${singkat}`, 1200, 1600, "navy", "COVER"));
   const bph = unit.leaders.filter((l) => l.name).map((l) => ({
     ...orang(l.name, l.title, l.photo, unit.name),
     jurusanAngkatan: l.description,
@@ -171,7 +177,7 @@ export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Div
     staff: unit.staff.map((s) => orang(s.name, "Staf", s.photo, unit.name)),
     cover,
     logo: { url: placeholder(singkat, 1200, 1200, "navy", "LOGO", "logo"), alt: `Logo ${unit.name}` },
-    foto_bph: bph[0]?.foto ?? cover,
+    foto_bph: cover,
     sections: sectionsDariProker(unit, singkat),
   };
 }

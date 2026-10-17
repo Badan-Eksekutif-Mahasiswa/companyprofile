@@ -54,7 +54,10 @@ async function main() {
   const unit = { id: 91, cabinet_id: 7, slug: "unit-baru-dari-cms", name: "Biro Uji CMS",
     kind: "biro", group: "internal", group_label: "Internal", abbreviation: "UJI",
     summary: "Ringkasan resmi CMS", description: "Deskripsi resmi CMS", roles: ["Tugas CMS"],
-    vision: "Visi CMS", missions: ["Misi CMS"], main_photo: null, leaders: [], staff: [], programs: [] };
+    vision: "Visi CMS", missions: ["Misi CMS"],
+    main_photo: { url: "/api/placeholder?label=MAIN&w=1600&h=900", alt: "Foto utama lebar" },
+    cover_photo: { url: "/api/placeholder?label=COVER&w=1200&h=1600", alt: "Foto bersama BPH" },
+    leaders: [], staff: [], programs: [] };
   const cabinet = { id: 7, name: "Kabinet Uji CMS", description: "Deskripsi kabinet CMS",
     vision: "Visi kabinet CMS", missions: ["Misi kabinet"], main_photo: null, leaders: [], units: [unit],
     statistics: { units: 1, programs: 0, people: 3, active_programs: 0, represented_students: 1234, faculties: 2 } };
@@ -105,6 +108,9 @@ async function main() {
     const division = await (await fetch(`${base}/api/divisi/unit-baru-dari-cms`)).json();
     assert.equal(division.nama, unit.name);
     assert.equal(division.year, undefined);
+    assert.equal(division.cover.url, unit.cover_photo.url);
+    assert.equal(division.foto_bph.url, unit.cover_photo.url);
+    assert.equal(division.sections[0].media.url, unit.main_photo.url);
     const stats = await (await fetch(`${base}/api/stats`)).json();
     assert.deepEqual(stats, { mahasiswa_terwakili: 1234, proker_aktif: 0, fungsionaris: 3 });
     assert.equal((await fetch(`${base}/api/divisi/tidak-ada`)).status, 404);
