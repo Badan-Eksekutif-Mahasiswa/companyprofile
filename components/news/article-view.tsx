@@ -45,7 +45,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
 
       <div className="mt-8 max-w-[860px]">
         <ContentLabel kategori={a.kategori} />
-        <h1 tabIndex={-1} className="mt-4 text-[clamp(30px,4.6vw,60px)] font-extrabold leading-[1.05] tracking-[-0.035em] text-navy">
+        <h1 tabIndex={-1} className="mt-4 text-[clamp(30px,4.6vw,60px)] font-bold leading-[1.05] tracking-normal text-navy">
           {a.judul}
         </h1>
         <p className="mt-4 text-sm text-muted">
@@ -83,7 +83,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
           <div><Attachments items={a.lampiran} /></div>
           {a.sumber.length > 0 && (
             <section aria-labelledby="sumber" className="mt-12 max-w-[720px]">
-              <h2 id="sumber" className="text-xl font-extrabold text-navy">Sumber</h2>
+              <h2 id="sumber" className="text-xl font-bold text-navy">Sumber</h2>
               <ul className="mt-3 list-disc space-y-1.5 pl-6 text-[15px] text-secondary marker:text-accent">
                 {a.sumber.map((s, i) => (
                   <li key={i}>
@@ -112,7 +112,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
           </aside>
         ) : (
         <aside aria-labelledby="terkait" className="lg:sticky lg:top-28 lg:self-start">
-          <h2 id="terkait" className="text-lg font-extrabold text-navy">Artikel Terkait</h2>
+          <h2 id="terkait" className="text-lg font-bold text-navy">Artikel Terkait</h2>
           <ul className="mt-4 space-y-4">
             {related.map((r) => (
               <li key={r.slug}>
@@ -125,7 +125,7 @@ export function ArticleView({ a, related, banner }: { a: NewsArticle; related: N
       </div>
 
       <section aria-labelledby="baca-juga" className="mt-20 border-t border-divider pt-10">
-        <h2 id="baca-juga" className="text-[clamp(28px,3.5vw,48px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">Baca Juga</h2>
+        <h2 id="baca-juga" className="text-[clamp(28px,3.5vw,48px)] font-bold leading-[0.95] tracking-normal text-navy">Baca Juga</h2>
         <div className="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((r, i) => (
             <Reveal key={r.slug} index={i}>

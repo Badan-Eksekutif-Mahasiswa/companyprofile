@@ -34,7 +34,7 @@ export function ArticleBody({ blocks }: { blocks: NewsBlock[] }) {
           case "h2": {
             const { id } = heads[h++];
             return (
-              <h2 key={i} id={id} className="scroll-mt-28 pt-4 text-[1.4em] font-extrabold leading-snug text-navy">
+              <h2 key={i} id={id} className="scroll-mt-28 pt-4 text-[1.4em] font-bold leading-snug text-navy">
                 {b.text}
               </h2>
             );

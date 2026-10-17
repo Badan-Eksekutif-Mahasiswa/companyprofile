@@ -78,7 +78,7 @@ Urutan section: **Hero orbit → Statistik → Tagline kabinet → Kabinet Kami 
 
 ### Hero orbit (ala k95.it/en)
 
-Latar, ukuran kartu, dan motion hero **mengikuti halaman detail kabinet** (`components/kabinet`): latar putih + grid silinder, kartu rasio 1.4:1.9, reveal teks per kata, smooth scroll Lenis, gelombang gambar saat scroll, dan transisi kartu terbang `expo.inOut` 1.5s. Komponen tim kabinet dipakai ulang tanpa diubah.
+Latar, ukuran kartu, dan motion hero **mengikuti halaman detail kabinet** (`components/kabinet`): latar putih + grid silinder, kartu rasio 3:4, reveal teks per kata, smooth scroll Lenis, gelombang gambar saat scroll, dan transisi kartu terbang `expo.inOut` 1.5s. Komponen tim kabinet dipakai ulang tanpa diubah.
 
 - **Orbit**: logo BEM UI 3D (ekstrusi siluet `components/home/orbit/logo-shapes.ts` + tekstur `public/images/logo-bem-ui.png`) dibungkus **20 proker unggulan** (`HERO.featured`, dipilih di `pickFeaturedProker` — tempat rotasi harian nanti) yang berputar otomatis (pelan). Perspektif kuat ala k95 (kartu belakang kecil, dekat besar), kartu mengisi sampai tepi layar dan lewat di balik navbar glass. **Scroll menggerakkan kartu turun** (berulang tanpa ujung) dan membuatnya bergelombang (shader sama dengan `DistortManager`). Kartu yang melintas di belakang logo **digeser menjauh** (tidak hilang) agar selalu berjarak dari logo.
 - **Logo** hanya berputar (tidak mengikuti kursor). Klik logo → panel **filosofi logo** (`data/filosofi-logo.json`).
@@ -118,14 +118,14 @@ Proker nantinya dikelola lewat **CRUD di sistem terpisah** (bukan di website ini
   "tanggal": "Maret 2026",
   "deskripsi": "Ringkasan satu kalimat.",
   "penjelasan": ["Paragraf 1", "Paragraf 2"],
-  "foto_url": "/images/proker/kajian-strategis-sekolah-advokasi-cover.svg", // sampul 1.4:1.9, opsional
+  "foto_url": "/images/proker/kajian-strategis-sekolah-advokasi-cover.svg", // sampul 3:4, opsional
   "dokumentasi": [
     { "url": "/images/proker/kajian-strategis-sekolah-advokasi-1.svg", "caption": "Pembukaan kegiatan" }
   ]
 }
 ```
 
-**Sampul proker (`foto_url`) rasio 1.4:1.9** (disarankan 1400×1900), sama dengan kartu detail kabinet; dipakai di orbit dan kartu tengah. **Foto dokumentasi wajib rasio 4:3** (disarankan 1200×900). Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
+**Sampul proker (`foto_url`) rasio 3:4** (disarankan 1200×1600), sama dengan kartu detail kabinet; dipakai di orbit dan kartu tengah. **Foto dokumentasi wajib rasio 4:3** (disarankan 1200×900). Bila `foto_url` kosong, `dokumentasi[0]` dipakai sebagai sampul.
 
 > Seluruh isi data dan gambar di repo ini masih **dummy** (placeholder SVG). Ganti dengan konten resmi sebelum rilis.
 

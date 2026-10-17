@@ -45,7 +45,7 @@ export function KabinetPreview({ divisi }: { divisi: Divisi[] }) {
             />
             <div className="relative">
               <Badge variant="pink">BPH</Badge>
-              <h3 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl">{bph.nama}</h3>
+              <h3 className="mt-5 text-3xl font-bold tracking-normal sm:text-4xl">{bph.nama}</h3>
               <p className="mt-2 line-clamp-3 max-w-xl text-white/70">{bph.description}</p>
               <ul className="mt-6 flex flex-wrap gap-2">
                 {bph.bph.map((p) => (

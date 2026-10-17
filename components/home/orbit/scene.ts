@@ -5,7 +5,7 @@
  * Konsisten dengan halaman detail kabinet (components/kabinet):
  * - Grid: silinder garis navy 16% radius 30 dilihat dari dalam, parallax scroll .003 / smoothing .08
  *   (sama dengan BackgroundGrid).
- * - Kartu: rasio 1.4:1.9 (sama dengan .hero__panel), gelombang sinus + RGB-shift mengikuti
+ * - Kartu: rasio 3:4 (sama dengan .hero__panel), gelombang sinus + RGB-shift mengikuti
  *   kecepatan scroll (shader "shared-wave", sama dengan DistortManager).
  * - Logo hanya berputar; bisa diklik (filosofi logo).
  *
@@ -59,7 +59,7 @@ export type Pick = { kind: "card"; instance: number } | { kind: "logo" };
 
 export interface OrbitOptions {
   canvas: HTMLCanvasElement;
-  /** URL sampul tiap proker (index = index item), rasio 1.4:1.9. */
+  /** URL sampul tiap proker (index = index item), rasio 3:4. */
   images: string[];
   /** Pemetaan instance kartu → index item. Panjangnya = jumlah kartu. */
   slots: number[];
@@ -93,10 +93,10 @@ const RAD = Math.PI / 180;
 const BG = 0xffffff;
 const NAVY = 0x0b102d;
 // Ala k95: kamera tepat di depan dinding cincin → perspektif kuat (kartu belakang kecil, kartu
-// dekat besar & terpotong di tepi layar). Kartu menghadap ke dalam (ke logo), potret 1.4:1.9.
+// dekat besar & terpotong di tepi layar). Kartu menghadap ke dalam (ke logo), potret 3:4.
 const RADIUS = 6;
 const CARD_H = 2.3;
-const CARD_W = CARD_H * (1.4 / 1.9);
+const CARD_W = CARD_H * (3 / 4);
 /** Jarak antarbaris; baris berulang tanpa ujung secara vertikal (scroll menggerakkan kartu turun). */
 const ROW_PITCH = 3.2;
 const CAM_Z = 8.2;
@@ -171,13 +171,13 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
-/** Gabungkan semua sampul ke satu canvas atlas (sel 1.4:1.9) + hitung UV tiap sel. */
+/** Gabungkan semua sampul ke satu canvas atlas (sel 3:4) + hitung UV tiap sel. */
 async function buildAtlas(urls: string[]) {
   const imgs = await Promise.all(urls.map((u) => loadImage(u).catch(() => null)));
   const cols = Math.min(5, urls.length);
   const rows = Math.ceil(urls.length / cols);
-  let cw = 440;
-  let ch = 597; // 1.4:1.9, cukup tajam untuk kartu besar
+  let cw = 450;
+  let ch = 600; // 3:4, cukup tajam untuk kartu besar
   const scale = Math.min(1, 4096 / (rows * ch), 4096 / (cols * cw));
   cw = Math.floor(cw * scale);
   ch = Math.floor(ch * scale);

@@ -258,7 +258,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
           {shown.length > 0 && (
             <div className="mt-20">
               <div className="flex flex-wrap items-end justify-between gap-4">
-                <h2 className="text-[clamp(32px,4.5vw,64px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">
+                <h2 className="text-[clamp(32px,4.5vw,64px)] font-bold leading-[0.95] tracking-normal text-navy">
                   {searching ? "Hasil pencarian" : "Artikel terbaru"}
                 </h2>
                 <p className="max-w-[320px] text-[15px] leading-relaxed text-secondary">{results.length} artikel. Klik kartu untuk membaca selengkapnya.</p>

@@ -9,7 +9,7 @@
   padding-bottom: 32px;
 }
 .kd.kd-hero .hero__panel {
-  width: min(30vw, calc((100vh - 168px) * 1.4 / 1.9));
+  width: min(30vw, calc((100vh - 168px) * 3 / 4));
 }
 
 @media (max-width: 1024px) {

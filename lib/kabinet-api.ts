@@ -132,7 +132,7 @@ const orang = (nama: string, jabatan: string, foto: ApiMedia | null, unit: strin
 function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
   const kartu = unit.programs.map(
     (p): Media => ({
-      ...media(p.main_photo, p.title, placeholder(`${singkat} — PROKER`, 1200, 1500, "navy", "FOTO PROKER")),
+      ...media(p.main_photo, p.title, placeholder(`${singkat} — PROKER`, 1200, 1600, "navy", "FOTO PROKER")),
       title: p.title,
       desc: p.description,
     }),
@@ -150,7 +150,7 @@ function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
 
 export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Divisi {
   const singkat = unit.abbreviation || singkatan(unit.name);
-  const cover = media(unit.main_photo, `Foto ${unit.name}`, placeholder(`FOTO ${singkat}`, 1400, 1900, "navy", "COVER"));
+  const cover = media(unit.main_photo, `Foto ${unit.name}`, placeholder(`FOTO ${singkat}`, 1200, 1600, "navy", "COVER"));
   const bph = unit.leaders.filter((l) => l.name).map((l) => orang(l.name, l.title, l.photo, unit.name));
   return {
     order,
@@ -195,7 +195,7 @@ export function toKabinet(api: ApiCabinet): Kabinet {
         divisi: u.slug,
         title: p.title,
         date: p.schedule || "",
-        image: p.main_photo?.url ?? placeholder(`${singkatan(u.name)} — PROKER`, 1200, 1500, "navy", "FOTO PROKER"),
+        image: p.main_photo?.url ?? placeholder(`${singkatan(u.name)} — PROKER`, 1200, 1600, "navy", "FOTO PROKER"),
       })),
     ),
   };

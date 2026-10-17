@@ -45,7 +45,7 @@ export function ArticleToc({ headings }: { headings: Heading[] }) {
         <div className="mt-3">{list}</div>
       </details>
       <div className="hidden lg:block">
-        <h2 className="mb-3 text-sm font-extrabold uppercase tracking-[0.14em] text-navy">Daftar isi</h2>
+        <h2 className="mb-3 text-sm font-bold uppercase tracking-normal text-navy">Daftar isi</h2>
         {list}
       </div>
     </nav>

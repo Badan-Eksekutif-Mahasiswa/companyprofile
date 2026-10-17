@@ -12,7 +12,7 @@ export function Attachments({ items }: { items: NewsAttachment[] }) {
 
   return (
     <section aria-labelledby="lampiran" className="mt-12">
-      <h2 id="lampiran" className="text-xl font-extrabold text-navy">
+      <h2 id="lampiran" className="text-xl font-bold text-navy">
         Lampiran
       </h2>
       <ul className="mt-4 space-y-4">

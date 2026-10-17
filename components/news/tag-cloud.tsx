@@ -18,7 +18,7 @@ export function TagCloud({ tags, active, onSelect }: TagCloudProps) {
 
   return (
     <section aria-labelledby="topik-populer" className="mt-24">
-      <h2 id="topik-populer" className="text-[clamp(28px,3.5vw,48px)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy">
+      <h2 id="topik-populer" className="text-[clamp(28px,3.5vw,48px)] font-bold leading-[0.95] tracking-normal text-navy">
         Topik Populer
       </h2>
       <ul className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2">

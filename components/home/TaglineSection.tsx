@@ -12,7 +12,7 @@ export function TaglineSection({ kabinet }: { kabinet: Kabinet }) {
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Tentang BEM UI</p>
         <h2
           id="tagline-title"
-          className="mt-4 text-[clamp(3.25rem,11vw,9rem)] font-extrabold leading-[0.9] tracking-[-0.04em] text-navy"
+          className="mt-4 text-[clamp(3.25rem,11vw,9rem)] font-bold leading-[0.9] tracking-normal text-navy"
         >
           {SITE.tagline}
         </h2>

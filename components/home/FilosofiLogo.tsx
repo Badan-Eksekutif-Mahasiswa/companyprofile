@@ -76,7 +76,7 @@ export function FilosofiLogo({ closeSignal, onClose }: { closeSignal: number; on
           <p data-reveal className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
             Kabinet TerusTerang · BEM UI 2026
           </p>
-          <h2 id="filosofi-title" data-reveal className="mt-2 text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold uppercase leading-none tracking-[-0.02em]">
+          <h2 id="filosofi-title" data-reveal className="mt-2 text-[clamp(1.75rem,3vw,2.5rem)] font-bold uppercase leading-none tracking-normal">
             {filosofi.judul}
           </h2>
           <p data-reveal className="mt-5 text-[17px] leading-relaxed text-secondary">

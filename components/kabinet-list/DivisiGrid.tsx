@@ -8,7 +8,7 @@ export function DivisiGrid({ divisi }: { divisi: Divisi[] }) {
   return (
     <section className="mx-auto max-w-wrap px-6 pb-24 md:pb-32" aria-labelledby="divisi-title">
       <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
-        <h2 id="divisi-title" className="text-[clamp(36px,5vw,72px)] font-extrabold leading-[0.95] tracking-[-0.035em]">
+        <h2 id="divisi-title" className="text-[clamp(36px,5vw,72px)] font-bold leading-[0.95] tracking-normal">
           Departemen
           <br />& Biro
         </h2>

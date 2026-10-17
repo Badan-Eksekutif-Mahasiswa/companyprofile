@@ -24,7 +24,7 @@ export interface Proker {
   /** Penjelasan lengkap, satu string per paragraf. */
   penjelasan: string[];
   tanggal?: string;
-  /** Sampul kartu, rasio 1.4:1.9 (sama dengan kartu detail kabinet). Bila kosong, pakai dokumentasi[0]. */
+  /** Sampul kartu, rasio 3:4 (sama dengan kartu detail kabinet). Bila kosong, pakai dokumentasi[0]. */
   foto_url?: string;
   dokumentasi: Dokumentasi[];
 }

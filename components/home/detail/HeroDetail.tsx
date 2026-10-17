@@ -4,7 +4,7 @@
  * Tampilan detail proker ⇄ biro/departemen di hero beranda (hanya di hero).
  * Lapisan & motion mengikuti halaman detail kabinet (components/kabinet/ProjectShell):
  * latar putih + BackgroundGrid, smooth scroll Lenis (lerp .05) yang disinkronkan ke ScrollTrigger,
- * kanvas distorsi gambar, kartu 30vw 1.4:1.9, dan transisi kartu "terbang" expo.inOut 1.5s.
+ * kanvas distorsi gambar, kartu 30vw 3:4, dan transisi kartu "terbang" expo.inOut 1.5s.
  * Bedanya: semua terjadi di overlay, jadi tidak pindah halaman.
  */
 import * as React from "react";
@@ -75,8 +75,8 @@ const rectOf = (el: Element): Rect => {
 function heroPanelRect(): Rect {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const width = Math.min(vw * 0.3, ((vh - 168) * 1.4) / 1.9);
-  const height = (width * 1.9) / 1.4;
+  const width = Math.min(vw * 0.3, ((vh - 168) * 3) / 4);
+  const height = (width * 4) / 3;
   return { left: (vw - width) / 2, top: 112 + (vh - 144 - height) / 2, width, height };
 }
 

@@ -54,6 +54,11 @@
   --text-muted: var(--navy-50);
   --text-faint: var(--navy-30);
 
+  /* typography */
+  --font-body-size: 15px;
+  --font-body-weight: 500;
+  --font-heading-weight: 700;
+
   /* surfaces */
   --card-bg: var(--white);
   --border: #e7e7ec;
@@ -103,11 +108,14 @@
   body {
     background: var(--bg);
     color: var(--text-primary);
+    font-size: var(--font-body-size);
+    font-weight: var(--font-body-weight);
+    letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4 {
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: var(--font-heading-weight);
+    letter-spacing: 0;
     text-wrap: balance;
   }
   ::selection {

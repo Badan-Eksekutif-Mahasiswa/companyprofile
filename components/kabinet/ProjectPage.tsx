@@ -261,7 +261,7 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
     }
     const r = panel.getBoundingClientRect();
     const tw = window.innerWidth * 0.3;
-    const th = tw * (1.9 / 1.4);
+    const th = tw * (4 / 3);
     const left = (window.innerWidth - tw) / 2;
     const top = (window.innerHeight - th) / 2;
     lenis?.stop();

@@ -3,7 +3,7 @@
 /**
  * Isi tampilan detail di hero beranda. Markup & kelas sama dengan halaman detail kabinet
  * (components/kabinet/ProjectPage + project.css) supaya tampilan dan motion-nya identik:
- * hero row (judul · kartu 30vw 1.4:1.9 · label), info grid, section teks, media, tim.
+ * hero row (judul · kartu 30vw 3:4 · label), info grid, section teks, media, tim.
  */
 import * as React from "react";
 import Link from "next/link";

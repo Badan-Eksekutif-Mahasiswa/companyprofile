@@ -39,7 +39,7 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
         <MeshGradient className="h-full" />
         <div className="relative mx-auto max-w-wrap px-6">
           <Badge className="mb-6 px-3.5 py-1.5 text-[13px]">Topik</Badge>
-          <h1 tabIndex={-1} className="text-[clamp(40px,7vw,96px)] font-extrabold leading-[0.95] tracking-[-0.03em] text-navy">#{label}</h1>
+          <h1 tabIndex={-1} className="text-[clamp(40px,7vw,96px)] font-bold leading-[0.95] tracking-normal text-navy">#{label}</h1>
           <p className="mt-4 text-[17px] font-medium text-secondary">{list.length} artikel</p>
           <Link href="/news" className="mt-4 inline-block text-sm font-bold text-accent hover:underline">← Semua berita</Link>
         </div>
@@ -55,7 +55,7 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
         </ul>
         {others.length > 0 && (
           <section aria-labelledby="topik-lain" className="mt-20 rounded-2xl border border-border bg-navy-5 p-8">
-            <h2 id="topik-lain" className="text-xl font-extrabold text-navy">Topik lain</h2>
+            <h2 id="topik-lain" className="text-xl font-bold text-navy">Topik lain</h2>
             <ul className="mt-4 flex flex-wrap gap-2">
               {others.map((t) => (
                 <li key={t.key}>

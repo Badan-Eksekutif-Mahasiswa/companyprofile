@@ -14,7 +14,7 @@ export function KabinetHero({ kabinet }: { kabinet: Kabinet }) {
           <Badge className="mb-6 px-3.5 py-1.5 text-[13px]">{kabinet.periode}</Badge>
         </Reveal>}
 
-        <h1 className="text-[clamp(56px,11vw,168px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
+        <h1 className="text-[clamp(56px,11vw,168px)] font-bold leading-[0.9] tracking-normal">
           {sisa !== kabinet.nama && (
             <Reveal as="span" className="block">
               Kabinet
