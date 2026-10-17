@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllDivisi, getDivisi, getKabinet, getNextDivisi } from "@/lib/kabinet";
+import { getDivisi, getKabinet, getNextDivisi } from "@/lib/kabinet";
 import { ProjectShell } from "@/components/kabinet/ProjectShell";
 import { ProjectPage } from "@/components/kabinet/ProjectPage";
 import { SiteFooter } from "@/components/ui/site-footer";
 
 type Props = { params: { slug: string } };
 
-export async function generateStaticParams() {
-  return (await getAllDivisi()).map((d) => ({ slug: d.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [d, kabinet] = await Promise.all([getDivisi(params.slug), getKabinet()]);

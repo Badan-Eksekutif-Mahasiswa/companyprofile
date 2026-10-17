@@ -301,7 +301,7 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
           </div>
         </div>
         <div className="hero__col hero__col--year">
-          <div className="hero__year label_info hero--reveal-pending">Tahun — {divisi.year}</div>
+          {divisi.year && <div className="hero__year label_info hero--reveal-pending">Tahun — {divisi.year}</div>}
         </div>
       </section>
 

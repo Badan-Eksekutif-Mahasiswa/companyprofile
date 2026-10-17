@@ -21,7 +21,7 @@ export type Divisi = {
   nama: string;
   singkatan: string;
   tagline: string;
-  year: string;
+  year?: string;
   categories: { name: string; slug: string }[];
   roles: string[];
   description: string;
@@ -50,7 +50,7 @@ export type Tokoh = {
 
 export type Kabinet = {
   nama: string;
-  periode: string;
+  periode?: string;
   deskripsi: string;
   visi: string;
   /** `teks` boleh memuat **frasa kunci**; `kunci` = satu kata untuk tampilan tipografi besar. */
@@ -90,7 +90,7 @@ function localDivisi(): Divisi[] {
 export async function getKabinet(): Promise<Kabinet> {
   const local = readJson<Kabinet>("kabinet.json");
   const sit = await getSitCabinet();
-  return sit ? toKabinet(sit, local) : local;
+  return sit ? toKabinet(sit) : local;
 }
 
 export async function getAllDivisi(): Promise<Divisi[]> {
@@ -113,6 +113,10 @@ export async function getNextDivisi(slug: string): Promise<Divisi | null> {
 /** true bila data kabinet berasal dari SIT, bukan dari data/*.json. */
 export async function isSitCabinetLive(): Promise<boolean> {
   return (await getSitCabinet()) !== null;
+}
+
+export async function getSitStatistics(): Promise<ApiCabinet["statistics"] | null> {
+  return (await getSitCabinet())?.statistics ?? null;
 }
 
 /** Proker beranda dari SIT; null berarti pakai data/proker.json. */

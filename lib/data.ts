@@ -7,7 +7,7 @@
 import "server-only";
 import prokerJson from "@/data/proker.json";
 import statsJson from "@/data/stats.json";
-import { getAllDivisi, getKabinet, getSitHeroProker, isSitCabinetLive } from "@/lib/kabinet";
+import { getAllDivisi, getSitHeroProker, getSitStatistics } from "@/lib/kabinet";
 import { getNewsArticles } from "@/lib/news-data";
 import type { NewsCategory } from "@/lib/news";
 import { unitType } from "@/lib/unit";
@@ -43,10 +43,10 @@ export function pickFeaturedProker(all: HeroProker[], limit: number): HeroProker
 
 export async function getStats(): Promise<Stats> {
   const local = statsJson as Stats;
-  if (!(await isSitCabinetLive())) return local;
-  const { stats } = await getKabinet();
-  // Jumlah mahasiswa terwakili tidak ada di SIT, jadi tetap dari data/stats.json.
-  return { ...local, proker_aktif: stats.proker, fungsionaris: stats.anggota };
+  const stats = await getSitStatistics();
+  if (!stats) return local;
+  return { mahasiswa_terwakili: stats.represented_students ?? 0,
+    proker_aktif: stats.active_programs ?? 0, fungsionaris: stats.people };
 }
 
 const KATEGORI: Record<NewsCategory, KategoriArtikel> = {

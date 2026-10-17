@@ -11,9 +11,9 @@ Website utama Badan Eksekutif Mahasiswa Universitas Indonesia 2026. Detail fitur
 | 3D / WebGL | `three` (hero orbit + logo 3D), `ogl` (MeshGradient) |
 | Animasi UI | `framer-motion` |
 | Ikon | `lucide-react` |
-| Data v1 | Flat JSON di `data/` |
-| Data v2 (rencana) | SIT BEM UI (CRUD) + Supabase |
-| Deploy | Vercel (auto-deploy dari GitHub) |
+| Data utama | API CMS SIT untuk kabinet, birdep, proker, statistik, dan berita |
+| Data cadangan | JSON lokal untuk profil; Supabase atau contoh untuk berita saat SIT tidak dikonfigurasi |
+| Deploy | Railway, panduan di [RAILWAY.md](RAILWAY.md) |
 
 ## Menjalankan secara lokal
 
@@ -31,6 +31,7 @@ npm run dev                  # http://localhost:3000
 | `npm run build` | Build produksi (sekaligus type check & lint) |
 | `npm run start` | Menjalankan hasil build |
 | `npm run lint` | ESLint |
+| `npm test` | Tes kontrak integrasi kabinet SIT |
 
 ### Variabel lingkungan
 
@@ -38,6 +39,8 @@ npm run dev                  # http://localhost:3000
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | URL publik website, untuk metadata/OG. |
 | `NEXT_PUBLIC_YOUTUBE_VIDEO_ID` | ID video company profile (default `R5XbD1vjXlg`). |
+| `SIT_API_URL` | URL API publik CMS, misalnya `https://sitbemui.com/api/website/v1`. |
+| `NEXT_PUBLIC_R2_PUBLIC_URL` | Opsional, URL publik media yang memakai bucket langsung. |
 
 ## Struktur folder
 

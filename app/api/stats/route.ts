@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { getStats } from "@/lib/data";
 
-// v1: dummy dari data/stats.json. v2: proxy ke endpoint SIT.
+export const dynamic = "force-dynamic";
+
+// Statistik terbit dari CMS SIT, dengan JSON lokal bila SIT belum tersedia.
 export async function GET() {
   return NextResponse.json(await getStats());
 }

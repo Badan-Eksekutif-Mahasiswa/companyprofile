@@ -10,9 +10,9 @@ export function KabinetHero({ kabinet }: { kabinet: Kabinet }) {
     <header className="relative overflow-hidden pb-16 pt-32 md:pt-40">
       <MeshGradient className="h-full" />
       <div className="relative mx-auto max-w-wrap px-6">
-        <Reveal>
+        {kabinet.periode && <Reveal>
           <Badge className="mb-6 px-3.5 py-1.5 text-[13px]">{kabinet.periode}</Badge>
-        </Reveal>
+        </Reveal>}
 
         <h1 className="text-[clamp(56px,11vw,168px)] font-extrabold leading-[0.9] tracking-[-0.04em]">
           {sisa !== kabinet.nama && (

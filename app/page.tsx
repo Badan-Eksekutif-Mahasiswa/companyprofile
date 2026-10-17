@@ -11,6 +11,8 @@ import { HERO } from "@/config/site";
 import { getHeroProker, getLatestNews, getStats, pickFeaturedProker } from "@/lib/data";
 import { getAllDivisi, getKabinet } from "@/lib/kabinet";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [proker, stats, news] = await Promise.all([
     getHeroProker(),

@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+node_modules
+.next
+out
+coverage
+*.tsbuildinfo
+*.log
+.vercel
+.idea
+.vscode
+.claude
+.DS_Store

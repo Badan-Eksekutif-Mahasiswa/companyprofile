@@ -401,7 +401,7 @@ export function DivisiView({
           hoverText="Lihat Proker"
         />
         <div className="hero__col hero__col--year">
-          <div className="hero__year label_info hero--reveal-pending">Tahun {divisi.year}</div>
+          {divisi.year && <div className="hero__year label_info hero--reveal-pending">Tahun {divisi.year}</div>}
         </div>
       </section>
 
