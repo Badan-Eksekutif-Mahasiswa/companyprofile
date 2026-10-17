@@ -11,6 +11,44 @@ async function listen(server) {
   return server.address().port;
 }
 
+async function verifyEmptyState(apiUrl) {
+  const reserve = http.createServer();
+  const port = await listen(reserve);
+  await new Promise((resolve) => reserve.close(resolve));
+  const child = spawn(process.execPath, [path.join(__dirname, "../node_modules/next/dist/bin/next"),
+    "start", "--hostname", "127.0.0.1", "--port", String(port)], {
+    cwd: path.join(__dirname, ".."),
+    env: { ...process.env, NODE_ENV: "production", SIT_API_URL: apiUrl, ENABLE_DEMO_DATA: "true",
+      NEXT_PUBLIC_SUPABASE_URL: "", NEXT_PUBLIC_SUPABASE_ANON_KEY: "", NEXT_TELEMETRY_DISABLED: "1" },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  let logs = "";
+  child.stdout.on("data", (data) => { logs += data; });
+  child.stderr.on("data", (data) => { logs += data; });
+  const base = `http://127.0.0.1:${port}`;
+  try {
+    let ready = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null) throw new Error(logs);
+      try { ready = (await fetch(`${base}/api/health`)).ok; } catch { /* Wait for startup. */ }
+      if (ready) break;
+      await delay(200);
+    }
+    assert.ok(ready, logs);
+    for (const route of ["/", "/kabinet", "/news"]) {
+      const response = await fetch(base + route);
+      assert.equal(response.status, 200, route + logs);
+      assert.doesNotMatch(await response.text(), /Placeholder|Nama Kepala Departemen|Analisis Kritis Kebijakan UKT|Rapat Kerja BEM/);
+    }
+    assert.equal((await fetch(base + "/news/analisis-kritis-kebijakan-ukt-baru")).status, 404);
+    assert.equal((await fetch(base + "/kabinet/kominfo")).status, 404);
+    console.log("PASS no dummy content with", apiUrl ? "unavailable CMS" : "unconfigured CMS");
+  } finally {
+    child.kill();
+    if (child.exitCode === null) await once(child, "exit");
+  }
+}
+
 async function main() {
   const requests = [];
   const unit = { id: 91, cabinet_id: 7, slug: "unit-baru-dari-cms", name: "Biro Uji CMS",
@@ -74,6 +112,8 @@ async function main() {
     assert.ok(requests.includes("/api/website/v1/cabinets/7/"));
     assert.ok(!requests.some((url) => url.includes("undefined")));
     console.log("PASS runtime division, statistics, missing content and ID-based API requests");
+    await verifyEmptyState("");
+    await verifyEmptyState(`http://127.0.0.1:${apiPort}/unavailable`);
   } finally {
     child.kill();
     if (child.exitCode === null) await once(child, "exit");

@@ -23,24 +23,34 @@
     }
   ],
   "ketua": {
-    "nama": "Nama Ketua BEM",
+    "nama": "Yatalathof Ma'sum Imawan",
     "jabatan": "Ketua BEM UI 2026",
-    "fakultas": "Fakultas — Angkatan",
+    "fakultas": "FEB 2022",
     "kutipan": "Placeholder kutipan Ketua BEM tentang semangat Kabinet Terus Terang.",
     "foto": {
-      "url": "/api/placeholder?label=FOTO%20KETUA&w=1200&h=1500&tone=pink&sub=PORTRAIT",
-      "alt": "Foto Ketua BEM UI"
-    }
+      "url": "/images/kabinet/kabem/yatalathof-01.png",
+      "alt": "Yatalathof Ma'sum Imawan, Ketua BEM UI 2026"
+    },
+    "fotos": [
+      { "url": "/images/kabinet/kabem/yatalathof-01.png", "alt": "Yatalathof Ma'sum Imawan merapikan jas" },
+      { "url": "/images/kabinet/kabem/yatalathof-02.png", "alt": "Yatalathof Ma'sum Imawan dengan tangan bersilang" },
+      { "url": "/images/kabinet/kabem/yatalathof-03.png", "alt": "Yatalathof Ma'sum Imawan melambaikan tangan" }
+    ]
   },
   "wakil": {
-    "nama": "Nama Wakil Ketua",
+    "nama": "Fathimah Azzahra",
     "jabatan": "Wakil Ketua BEM UI 2026",
-    "fakultas": "Fakultas — Angkatan",
+    "fakultas": "FK 2023",
     "kutipan": "Placeholder kutipan Wakil Ketua BEM tentang semangat Kabinet Terus Terang.",
     "foto": {
-      "url": "/api/placeholder?label=FOTO%20WAKIL%20KETUA&w=1200&h=1500&tone=blue&sub=PORTRAIT",
-      "alt": "Foto Wakil Ketua BEM UI"
-    }
+      "url": "/images/kabinet/wakabem/fathimah-01.png",
+      "alt": "Fathimah Azzahra, Wakil Ketua BEM UI 2026"
+    },
+    "fotos": [
+      { "url": "/images/kabinet/wakabem/fathimah-01.png", "alt": "Fathimah Azzahra berdiri" },
+      { "url": "/images/kabinet/wakabem/fathimah-02.png", "alt": "Fathimah Azzahra dengan tangan bersilang", "scale": 0.86 },
+      { "url": "/images/kabinet/wakabem/fathimah-03.png", "alt": "Fathimah Azzahra melambaikan tangan", "scale": 0.89 }
+    ]
   },
   "stats": {
     "divisi": 17,

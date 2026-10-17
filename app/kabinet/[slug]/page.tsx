@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [d, kabinet] = await Promise.all([getDivisi(params.slug), getKabinet()]);
-  return d ? { title: `${d.nama} — ${kabinet.nama}`, description: d.description.slice(0, 160) } : {};
+  return d ? { title: [d.nama, kabinet?.nama].filter(Boolean).join(" — "), description: d.description.slice(0, 160) } : {};
 }
 
 export default async function DivisiPage({ params }: Props) {

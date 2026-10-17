@@ -2,11 +2,10 @@
  * Data access layer untuk beranda (proker, statistik, berita).
  * Proker, jumlah proker, dan jumlah fungsionaris dibaca dari kabinet terbit di SIT
  * (lib/kabinet.ts); berita memakai sumber yang sama dengan halaman /news. data/*.json
- * hanya cadangan selama SIT belum dikonfigurasi atau belum ada yang terbit.
+ * hanya untuk pengembangan lokal, tidak dibaca pada deployment produksi.
  */
 import "server-only";
-import prokerJson from "@/data/proker.json";
-import statsJson from "@/data/stats.json";
+import { readDemoJson } from "@/lib/demo-data";
 import { getAllDivisi, getSitHeroProker, getSitStatistics } from "@/lib/kabinet";
 import { getNewsArticles } from "@/lib/news-data";
 import type { NewsCategory } from "@/lib/news";
@@ -18,7 +17,7 @@ export async function getHeroProker(): Promise<HeroProker[]> {
   const sit = await getSitHeroProker(unitType);
   if (sit) return sit;
   const unit = new Map((await getAllDivisi()).map((d) => [d.slug, d]));
-  return (prokerJson as Proker[]).flatMap((p) => {
+  return (readDemoJson<Proker[]>("proker.json") ?? []).flatMap((p) => {
     const foto_url = p.foto_url || p.dokumentasi[0]?.url;
     const u = unit.get(p.divisi);
     if (!foto_url || !u) return [];
@@ -42,7 +41,7 @@ export function pickFeaturedProker(all: HeroProker[], limit: number): HeroProker
 }
 
 export async function getStats(): Promise<Stats> {
-  const local = statsJson as Stats;
+  const local = readDemoJson<Stats>("stats.json") ?? { mahasiswa_terwakili: 0, proker_aktif: 0, fungsionaris: 0 };
   const stats = await getSitStatistics();
   if (!stats) return local;
   return { mahasiswa_terwakili: stats.represented_students ?? 0,

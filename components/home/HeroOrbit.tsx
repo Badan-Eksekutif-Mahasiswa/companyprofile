@@ -9,6 +9,7 @@ import { clamp } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { HeroProker } from "@/types";
 import type { OrbitController, Quad } from "./orbit/scene";
+import type { LogoPhilosophy } from "./FilosofiLogo";
 
 // Dimuat terpisah (GSAP + Lenis tidak ikut bundle awal); diunduh saat browser senggang.
 const loadDetail = () => import("./detail/HeroDetail");
@@ -24,7 +25,7 @@ const TOTAL_SLOTS = HERO.rings * HERO.cardsPerRing;
  * Scroll menambah putaran sampai HERO.maxRotations, lalu halaman lanjut ke bawah.
  * Klik kartu → detail proker (bisa ditukar ke detail biro/departemen); klik logo → filosofi logo.
  */
-export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: HeroProker[] }) {
+export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProker[]; allItems: HeroProker[]; logoPhilosophy?: LogoPhilosophy }) {
   const wrapRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -46,6 +47,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
   // Instance kartu → index proker. Langkah coprime agar kartu bertetangga tidak sama.
   const slots = useMemo(() => {
     const n = items.length;
+    if (!n) return [];
     const step = [7, 5, 11, 13].find((s) => gcd(s, n) === 1) ?? 1;
     return Array.from({ length: TOTAL_SLOTS }, (_, i) => (i * step) % n);
   }, [items.length]);
@@ -53,7 +55,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
   // Muat scene WebGL setelah halaman tampil (three.js di chunk terpisah).
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || items.length === 0) return;
+    if (!canvas || items.length === 0) { setStatus("failed"); return; }
     let disposed = false;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -237,7 +239,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
       ref={wrapRef}
       aria-label="Program kerja BEM UI 2026"
       className="relative bg-white text-navy"
-      style={{ height: `${100 + HERO.maxRotations * HERO.viewportsPerRotation * 100}svh` }}
+      style={{ height: `${items.length ? 100 + HERO.maxRotations * HERO.viewportsPerRotation * 100 : 100}svh` }}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <h1 className="sr-only">
@@ -329,6 +331,7 @@ export function HeroOrbit({ items, allItems }: { items: HeroProker[]; allItems: 
       )}
       {filosofi && (
         <FilosofiLogo
+          content={logoPhilosophy}
           closeSignal={closeSignal}
           onClose={() => {
             setFilosofi(false);

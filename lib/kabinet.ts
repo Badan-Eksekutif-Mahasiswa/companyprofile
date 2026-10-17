@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { cache } from "react";
+import { readDemoJson } from "@/lib/demo-data";
+import portraits from "@/config/leader-portraits.json";
 import { fetchSitCabinet, toDivisi, toHeroProker, toKabinet, type ApiCabinet } from "@/lib/kabinet-api";
 import type { HeroProker } from "@/types";
 
@@ -12,7 +14,7 @@ export type Section =
   | { type: "media-trio"; media_1: Media; media_2: Media; media_3: Media }
   | { type: "text-block"; subtitle?: string; content: string[] };
 
-export type Person = { nama: string; jabatan: string; foto: Media };
+export type Person = { nama: string; jabatan: string; foto: Media; jurusanAngkatan?: string };
 
 export type Divisi = {
   order: number;
@@ -46,6 +48,7 @@ export type Tokoh = {
   fakultas: string;
   kutipan: string;
   foto: Media;
+  fotos?: (Media & { scale?: number })[];
 };
 
 export type Kabinet = {
@@ -63,34 +66,30 @@ export type Kabinet = {
 
 const DATA = path.join(process.cwd(), "data");
 
-const readJson = <T,>(file: string): T => JSON.parse(fs.readFileSync(path.join(DATA, file), "utf8")) as T;
-
 /**
- * Sumber data: kabinet terbit di CMS SIT (SIT_API_URL). data/*.json hanya cadangan placeholder
- * selama SIT belum dikonfigurasi, belum ada kabinet yang terbit, atau API sedang gagal, agar
- * halaman tetap tampil. Struktur birdep SIT berbeda dari placeholder, jadi keduanya tidak dicampur.
+ * Published CMS data is authoritative. Demo fixtures are available only during local development.
  */
 const getSitCabinet = cache(async (): Promise<ApiCabinet | null> => {
   try {
     return await fetchSitCabinet();
   } catch (e) {
-    console.error("Data kabinet SIT gagal dimuat, memakai data/*.json:", e);
+    console.error("Data kabinet SIT gagal dimuat:", e);
     return null;
   }
 });
 
 function localDivisi(): Divisi[] {
+  if (process.env.NODE_ENV !== "development" || process.env.ENABLE_DEMO_DATA === "false" || !fs.existsSync(path.join(DATA, "divisi"))) return [];
   return fs
     .readdirSync(path.join(DATA, "divisi"))
     .filter((f) => f.endsWith(".json"))
-    .map((f) => readJson<Divisi>(`divisi/${f}`))
+    .map((f) => readDemoJson<Divisi>(`divisi/${f}`)!)
     .sort((a, b) => a.order - b.order);
 }
 
-export async function getKabinet(): Promise<Kabinet> {
-  const local = readJson<Kabinet>("kabinet.json");
+export async function getKabinet(): Promise<Kabinet | null> {
   const sit = await getSitCabinet();
-  return sit ? toKabinet(sit) : local;
+  return sit ? toKabinet(sit, portraits.ketua, portraits.wakil) : readDemoJson<Kabinet>("kabinet.json") ?? null;
 }
 
 export async function getAllDivisi(): Promise<Divisi[]> {

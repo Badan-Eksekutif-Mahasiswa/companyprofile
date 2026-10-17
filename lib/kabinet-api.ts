@@ -151,7 +151,10 @@ function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
 export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Divisi {
   const singkat = unit.abbreviation || singkatan(unit.name);
   const cover = media(unit.main_photo, `Foto ${unit.name}`, placeholder(`FOTO ${singkat}`, 1200, 1600, "navy", "COVER"));
-  const bph = unit.leaders.filter((l) => l.name).map((l) => orang(l.name, l.title, l.photo, unit.name));
+  const bph = unit.leaders.filter((l) => l.name).map((l) => ({
+    ...orang(l.name, l.title, l.photo, unit.name),
+    jurusanAngkatan: l.description,
+  }));
   return {
     order,
     slug: unit.slug,
@@ -173,8 +176,19 @@ export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Div
   };
 }
 
-export function toKabinet(api: ApiCabinet): Kabinet {
+export function toKabinet(api: ApiCabinet, portrait?: Pick<Tokoh, "nama" | "fakultas" | "fotos">, vicePortrait?: Pick<Tokoh, "nama" | "fakultas" | "fotos">): Kabinet {
   const byRole = new Map(api.leaders.map((l) => [l.role_key, l]));
+  const ketua = tokoh(byRole.get("ketua"), "Ketua BEM UI");
+  const wakil = tokoh(byRole.get("wakil-ketua"), "Wakil Ketua BEM UI");
+  const personKey = (name: string) => name.normalize("NFKD").replace(/[^a-z0-9]/gi, "").toLowerCase();
+  // A local photo sequence must never be assigned to a different CMS office-holder.
+  for (const [leader, local] of [[ketua, portrait], [wakil, vicePortrait]] as const) {
+    if (local?.fotos?.length && leader.nama && personKey(leader.nama) === personKey(local.nama)) {
+      leader.fotos = local.fotos;
+      leader.foto = local.fotos[0];
+      leader.fakultas = local.fakultas;
+    }
+  }
   return {
     nama: api.name,
     deskripsi: api.description,
@@ -182,8 +196,8 @@ export function toKabinet(api: ApiCabinet): Kabinet {
     misi: misiDenganKunci(api.missions).map((mission, index) => ({
       ...mission, kunci: api.mission_keywords?.[index] || mission.kunci,
     })),
-    ketua: tokoh(byRole.get("ketua"), "Ketua BEM UI"),
-    wakil: tokoh(byRole.get("wakil-ketua"), "Wakil Ketua BEM UI"),
+    ketua,
+    wakil,
     stats: {
       divisi: api.statistics.units,
       anggota: api.statistics.people,

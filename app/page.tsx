@@ -10,6 +10,8 @@ import { SiteFooter, SiteNav } from "@/components/ui";
 import { HERO } from "@/config/site";
 import { getHeroProker, getLatestNews, getStats, pickFeaturedProker } from "@/lib/data";
 import { getAllDivisi, getKabinet } from "@/lib/kabinet";
+import { readDemoJson } from "@/lib/demo-data";
+import type { LogoPhilosophy } from "@/components/home/FilosofiLogo";
 
 export const dynamic = "force-dynamic";
 
@@ -31,10 +33,10 @@ export default async function HomePage() {
       </a>
       <SiteNav />
       <main>
-        <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} />
+        <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} logoPhilosophy={readDemoJson<LogoPhilosophy>("filosofi-logo.json")} />
         <div id="konten">
-          <StatsSection stats={stats} />
-          <TaglineSection kabinet={kabinet} />
+          {kabinet && <StatsSection stats={stats} />}
+          {kabinet && <TaglineSection kabinet={kabinet} />}
           <KabinetPreview divisi={divisi} />
           <NewsPreview articles={news} />
           <VideoSection />

@@ -99,3 +99,68 @@ test("empty published cabinet does not invent programs or faculty counts", () =>
   assert.equal(api.toKabinet(empty).stats.fakultas, 0);
   assert.equal(api.toHeroProker(empty, () => "Biro").length, 0);
 });
+
+test("BPH academic subtitle comes from the SIT field without replacing the role", () => {
+  const leader = { ...cabinet.leaders[0], description: "Kedokteran 2023", title: "Wakil Kepala Eksternal" };
+  const mapped = adapter().toDivisi({ ...unit, leaders: [leader] }, 1, cabinet.name);
+  assert.equal(mapped.bph[0].jurusanAngkatan, "Kedokteran 2023");
+  assert.equal(mapped.bph[0].jabatan, "Wakil Kepala Eksternal");
+  assert.equal(adapter().toDivisi({ ...unit, leaders: [{ ...leader, description: "" }] }, 1, cabinet.name).bph[0].jurusanAngkatan, "");
+});
+
+test("local chairman sequence is attached only to the same CMS person", () => {
+  const profile = JSON.parse(readFileSync(path.join(__dirname, "../config/leader-portraits.json"), "utf8")).ketua;
+  const api = adapter();
+  const samePerson = { ...cabinet, leaders: [{ ...cabinet.leaders[0], name: profile.nama.toUpperCase() }] };
+  const result = api.toKabinet(samePerson, profile);
+  assert.equal(result.ketua.fakultas, "FEB 2022");
+  assert.equal(result.ketua.fotos.length, 3);
+  assert.equal(result.ketua.foto.url, profile.fotos[0].url);
+  assert.equal(api.toKabinet(cabinet, profile).ketua.fotos, undefined);
+  assert.equal(api.toKabinet({ ...cabinet, leaders: [] }, profile).ketua.fotos, undefined);
+});
+
+test("chairman images exist as alpha PNGs with consistent dimensions", () => {
+  const profile = JSON.parse(readFileSync(path.join(__dirname, "../config/leader-portraits.json"), "utf8")).ketua;
+  assert.equal(profile.nama, "Yatalathof Ma'sum Imawan");
+  assert.equal(profile.fakultas, "FEB 2022");
+  assert.equal(profile.fotos.length, 3);
+  const dimensions = profile.fotos.map((photo) => {
+    const png = readFileSync(path.join(__dirname, "../public", photo.url));
+    assert.equal(png.subarray(1, 4).toString(), "PNG");
+    assert.equal(png[25], 6, "PNG must retain RGBA transparency");
+    return [png.readUInt32BE(16), png.readUInt32BE(20)].join("x");
+  });
+  assert.equal(new Set(dimensions).size, 1);
+});
+
+test("vice-chair sequence is matched by role and person without replacing CMS quotes", () => {
+  const local = JSON.parse(readFileSync(path.join(__dirname, "../config/leader-portraits.json"), "utf8"));
+  const api = adapter();
+  const cms = { ...cabinet, leaders: [...cabinet.leaders, {
+    ...cabinet.leaders[0], role_key: "wakil-ketua", name: "FATHIMAH AZZAHRA",
+  }] };
+  const result = api.toKabinet(cms, local.ketua, local.wakil);
+  assert.equal(result.wakil.fakultas, "FK 2023");
+  assert.equal(result.wakil.fotos.length, 3);
+  assert.equal(result.wakil.kutipan, "Kutipan CMS");
+  assert.equal(result.ketua.fotos, undefined);
+  assert.equal(api.toKabinet(cabinet, local.ketua, local.wakil).wakil.fotos, undefined);
+  cms.leaders[1].name = "Wakil lain";
+  assert.equal(api.toKabinet(cms, local.ketua, local.wakil).wakil.fotos, undefined);
+});
+
+test("vice-chair portraits retain alpha and a consistent frame size", () => {
+  const profile = JSON.parse(readFileSync(path.join(__dirname, "../config/leader-portraits.json"), "utf8")).wakil;
+  assert.equal(profile.nama, "Fathimah Azzahra");
+  assert.equal(profile.fakultas, "FK 2023");
+  assert.equal(profile.fotos.length, 3);
+  const dimensions = profile.fotos.map((photo) => {
+    const png = readFileSync(path.join(__dirname, "../public", photo.url));
+    assert.equal(png.subarray(1, 4).toString(), "PNG");
+    assert.equal(png[25], 6);
+    assert.ok((photo.scale ?? 1) > 0 && (photo.scale ?? 1) <= 1);
+    return [png.readUInt32BE(16), png.readUInt32BE(20)].join("x");
+  });
+  assert.equal(new Set(dimensions).size, 1);
+});

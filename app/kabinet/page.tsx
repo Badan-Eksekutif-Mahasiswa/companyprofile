@@ -11,10 +11,10 @@ import { ProkerSpotlight } from "@/components/kabinet-list/ProkerSpotlight";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { nama, periode } = await getKabinet();
+  const kabinet = await getKabinet();
   return {
-    title: nama,
-    description: `Visi, misi, ketua, wakil ketua, dan seluruh birdep ${[nama, periode].filter(Boolean).join(" ")}.`,
+    title: { absolute: "BEM UI 2026" },
+    description: `Visi, misi, ketua, wakil ketua, dan seluruh birdep ${[kabinet?.nama, kabinet?.periode].filter(Boolean).join(" ") || "BEM UI"}.`,
   };
 }
 
@@ -24,11 +24,20 @@ export default async function KabinetPage() {
     <>
       <SiteNav />
       <main>
-        <KabinetHero kabinet={kabinet} />
-        <MisiMisi misi={kabinet.misi} />
-        <Leaders kabinet={kabinet} />
-        <DivisiGrid divisi={divisi} />
-        <ProkerSpotlight kabinet={kabinet} />
+        {kabinet ? (
+          <>
+            <KabinetHero kabinet={kabinet} />
+            <MisiMisi misi={kabinet.misi} />
+            <Leaders kabinet={kabinet} />
+            <DivisiGrid divisi={divisi} />
+            <ProkerSpotlight kabinet={kabinet} />
+          </>
+        ) : (
+          <section className="mx-auto min-h-[60svh] max-w-wrap px-6 pb-24 pt-40">
+            <h1 className="text-4xl font-bold">Kabinet BEM UI</h1>
+            <p className="mt-4 text-secondary">Profil kabinet belum tersedia.</p>
+          </section>
+        )}
       </main>
       <SiteFooter />
       <Cursor />

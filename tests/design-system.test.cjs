@@ -70,3 +70,19 @@ test("body and detail headings use shared design-system typography tokens", () =
   });
   assert.equal(checked, 2);
 });
+
+test("BPH uses a centered wrapping layout without changing staff grids", () => {
+  const read = (file) => readFileSync(path.join(__dirname, "..", file), "utf8");
+  const css = postcss.parse(read("components/kabinet/project.css"));
+  const centered = {};
+  css.walkRules(".kd .team__grid--centered", (rule) => {
+    rule.walkDecls((decl) => { centered[decl.prop] = decl.value; });
+  });
+  assert.equal(centered.display, "flex");
+  assert.equal(centered["flex-wrap"], "wrap");
+  assert.equal(centered["justify-content"], "center");
+  const page = read("components/kabinet/ProjectPage.tsx");
+  assert.match(page, /title="BPH" people=\{divisi.bph\} centered/);
+  assert.match(page, /title="Staff" people=\{divisi.staff\} \/>/);
+  assert.doesNotMatch(read("components/kabinet-list/DivisiGrid.tsx"), /Arahkan kursor|divisi yang bekerja bersama/);
+});

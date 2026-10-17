@@ -4,10 +4,11 @@ import * as React from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { X } from "lucide-react";
-import filosofi from "@/data/filosofi-logo.json";
+export type LogoPhilosophy = { judul: string; ringkasan: string; elemen: { nama: string; makna: string }[]; warna: { nama: string; hex: string; makna: string }[] };
 
-/** Panel filosofi logo, muncul saat logo 3D di hero diklik. Isi dari data/filosofi-logo.json (dummy). */
-export function FilosofiLogo({ closeSignal, onClose }: { closeSignal: number; onClose: () => void }) {
+/** The production dialog displays only approved brand information. */
+export function FilosofiLogo({ closeSignal, onClose, content }: { closeSignal: number; onClose: () => void; content?: LogoPhilosophy }) {
+  const filosofi = content ?? { judul: "Logo BEM UI 2026", ringkasan: "", elemen: [], warna: [] };
   const backdrop = React.useRef<HTMLDivElement>(null);
   const card = React.useRef<HTMLDivElement>(null);
   const closeBtn = React.useRef<HTMLButtonElement>(null);
@@ -95,9 +96,9 @@ export function FilosofiLogo({ closeSignal, onClose }: { closeSignal: number; on
             ))}
           </ol>
 
-          <h3 data-reveal className="mt-8 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
+          {filosofi.warna.length > 0 && <h3 data-reveal className="mt-8 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
             Warna
-          </h3>
+          </h3>}
           <ul className="mt-3 grid gap-3 sm:grid-cols-3">
             {filosofi.warna.map((w) => (
               <li key={w.hex} data-reveal className="rounded-xl border border-border p-3">

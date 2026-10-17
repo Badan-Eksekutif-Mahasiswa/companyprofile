@@ -12,7 +12,6 @@ export function DivisiGrid({ divisi }: { divisi: Divisi[] }) {
           Departemen
           <br />& Biro
         </h2>
-        <p className="max-w-[320px] text-[15px] leading-relaxed text-secondary">{divisi.length} divisi yang bekerja bersama. Arahkan kursor untuk ringkasan, klik untuk masuk.</p>
       </Reveal>
       <ul className="flex flex-wrap justify-center gap-5">
         {divisi.map((d, i) => (

@@ -208,6 +208,14 @@ html.kd-root::-webkit-scrollbar { display: none; }
 .kd .section--team { padding: var(--spaceMedium) var(--margin) 30px; }
 .kd .team__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 28px; }
 @media (max-width: 767px) { .kd .team__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+.kd .team__grid--centered { display: flex; flex-wrap: wrap; justify-content: center; }
+.kd .team__grid--centered > .person-card { flex: 0 1 calc((100% - 56px) / 3); min-width: 0; max-width: 360px; }
+@media (max-width: 767px) {
+  .kd .team__grid--centered > .person-card { flex-basis: calc((100% - 16px) / 2); }
+}
+@media (max-width: 479px) {
+  .kd .team__grid--centered > .person-card { flex-basis: 100%; }
+}
 
 .kd .collaborators { display: flex; gap: 28px; padding: 0 var(--margin) var(--spaceHigh); }
 .kd .collaborators__label { flex-shrink: 0; width: 22.4%; }

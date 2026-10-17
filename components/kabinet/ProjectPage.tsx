@@ -34,27 +34,28 @@ function MediaAsset({ media, imgClass = "media-item__el" }: { media: Media; imgC
   );
 }
 
-function PersonCard({ p }: { p: Person }) {
+function PersonCard({ p, academic = false }: { p: Person; academic?: boolean }) {
+  const subtitle = academic ? p.jurusanAngkatan : p.jabatan;
   return (
     <figure className="person-card group relative m-0 aspect-[4/5] overflow-hidden rounded-2xl border border-border bg-navy-5 shadow-sm transition-shadow duration-base ease-out-expo hover:shadow-lg">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={p.foto.url} alt={p.foto.alt ?? p.nama} loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-[900ms] ease-out-expo group-hover:scale-[1.06]" />
       <figcaption className="absolute inset-x-3 bottom-3 rounded-xl border border-glass-border bg-glass-strong p-3 shadow-glass-soft backdrop-blur-glass">
         <div className="text-[14px] font-bold leading-tight text-navy">{p.nama}</div>
-        <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-secondary">{p.jabatan}</div>
+        {subtitle && <div className={`mt-0.5 text-[11px] font-semibold text-secondary${academic ? "" : " uppercase tracking-[0.08em]"}`}>{subtitle}</div>}
       </figcaption>
     </figure>
   );
 }
 
-function TeamSection({ title, people }: { title: string; people: Person[] }) {
+function TeamSection({ title, people, centered = false }: { title: string; people: Person[]; centered?: boolean }) {
   if (!people.length) return null;
   return (
     <section className="section section--team">
       <h2 className="section__subtitle">{title}</h2>
-      <div className="team__grid">
+      <div className={`team__grid${centered ? " team__grid--centered" : ""}`}>
         {people.map((p, i) => (
-          <PersonCard key={i} p={p} />
+          <PersonCard key={i} p={p} academic={centered} />
         ))}
       </div>
     </section>
@@ -359,7 +360,7 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
 
       {divisi.sections.map(renderSection)}
 
-      <TeamSection title="BPH" people={divisi.bph} />
+      <TeamSection title="BPH" people={divisi.bph} centered />
       <TeamSection title="Staff" people={divisi.staff} />
 
       {next && (
