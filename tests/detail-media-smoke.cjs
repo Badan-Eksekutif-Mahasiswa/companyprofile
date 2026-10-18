@@ -41,6 +41,34 @@ async function scrollPhotoIntoView(page, image) {
   assert.fail('Photo did not scroll into the viewport');
 }
 
+async function assertInfoLayout(page, width) {
+  const layout = await page.locator('.info').evaluate((info) => {
+    const category = info.querySelector('.info__category');
+    const column = info.querySelector('.info__left').getBoundingClientRect();
+    const roles = info.querySelector('.info__roles').getBoundingClientRect();
+    return {
+      text: category.getAttribute('aria-label') || category.querySelector('[aria-label]').getAttribute('aria-label'),
+      contained: [...category.querySelectorAll('.cat-char')].every((char) => {
+        const box = char.getBoundingClientRect();
+        return box.left >= column.left - 1 && box.right <= column.right + 1;
+      }),
+      separated: column.right < roles.left,
+      categoryFont: getComputedStyle(category).fontSize,
+      descriptionFont: getComputedStyle(info.querySelector('.description .rich-text')).fontSize,
+      paragraphAlignment: getComputedStyle(info.querySelector('.description p')).textAlign,
+      rolesJustified: [...info.querySelectorAll('.info__roles-list li')]
+        .every((item) => getComputedStyle(item).textAlign === 'justify' && getComputedStyle(item).textAlignLast === 'start'),
+    };
+  });
+  assert.equal(layout.text, 'Kantor Komunikasi dan Informasi');
+  assert.ok(layout.contained, `Category must stay inside its column at ${width}px`);
+  assert.ok(layout.separated, `Category and roles must not overlap at ${width}px`);
+  assert.equal(layout.categoryFont, width <= 500 ? '15px' : '16px');
+  assert.equal(layout.descriptionFont, width <= 500 ? '16px' : '18px');
+  assert.equal(layout.paragraphAlignment, 'justify');
+  assert.ok(layout.rolesJustified, 'Each role must be justified with a natural last line');
+}
+
 async function main() {
   const bytes = await fs.readFile(path.join(__dirname, '../public/images/kabinet/kabem/yatalathof-01.png'));
   const storage = http.createServer((_req, res) => {
@@ -53,7 +81,9 @@ async function main() {
   const mediaPath = '/api/website/v1/media/00000000-0000-4000-8000-000000000001/';
   const apiRequests = [];
   const unit = (slug, photo) => ({ id: slug === 'unit-remote' ? 1 : 2, cabinet_id: 1,
-    slug, name: slug, kind: 'biro', group: 'internal', group_label: 'Bidang Internal',
+    slug, name: slug, kind: 'biro', group: 'kominfo', group_label: 'Kantor Komunikasi dan Informasi',
+    roles: ['Mengelola dan mengoptimalkan kanal media sosial resmi BEM UI 2026.',
+      'Mengembangkan dan mengintegrasikan Sistem Informasi Terintegrasi (SIT).'],
     summary: '', description: 'Deskripsi unit', vision: 'Visi', missions: ['Misi'],
     cover_photo: { url: photo }, main_photo: { url: photo }, leaders: [], staff: [], programs: [] });
   const api = http.createServer((req, res) => {
@@ -113,6 +143,7 @@ async function main() {
       await card.evaluate((image) => image.decode());
       await page.goto(base + '/kabinet/unit-remote');
       assert.equal((await page.locator('h1').textContent()).trim(), 'unit-remote');
+      await assertInfoLayout(page, width);
       const images = page.locator('main.project .media-item__inner img');
       assert.equal(await images.count(), 2);
       for (const image of await images.all()) {
@@ -140,8 +171,21 @@ async function main() {
         }
       }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      if (process.env.SIT_UI_SCREENSHOT_DIR) {
+        const info = await page.locator('.info').boundingBox();
+        await page.mouse.wheel(0, info.y + info.height / 2 - 450);
+        await delay(1500);
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('.info__category')).opacity === '1');
+        await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR,
+          `companyprofile-category-layout-${width}.png`) });
+      }
       console.log('PASS remote cover and main photo without storage CORS; WebGL on desktop, native on mobile', width);
     }
+    for (const width of [1764, 1280, 768, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      await assertInfoLayout(page, width);
+    }
+    console.log('PASS long category stays contained and typography is compact across six viewport widths');
     assert.ok(optimized.length > 0, 'SIT textures must use the same-origin image optimizer');
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(base + '/kabinet/unit-fallback');

@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Divisi, Media, Person, Section } from "@/lib/kabinet";
 import { createReveal } from "@/lib/gsap-reveal";
-import { CharRoll } from "./CharRoll";
+import { WordRoll } from "./CharRoll";
 import { useShell } from "./shell-context";
 import { PersonCard } from "./PersonCard";
 
@@ -300,7 +300,7 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
             <div>
               {divisi.categories.map((c) => (
                 <Link key={c.slug} href={`/kabinet?kategori=${c.slug}`} className="info__category project--reveal-pending" data-hover>
-                  <CharRoll text={c.name} topClass="cat-char-top" botClass="cat-char-bot" charClass="cat-char" />
+                  <WordRoll text={c.name} />
                 </Link>
               ))}
             </div>

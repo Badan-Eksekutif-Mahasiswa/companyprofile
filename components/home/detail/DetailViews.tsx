@@ -10,7 +10,7 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, RotateCw } from "lucide-react";
-import { CharRoll } from "@/components/kabinet/CharRoll";
+import { WordRoll } from "@/components/kabinet/CharRoll";
 import { useShell } from "@/components/kabinet/shell-context";
 import type { Divisi } from "@/lib/kabinet";
 import { createReveal } from "@/lib/gsap-reveal";
@@ -22,17 +22,6 @@ import { PersonCard } from "@/components/kabinet/PersonCard";
 export type EnterMode = "fly" | "toggle";
 
 /* ---------- media: <img> tetap di DOM, di desktop digambar kanvas distorsi (sama dgn ProjectPage) ---------- */
-/** CharRoll per kata: spasi CharRoll tidak bisa patah baris, jadi nama unit yang panjang menabrak kolom sebelah. */
-function WordRoll({ text }: { text: string }) {
-  return (
-    <span className="kd-wordroll" aria-label={text}>
-      {text.split(/\s+/).map((w, i) => (
-        <CharRoll key={i} text={w} topClass="cat-char-top" botClass="cat-char-bot" charClass="cat-char" />
-      ))}
-    </span>
-  );
-}
-
 function MediaAsset({ src, alt, className = "media-item__el" }: { src: string; alt: string; className?: string }) {
   const { distort } = useShell();
   const ref = React.useRef<HTMLDivElement>(null);
