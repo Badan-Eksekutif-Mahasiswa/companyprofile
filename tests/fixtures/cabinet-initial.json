@@ -1,5 +1,4 @@
 {
-  "_dummy": true,
   "nama": "#TerusTerang",
   "deskripsi": "Deskripsi kabinet akan diperbarui.",
   "visi": "Terwujudnya gerakan mahasiswa yang konvergen melalui BEM UI yang akuntabel demi menghadirkan resiliensi wadah kebermanfaatan untuk terus menerangi IKM UI, UI, dan Indonesia.",
@@ -46,31 +45,5 @@
       { "url": "/images/kabinet/wakabem/fathimah-02.png", "alt": "Fathimah Azzahra dengan tangan bersilang", "scale": 0.86 },
       { "url": "/images/kabinet/wakabem/fathimah-03.png", "alt": "Fathimah Azzahra melambaikan tangan", "scale": 0.89 }
     ]
-  },
-  "stats": {
-    "divisi": 17,
-    "anggota": 900,
-    "proker": 120,
-    "fakultas": 18
-  },
-  "proker": [
-    {
-      "divisi": "kominfo",
-      "title": "Placeholder Proker Terbaru 1",
-      "date": "Mei 2026",
-      "image": "/api/placeholder?label=FOTO%20PROKER%201&w=1400&h=1800&tone=pink&sub=PROKER"
-    },
-    {
-      "divisi": "pengabdian-masyarakat",
-      "title": "Placeholder Proker Terbaru 2",
-      "date": "April 2026",
-      "image": "/api/placeholder?label=FOTO%20PROKER%202&w=1400&h=1000&tone=blue&sub=PROKER"
-    },
-    {
-      "divisi": "seni-budaya",
-      "title": "Placeholder Proker Terbaru 3",
-      "date": "Maret 2026",
-      "image": "/api/placeholder?label=FOTO%20PROKER%203&w=1200&h=1200&tone=maroon&sub=PROKER"
-    }
-  ]
+  }
 }

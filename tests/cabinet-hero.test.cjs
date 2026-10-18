@@ -29,7 +29,7 @@ test('cabinet hero shows one hashtag heading without year badge or Kabinet prefi
 });
 
 test('initial cabinet has official vision and three missions, leaving only description and quotes pending', () => {
-  const initial = JSON.parse(readFileSync(path.join(__dirname, '../data/kabinet.json'), 'utf8'));
+  const initial = JSON.parse(readFileSync(path.join(__dirname, 'fixtures/cabinet-initial.json'), 'utf8'));
   assert.equal(initial.nama, '#TerusTerang');
   assert.equal(initial.misi.length, 3);
   assert.match(initial.visi, /^Terwujudnya gerakan mahasiswa yang konvergen/);

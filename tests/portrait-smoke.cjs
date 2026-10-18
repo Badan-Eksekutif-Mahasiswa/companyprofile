@@ -14,7 +14,7 @@ async function listen(server) {
 }
 
 async function main() {
-  const initial = JSON.parse(await fs.readFile(path.join(__dirname, '../data/kabinet.json'), 'utf8'));
+  const initial = JSON.parse(await fs.readFile(path.join(__dirname, 'fixtures/cabinet-initial.json'), 'utf8'));
   const photos = [1, 2, 3].map((pose) => ({ url: `/images/kabinet/kabem/yatalathof-0${pose}.png` }));
   const leader = { name: 'Pengurus Uji', role_key: 'koorbid-internal', title: 'Koordinator Bidang Internal',
     group: 'internal', description: 'Deskripsi pengurus', faculty: 'FEB', cohort: '2022', quote: '',
