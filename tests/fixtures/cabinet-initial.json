@@ -1,0 +1,49 @@
+{
+  "nama": "#TerusTerang",
+  "deskripsi": "Deskripsi kabinet akan diperbarui.",
+  "visi": "Terwujudnya gerakan mahasiswa yang konvergen melalui BEM UI yang akuntabel demi menghadirkan resiliensi wadah kebermanfaatan untuk terus menerangi IKM UI, UI, dan Indonesia.",
+  "misi": [
+    {
+      "teks": "Menerangi IKM UI melalui pembangunan kapasitas dan konsolidasi gerakan mahasiswa yang konvergen dengan reformasi tata kelola BEM UI yang partisipatif dan inklusif.",
+      "kunci": "IKM UI"
+    },
+    {
+      "teks": "Menerangi UI melalui akselerasi peran strategis mahasiswa secara akuntabel dan kolaboratif dalam advokasi kebijakan, pengawalan tata kelola, dan penguatan budaya kampus.",
+      "kunci": "UI"
+    },
+    {
+      "teks": "Menerangi Indonesia dengan mendorong kontribusi nyata gerakan mahasiswa yang resiliensi dalam isu-isu nasional melalui gagasan kebijakan dan gerakan sosial yang berdampak.",
+      "kunci": "Indonesia"
+    }
+  ],
+  "ketua": {
+    "nama": "Yatalathof Ma'sum Imawan",
+    "jabatan": "Ketua BEM UI 2026",
+    "fakultas": "FEB 2022",
+    "kutipan": "Kutipan Ketua BEM UI akan diperbarui.",
+    "foto": {
+      "url": "/images/kabinet/kabem/yatalathof-01.png",
+      "alt": "Yatalathof Ma'sum Imawan, Ketua BEM UI 2026"
+    },
+    "fotos": [
+      { "url": "/images/kabinet/kabem/yatalathof-01.png", "alt": "Yatalathof Ma'sum Imawan merapikan jas" },
+      { "url": "/images/kabinet/kabem/yatalathof-02.png", "alt": "Yatalathof Ma'sum Imawan dengan tangan bersilang" },
+      { "url": "/images/kabinet/kabem/yatalathof-03.png", "alt": "Yatalathof Ma'sum Imawan melambaikan tangan" }
+    ]
+  },
+  "wakil": {
+    "nama": "Fathimah Azzahra",
+    "jabatan": "Wakil Ketua BEM UI 2026",
+    "fakultas": "FK 2023",
+    "kutipan": "Kutipan Wakil Ketua BEM UI akan diperbarui.",
+    "foto": {
+      "url": "/images/kabinet/wakabem/fathimah-01.png",
+      "alt": "Fathimah Azzahra, Wakil Ketua BEM UI 2026"
+    },
+    "fotos": [
+      { "url": "/images/kabinet/wakabem/fathimah-01.png", "alt": "Fathimah Azzahra berdiri" },
+      { "url": "/images/kabinet/wakabem/fathimah-02.png", "alt": "Fathimah Azzahra dengan tangan bersilang", "scale": 0.86 },
+      { "url": "/images/kabinet/wakabem/fathimah-03.png", "alt": "Fathimah Azzahra melambaikan tangan", "scale": 0.89 }
+    ]
+  }
+}
