@@ -295,7 +295,7 @@ export function ProkerView({
           <div className="trio">
             {docs.map((d, i) => (
               <div key={d.url} className="media-item">
-                <div className="aspect-[4/3] overflow-hidden [&_.media-item__inner]:h-full [&_img]:h-full [&_img]:object-cover">
+                <div className="program-documentation" data-program-documentation>
                   <MediaAsset src={d.url} alt={`Dokumentasi ${i + 1} ${item.nama}: ${d.caption}`} />
                 </div>
                 <div className="media-caption">
