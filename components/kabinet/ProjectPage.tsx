@@ -30,7 +30,7 @@ function MediaAsset({ media, imgClass = "media-item__el" }: { media: Media; imgC
   return (
     <div ref={ref} className="media-item__inner">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className={imgClass} src={media.url} alt={media.alt} crossOrigin="anonymous" />
+      <img className={imgClass} src={media.url} alt={media.alt} />
     </div>
   );
 }
