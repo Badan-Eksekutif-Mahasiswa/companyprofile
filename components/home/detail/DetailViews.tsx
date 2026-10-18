@@ -376,7 +376,7 @@ export function DivisiView({
     <main ref={root} className="project">
       <section className="hero__row">
         <div className="hero__col hero__col--title">
-          <h1 className="hero__title hero--reveal-pending">{divisi.title}</h1>
+          <h1 className="hero__title hero--reveal-pending">{divisi.nama}</h1>
         </div>
         <CardPanel
           src={divisi.cover.url}
