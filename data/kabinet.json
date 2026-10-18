@@ -1,32 +1,27 @@
 {
   "_dummy": true,
-  "nama": "Kabinet Terus Terang",
-  "periode": "BEM UI 2026",
-  "deskripsi": "Placeholder deskripsi: Kabinet Terus Terang adalah kabinet BEM UI 2026 yang berkomitmen menyampaikan kebenaran dengan jelas dan bergerak bersama mahasiswa.",
-  "visi": "Placeholder visi: Mewujudkan BEM UI yang terbuka, berani menyuarakan kebenaran, dan menjadi rumah bersama bagi seluruh mahasiswa Universitas Indonesia.",
+  "nama": "#TerusTerang",
+  "deskripsi": "Deskripsi kabinet akan diperbarui.",
+  "visi": "Terwujudnya gerakan mahasiswa yang konvergen melalui BEM UI yang akuntabel demi menghadirkan resiliensi wadah kebermanfaatan untuk terus menerangi IKM UI, UI, dan Indonesia.",
   "misi": [
     {
-      "teks": "Membangun komunikasi yang **jujur dan terbuka** dengan seluruh mahasiswa.",
-      "kunci": "Terbuka"
+      "teks": "Menerangi IKM UI melalui pembangunan kapasitas dan konsolidasi gerakan mahasiswa yang konvergen dengan reformasi tata kelola BEM UI yang partisipatif dan inklusif.",
+      "kunci": "IKM UI"
     },
     {
-      "teks": "Memperkuat advokasi dan kajian yang **berpihak pada mahasiswa**.",
-      "kunci": "Berpihak"
+      "teks": "Menerangi UI melalui akselerasi peran strategis mahasiswa secara akuntabel dan kolaboratif dalam advokasi kebijakan, pengawalan tata kelola, dan penguatan budaya kampus.",
+      "kunci": "UI"
     },
     {
-      "teks": "Menumbuhkan **kolaborasi lintas fakultas** dan organisasi kemahasiswaan.",
-      "kunci": "Kolaborasi"
-    },
-    {
-      "teks": "Menghadirkan program kerja yang **berdampak nyata** bagi masyarakat.",
-      "kunci": "Berdampak"
+      "teks": "Menerangi Indonesia dengan mendorong kontribusi nyata gerakan mahasiswa yang resiliensi dalam isu-isu nasional melalui gagasan kebijakan dan gerakan sosial yang berdampak.",
+      "kunci": "Indonesia"
     }
   ],
   "ketua": {
     "nama": "Yatalathof Ma'sum Imawan",
     "jabatan": "Ketua BEM UI 2026",
     "fakultas": "FEB 2022",
-    "kutipan": "Placeholder kutipan Ketua BEM tentang semangat Kabinet Terus Terang.",
+    "kutipan": "Kutipan Ketua BEM UI akan diperbarui.",
     "foto": {
       "url": "/images/kabinet/kabem/yatalathof-01.png",
       "alt": "Yatalathof Ma'sum Imawan, Ketua BEM UI 2026"
@@ -41,7 +36,7 @@
     "nama": "Fathimah Azzahra",
     "jabatan": "Wakil Ketua BEM UI 2026",
     "fakultas": "FK 2023",
-    "kutipan": "Placeholder kutipan Wakil Ketua BEM tentang semangat Kabinet Terus Terang.",
+    "kutipan": "Kutipan Wakil Ketua BEM UI akan diperbarui.",
     "foto": {
       "url": "/images/kabinet/wakabem/fathimah-01.png",
       "alt": "Fathimah Azzahra, Wakil Ketua BEM UI 2026"

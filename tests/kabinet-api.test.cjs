@@ -57,6 +57,25 @@ test("unconfigured or empty CMS returns null", async () => {
   assert.equal(await adapter(async () => ({ ok: true, json: async () => ({ results: [] }) })).fetchSitCabinet(), null);
 });
 
+test("published units remain accessible without a published cabinet profile", async () => {
+  const urls = [];
+  const api = adapter(async (url) => {
+    urls.push(url);
+    return { ok: true, json: async () => ({ results: [unit, { ...unit, cabinet_id: 3 }] }) };
+  });
+  const units = await api.fetchSitUnits();
+  assert.equal(units.length, 1);
+  assert.equal(units[0].cabinet_id, 7);
+  assert.deepEqual(urls, ["https://sit.example/api/website/v1/units/"]);
+  assert.equal(api.toDivisi(units[0], 1, "").title, "Biro Multimedia");
+});
+
+test("published-unit fetch preserves empty and unavailable states without demo content", async () => {
+  assert.equal(await adapter(() => assert.fail("fetch should not run"), "").fetchSitUnits(), null);
+  assert.equal((await adapter(async () => ({ ok: true, json: async () => ({ results: [] }) })).fetchSitUnits()).length, 0);
+  await assert.rejects(adapter(async () => ({ ok: false, status: 503 })).fetchSitUnits(), /503/);
+});
+
 test("reports invalid IDs and HTTP failures instead of fetching undefined", async () => {
   await assert.rejects(adapter(async () => ({ ok: true, json: async () => ({ results: [{}] }) })).fetchSitCabinet(), /ID kabinet/);
   await assert.rejects(adapter(async () => ({ ok: false, status: 503 })).fetchSitCabinet(), /503/);
@@ -75,7 +94,7 @@ test("maps CMS roles, abbreviations, leaders and mission keywords without dates 
   const result = api.toKabinet(cabinet);
   assert.equal(Object.hasOwn(result, "periode"), false);
   assert.equal(result.ketua.nama, "Ketua CMS");
-  assert.equal(result.ketua.fakultas, "Fasilkom / 2023");
+  assert.equal(result.ketua.fakultas, "Fasilkom 2023");
   assert.equal(result.ketua.kutipan, "Kutipan CMS");
   assert.equal(result.wakil.nama, "");
   assert.equal(result.misi[0].kunci, "Kolaborasi");
@@ -134,6 +153,49 @@ test("local chairman sequence is attached only to the same CMS person", () => {
   assert.equal(result.ketua.foto.url, profile.fotos[0].url);
   assert.equal(api.toKabinet(cabinet, profile).ketua.fotos, undefined);
   assert.equal(api.toKabinet({ ...cabinet, leaders: [] }, profile).ketua.fotos, undefined);
+});
+
+test("BPH and core leaders map ordered CMS poses without duplicating chair profiles", () => {
+  const second = { url: 'https://sit.example/media/pose-2/' };
+  const third = { url: 'https://sit.example/media/pose-3/' };
+  const leader = { ...cabinet.leaders[0], role_key: 'koorbid-internal', name: 'Pengurus Inti',
+    title: 'Koordinator Bidang Internal', photo_2: second, photo_3: third };
+  const api = adapter();
+  const division = api.toDivisi({ ...unit, leaders: [leader] }, 1, cabinet.name);
+  assert.deepEqual(Array.from(division.bph[0].fotos, (photo) => photo.url), [media.url, second.url, third.url]);
+  const mapped = api.toKabinet({ ...cabinet, leaders: [...cabinet.leaders, leader] });
+  assert.equal(mapped.pengurusInti.length, 1);
+  assert.equal(mapped.pengurusInti[0].nama, 'Pengurus Inti');
+  assert.equal(mapped.pengurusInti[0].fotos.length, 3);
+  const remaining = api.toDivisi({ ...unit, leaders: [{ ...leader, photo: null, photo_2: null }] }, 1, cabinet.name);
+  assert.equal(remaining.bph[0].foto.url, third.url);
+  assert.equal(remaining.bph[0].fotos.length, 1);
+});
+
+test("CMS chair poses take precedence and deleted poses never fall back to bundled photos", () => {
+  const local = JSON.parse(readFileSync(path.join(__dirname, '../config/leader-portraits.json'), 'utf8')).ketua;
+  const cms = { ...cabinet, leaders: [{ ...cabinet.leaders[0], name: local.nama,
+    photo_2: { url: 'https://sit.example/pose-2/' }, photo_3: { url: 'https://sit.example/pose-3/' } }] };
+  const api = adapter();
+  assert.equal(api.toKabinet(cms, local).ketua.fotos[0].url, media.url);
+  cms.leaders[0].photo = null;
+  cms.leaders[0].photo_2 = null;
+  cms.leaders[0].photo_3 = null;
+  assert.equal(api.toKabinet(cms, local).ketua.fotos.length, 0);
+  assert.notEqual(api.toKabinet(cms, local).ketua.foto.url, local.fotos[0].url);
+});
+
+test("incomplete optional PI never render placeholder cards from approved or legacy API data", () => {
+  const complete = { ...cabinet.leaders[0], role_key: 'koorbid-internal', name: 'PI lengkap',
+    description: 'Deskripsi resmi', photo: null, photo_3: media };
+  const leaders = [complete,
+    { ...complete, name: 'Tanpa foto', photo_3: null },
+    { ...complete, name: 'Tanpa deskripsi', description: '  ' },
+    { ...complete, name: '   ' }];
+  const result = adapter().toKabinet({ ...cabinet, leaders: [...cabinet.leaders, ...leaders] });
+  assert.equal(result.pengurusInti.length, 1);
+  assert.equal(result.pengurusInti[0].nama, 'PI lengkap');
+  assert.equal(result.pengurusInti[0].foto.url, media.url);
 });
 
 test("chairman images exist as alpha PNGs with consistent dimensions", () => {

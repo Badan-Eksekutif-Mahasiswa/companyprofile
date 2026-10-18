@@ -14,7 +14,7 @@ export function MisiMisi({ misi }: { misi: Kabinet["misi"] }) {
           return (
             <Reveal key={i} className={cn("flex flex-col", right ? "md:items-end" : "md:items-start")}>
               <div
-                className={cn("text-[clamp(26px,6.25vw,90px)] font-extrabold uppercase leading-[0.9] tracking-[-0.06em]", right ? "text-accent" : "text-navy")}
+                className={cn("max-w-full break-words text-[30px] font-extrabold uppercase leading-tight tracking-normal sm:text-[48px] lg:text-[80px]", right ? "text-accent" : "text-navy")}
               >
                 {m.kunci}
               </div>

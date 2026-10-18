@@ -11,7 +11,7 @@ async function listen(server) {
   return server.address().port;
 }
 
-async function verifyEmptyState(apiUrl) {
+async function verifyEmptyState(apiUrl, publishedUnit) {
   const reserve = http.createServer();
   const port = await listen(reserve);
   await new Promise((resolve) => reserve.close(resolve));
@@ -38,11 +38,22 @@ async function verifyEmptyState(apiUrl) {
     for (const route of ["/", "/kabinet", "/news"]) {
       const response = await fetch(base + route);
       assert.equal(response.status, 200, route + logs);
-      assert.doesNotMatch(await response.text(), /Placeholder|Nama Kepala Departemen|Analisis Kritis Kebijakan UKT|Rapat Kerja BEM/);
+      const html = await response.text();
+      assert.doesNotMatch(html, /Placeholder|Nama Kepala Departemen|Analisis Kritis Kebijakan UKT|Rapat Kerja BEM/);
+      if (route === "/kabinet" && publishedUnit) {
+        assert.ok(html.includes(publishedUnit.name));
+        assert.ok(html.includes(`/kabinet/${publishedUnit.slug}`));
+        assert.ok(html.includes("#TerusTerang"));
+      }
+    }
+    if (publishedUnit) {
+      assert.equal((await fetch(`${base}/kabinet/${publishedUnit.slug}`)).status, 200);
+      const division = await (await fetch(`${base}/api/divisi/${publishedUnit.slug}`)).json();
+      assert.equal(division.nama, publishedUnit.name);
     }
     assert.equal((await fetch(base + "/news/analisis-kritis-kebijakan-ukt-baru")).status, 404);
     assert.equal((await fetch(base + "/kabinet/kominfo")).status, 404);
-    console.log("PASS no dummy content with", apiUrl ? "unavailable CMS" : "unconfigured CMS");
+    console.log("PASS", publishedUnit ? "published birdep without published cabinet" : "empty/unavailable CMS without dummy content");
   } finally {
     child.kill();
     if (child.exitCode === null) await once(child, "exit");
@@ -70,6 +81,9 @@ async function main() {
     if (url.pathname === "/api/website/v1/cabinets/") data = { results: [{ id: 7 }] };
     if (url.pathname === "/api/website/v1/cabinets/7/") data = cabinet;
     if (url.pathname === "/api/website/v1/articles/") data = { results: [article], pages: 1 };
+    if (url.pathname === "/units-only/cabinets/") data = { results: [] };
+    if (url.pathname === "/units-only/units/") data = { results: [unit] };
+    if (url.pathname === "/units-only/articles/") data = { results: [], pages: 1 };
     res.writeHead(data ? 200 : 404, { "Content-Type": "application/json" });
     res.end(JSON.stringify(data || { detail: "Not found" }));
   });
@@ -97,7 +111,7 @@ async function main() {
       await delay(200);
     }
     assert.ok(ready, "Production server did not start: " + logs);
-    for (const [route, expected] of [["/", "Berita Uji CMS"], ["/kabinet", "Kabinet Uji CMS"],
+    for (const [route, expected] of [["/", "Berita Uji CMS"], ["/kabinet", "#UjiCMS"],
       ["/kabinet/unit-baru-dari-cms", "Biro Uji CMS"], ["/news", "Berita Uji CMS"],
       ["/news/berita-uji-cms", "Isi berita resmi CMS"]]) {
       const response = await fetch(base + route);
@@ -120,6 +134,7 @@ async function main() {
     console.log("PASS runtime division, statistics, missing content and ID-based API requests");
     await verifyEmptyState("");
     await verifyEmptyState(`http://127.0.0.1:${apiPort}/unavailable`);
+    await verifyEmptyState(`http://127.0.0.1:${apiPort}/units-only`, unit);
   } finally {
     child.kill();
     if (child.exitCode === null) await once(child, "exit");

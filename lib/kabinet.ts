@@ -3,7 +3,7 @@ import path from "node:path";
 import { cache } from "react";
 import { readDemoJson } from "@/lib/demo-data";
 import portraits from "@/config/leader-portraits.json";
-import { fetchSitCabinet, toDivisi, toHeroProker, toKabinet, type ApiCabinet } from "@/lib/kabinet-api";
+import { fetchSitCabinet, fetchSitUnits, toDivisi, toHeroProker, toKabinet, type ApiCabinet } from "@/lib/kabinet-api";
 import type { HeroProker } from "@/types";
 
 export type Media = { url: string; alt: string; /** Opsional: judul & deskripsi (mis. program kerja) yang tampil sebagai caption. */ title?: string; desc?: string };
@@ -14,7 +14,7 @@ export type Section =
   | { type: "media-trio"; media_1: Media; media_2: Media; media_3: Media }
   | { type: "text-block"; subtitle?: string; content: string[] };
 
-export type Person = { nama: string; jabatan: string; foto: Media; jurusanAngkatan?: string };
+export type Person = { nama: string; jabatan: string; foto: Media; fotos?: Media[]; jurusanAngkatan?: string };
 
 export type Divisi = {
   order: number;
@@ -60,6 +60,7 @@ export type Kabinet = {
   misi: { teks: string; kunci: string }[];
   ketua: Tokoh;
   wakil: Tokoh;
+  pengurusInti?: Person[];
   stats: { divisi: number; anggota: number; proker: number; fakultas: number };
   proker: { divisi: string; title: string; date: string; image: string }[];
 };
@@ -89,12 +90,21 @@ function localDivisi(): Divisi[] {
 
 export async function getKabinet(): Promise<Kabinet | null> {
   const sit = await getSitCabinet();
-  return sit ? toKabinet(sit, portraits.ketua, portraits.wakil) : readDemoJson<Kabinet>("kabinet.json") ?? null;
+  if (sit) return toKabinet(sit, portraits.ketua, portraits.wakil);
+  return process.env.SIT_API_URL ? null : readDemoJson<Kabinet>("kabinet.json") ?? null;
 }
 
 export async function getAllDivisi(): Promise<Divisi[]> {
   const sit = await getSitCabinet();
-  return sit ? sit.units.map((u, i) => toDivisi(u, i + 1, sit.name)) : localDivisi();
+  if (sit) return sit.units.map((u, i) => toDivisi(u, i + 1, sit.name));
+  try {
+    const units = await fetchSitUnits();
+    if (units !== null) return units.map((unit, index) => toDivisi(unit, index + 1, ""));
+  } catch {
+    console.error("Daftar birdep SIT gagal dimuat.");
+    return [];
+  }
+  return localDivisi();
 }
 
 export async function getDivisi(slug: string): Promise<Divisi | null> {

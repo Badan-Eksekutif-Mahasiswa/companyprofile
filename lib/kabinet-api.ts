@@ -19,6 +19,8 @@ interface ApiLeader {
   name: string;
   description: string;
   photo: ApiMedia | null;
+  photo_2?: ApiMedia | null;
+  photo_3?: ApiMedia | null;
   faculty?: string;
   cohort?: string;
   quote?: string;
@@ -84,6 +86,17 @@ export async function fetchSitCabinet(): Promise<ApiCabinet | null> {
   return (await res.json()) as ApiCabinet;
 }
 
+/** Published units do not depend on publication of their parent cabinet profile. */
+export async function fetchSitUnits(): Promise<ApiUnit[] | null> {
+  if (!BASE) return null;
+  const response = await fetch(`${BASE}/units/`, { next: { revalidate: 60 } });
+  if (!response.ok) throw new Error(`API SIT menjawab ${response.status}`);
+  const units = ((await response.json()) as { results: ApiUnit[] }).results;
+  // Routes use a slug, so retain units from one (latest) cabinet only.
+  const latest = Math.max(0, ...units.map((unit) => unit.cabinet_id));
+  return units.filter((unit) => unit.cabinet_id === latest);
+}
+
 const placeholder = (label: string, w: number, h: number, tone: string, sub: string, kind?: "logo") =>
   `/api/placeholder?${new URLSearchParams({ label, w: String(w), h: String(h), tone, sub, ...(kind ? { kind } : {}) })}`;
 
@@ -113,14 +126,23 @@ function misiDenganKunci(missions: string[]): Kabinet["misi"] {
   });
 }
 
+const hasPoseFields = (leader: ApiLeader | undefined) => !!leader &&
+  (Object.hasOwn(leader, "photo_2") || Object.hasOwn(leader, "photo_3"));
+
+function photoSequence(leader: ApiLeader | undefined): Media[] {
+  return [leader?.photo, leader?.photo_2, leader?.photo_3]
+    .flatMap((photo) => photo?.url ? [{ url: photo.url, alt: photo.alt || leader?.name || "" }] : []);
+}
+
 function tokoh(leader: ApiLeader | undefined, jabatan: string): Tokoh {
   const name = leader?.name || "";
   return {
     nama: name,
     jabatan: leader?.title || jabatan,
-    fakultas: [leader?.faculty, leader?.cohort].filter(Boolean).join(" / "),
+    fakultas: [leader?.faculty, leader?.cohort].filter(Boolean).join(" "),
     kutipan: leader?.quote || leader?.description || "",
-    foto: media(leader?.photo, `Foto ${name || jabatan}`, placeholder(jabatan, 1200, 1500, "navy", "FOTO")),
+    foto: media(leader?.photo || leader?.photo_2 || leader?.photo_3, `Foto ${name || jabatan}`, placeholder(jabatan, 1200, 1500, "navy", "FOTO")),
+    ...(hasPoseFields(leader) ? { fotos: photoSequence(leader) } : {}),
   };
 }
 
@@ -159,12 +181,14 @@ export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Div
     `Foto bersama ${unit.name}`, placeholder(`FOTO ${singkat}`, 1200, 1600, "navy", "COVER"));
   const bph = unit.leaders.filter((l) => l.name).map((l) => ({
     ...orang(l.name, l.title, l.photo, unit.name),
+    foto: media(l.photo || l.photo_2 || l.photo_3, l.name, placeholder(l.title, 1200, 1600, "navy", "FOTO")),
+    fotos: hasPoseFields(l) ? photoSequence(l) : undefined,
     jurusanAngkatan: l.description,
   }));
   return {
     order,
     slug: unit.slug,
-    title: `${unit.name} | ${cabinetName}`,
+    title: [unit.name, cabinetName].filter(Boolean).join(" | "),
     nama: unit.name,
     singkatan: singkat,
     tagline: unit.summary,
@@ -189,7 +213,7 @@ export function toKabinet(api: ApiCabinet, portrait?: Pick<Tokoh, "nama" | "faku
   const personKey = (name: string) => name.normalize("NFKD").replace(/[^a-z0-9]/gi, "").toLowerCase();
   // A local photo sequence must never be assigned to a different CMS office-holder.
   for (const [leader, local] of [[ketua, portrait], [wakil, vicePortrait]] as const) {
-    if (local?.fotos?.length && leader.nama && personKey(leader.nama) === personKey(local.nama)) {
+    if (local?.fotos?.length && !leader.fotos && leader.nama && personKey(leader.nama) === personKey(local.nama)) {
       leader.fotos = local.fotos;
       leader.foto = local.fotos[0];
       leader.fakultas = local.fakultas;
@@ -204,6 +228,13 @@ export function toKabinet(api: ApiCabinet, portrait?: Pick<Tokoh, "nama" | "faku
     })),
     ketua,
     wakil,
+    pengurusInti: api.leaders.filter((leader) => leader.name.trim() && leader.description.trim()
+      && photoSequence(leader).length > 0 && !["ketua", "wakil-ketua"].includes(leader.role_key))
+      .map((leader) => ({
+        ...orang(leader.name, leader.title, leader.photo || leader.photo_2 || leader.photo_3 || null, api.name),
+        fotos: photoSequence(leader),
+        jurusanAngkatan: [leader.faculty, leader.cohort].filter(Boolean).join(" "),
+      })),
     stats: {
       divisi: api.statistics.units,
       anggota: api.statistics.people,
