@@ -1,5 +1,6 @@
 import type * as THREE_NS from "three";
 import type Lenis from "lenis";
+import { mediaTextureSource } from "@/lib/media-texture";
 
 type Three = typeof THREE_NS;
 
@@ -226,12 +227,14 @@ export class DistortManager {
   }
 
   private load(e: Entry) {
+    const src = mediaTextureSource(e.src, window.location.origin);
+    if (!src) return;
     const THREE = this.THREE!;
     const id = ++e.loadId;
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.decoding = "async";
-    img.src = e.src;
+    img.src = src;
     e.img = img;
     img
       .decode()

@@ -86,3 +86,24 @@ test("BPH uses a centered wrapping layout without changing staff grids", () => {
   assert.match(page, /title="Staff" people=\{divisi.staff\} \/>/);
   assert.doesNotMatch(read("components/kabinet-list/DivisiGrid.tsx"), /Arahkan kursor|divisi yang bekerja bersama/);
 });
+
+test('birdep details use only the unit name and an unclipped, spacious info grid', () => {
+  const read = (file) => readFileSync(path.join(__dirname, '..', file), 'utf8');
+  for (const file of ['components/kabinet/ProjectPage.tsx', 'components/home/detail/DetailViews.tsx']) {
+    assert.match(read(file), /className="hero__title hero--reveal-pending">\{divisi.nama\}/);
+    assert.doesNotMatch(read(file), /className="hero__title hero--reveal-pending">\{divisi.title\}/);
+  }
+  const rules = {};
+  postcss.parse(read('components/kabinet/project.css')).walkRules((rule) => {
+    if (rule.parent.type !== 'root') return;
+    const values = {};
+    rule.walkDecls((declaration) => { values[declaration.prop] = declaration.value; });
+    rules[rule.selector] = { ...rules[rule.selector], ...values };
+  });
+  assert.equal(rules['.kd .info__right']['grid-column'], '7 / -1');
+  assert.equal(rules['.kd .description .rich-text']['line-height'], '1.5');
+  assert.equal(rules['.kd']['--detail-description'], '24px');
+  assert.equal(rules['.kd .section--text > .rich-text']['grid-column'], '7 / -1');
+  assert.equal(rules['.kd .section--text .section__subtitle']['font-size'], '16px');
+  assert.equal(rules['.kd .misi-list li']['margin-bottom'], '20px');
+});
