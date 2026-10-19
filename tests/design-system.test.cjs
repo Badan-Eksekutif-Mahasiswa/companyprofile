@@ -83,7 +83,7 @@ test("BPH uses a centered wrapping layout without changing staff grids", () => {
   assert.equal(centered["justify-content"], "center");
   const page = read("components/kabinet/ProjectPage.tsx");
   assert.match(page, /title="BPH" people=\{divisi.bph\} centered/);
-  assert.match(page, /title="Staff" people=\{divisi.staff\} \/>/);
+  assert.match(page, /title="Staf" people=\{divisi.staff\} \/>/);
   assert.doesNotMatch(read("components/kabinet-list/DivisiGrid.tsx"), /Arahkan kursor|divisi yang bekerja bersama/);
 });
 

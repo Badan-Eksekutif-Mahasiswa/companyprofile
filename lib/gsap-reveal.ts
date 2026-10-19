@@ -1,9 +1,9 @@
 import type { gsap as Gsap } from "gsap";
-import type { ScrollTrigger as ST } from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
  * Port util reveal k95: pecah teks jadi kata (masking overflow:hidden), kata dikelompokkan
- * per baris visual, lalu naik dari yPercent 115 → 0 dengan expo.out saat masuk viewport.
+ * per baris visual, lalu bergerak mengikuti arah scroll saat masuk viewport.
  */
 type Els = string | Element | Element[] | NodeListOf<Element> | null | undefined;
 
@@ -22,7 +22,8 @@ function groupByLine(words: HTMLElement[]): HTMLElement[][] {
 }
 
 export function createReveal(gsap: typeof Gsap) {
-  const triggers = new Set<ST>();
+  const triggers = new Set<ScrollTrigger>();
+  const animations = new Set<gsap.core.Animation>();
   const originals = new Map<Element, string>();
 
   const prepareWords = (els: Els) => {
@@ -82,10 +83,20 @@ export function createReveal(gsap: typeof Gsap) {
     const { trigger = null, start = "top 90%", duration = 0.95, delay = 0, lineStagger = 0.055, wordStagger = 0.018, ease = "expo.out" } = o;
     prepareWords(o.elements).forEach(({ container, words }) => {
       const lines = groupByLine(words);
-      gsap.set(words, { yPercent: 115, opacity: 0 });
-      const tl = gsap.timeline({ scrollTrigger: { trigger: trigger || container, start, once: true } });
-      lines.forEach((line, i) => tl.to(line, { yPercent: 0, opacity: 1, duration, stagger: wordStagger, ease }, delay + i * lineStagger));
-      if (tl.scrollTrigger) triggers.add(tl.scrollTrigger);
+      let direction = 1;
+      gsap.set(words, { yPercent: -115, opacity: 0 });
+      const tl = gsap.timeline({ paused: true });
+      lines.forEach((line, i) => tl.fromTo(line,
+        { yPercent: () => -direction * 115, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration, stagger: wordStagger, ease, immediateRender: false },
+        delay + i * lineStagger));
+      animations.add(tl);
+      const play = (value: number) => {
+        direction = value;
+        tl.invalidate().restart(true);
+      };
+      triggers.add(ScrollTrigger.create({ trigger: trigger || container, start, end: "bottom top", once: false,
+        onEnter: () => play(1), onEnterBack: () => play(-1) }));
     });
   }
 
@@ -101,18 +112,30 @@ export function createReveal(gsap: typeof Gsap) {
   }) {
     const { start = "top 92%", duration = 1.05, delay = 0, y = 24, ease = "expo.out", fromVars = {}, toVars = {} } = o;
     toArray(o.elements).forEach((el) => {
+      let direction = 1;
       const tween = gsap.fromTo(
         el,
-        { y, opacity: 0, ...fromVars },
-        { y: 0, opacity: 1, duration, delay, ease, ...toVars, scrollTrigger: { trigger: el, start, once: true } }
+        { opacity: 0, ...fromVars, y: () => -direction * y,
+          ...(fromVars.clipPath === "inset(0 0 100% 0)" ? {
+            clipPath: () => direction > 0 ? "inset(0 0 100% 0)" : "inset(100% 0 0 0)",
+          } : {}) },
+        { y: 0, opacity: 1, duration, delay, ease, ...toVars, paused: true }
       );
-      if (tween.scrollTrigger) triggers.add(tween.scrollTrigger);
+      animations.add(tween);
+      const play = (value: number) => {
+        direction = value;
+        tween.invalidate().restart(true);
+      };
+      triggers.add(ScrollTrigger.create({ trigger: el, start, end: "bottom top", once: false,
+        onEnter: () => play(1), onEnterBack: () => play(-1) }));
     });
   }
 
   function cleanup() {
     triggers.forEach((t) => t.kill());
     triggers.clear();
+    animations.forEach((animation) => animation.kill());
+    animations.clear();
     originals.forEach((html, el) => {
       if (el.isConnected) {
         el.innerHTML = html;
