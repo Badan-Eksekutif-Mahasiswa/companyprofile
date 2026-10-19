@@ -22,7 +22,10 @@ async function main() {
   const unit = { id: 1, cabinet_id: 7, slug: 'unit-uji', name: 'Biro Uji', kind: 'biro', group: 'internal',
     group_label: 'Bidang Internal', summary: '', description: 'Deskripsi unit', vision: 'Visi', missions: ['Misi'],
     main_photo: null, cover_photo: null, leaders: [{ ...leader, name: 'Pengurus BPH Uji', role_key: 'kepala', title: 'Kepala Biro' }],
-    staff: [], programs: [] };
+    staff: [
+      { id: 1, name: 'Staf dengan bidang kerja', work_area: 'Pengembangan dan Pengelolaan Teknologi Informasi', photo: photos[0] },
+      { id: 2, name: 'Staf tanpa bidang kerja', photo: photos[1] },
+    ], programs: [] };
   const chairs = [initial.ketua, initial.wakil].map((person, index) => ({
     role_key: index ? 'wakil-ketua' : 'ketua', title: person.jabatan, name: person.nama,
     faculty: index ? 'FK' : 'FEB', cohort: index ? '2023' : '2022', quote: person.kutipan,
@@ -85,6 +88,28 @@ async function main() {
           });
           if (process.env.SIT_UI_SCREENSHOT_DIR) {
             await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-cabinet-${width}.png`) });
+          }
+        }
+        if (route === '/kabinet/unit-uji') {
+          assert.equal(await page.getByRole('heading', { name: 'Staf', exact: true }).count(), 1);
+          const staffCard = page.locator('figure.person-card').filter({ hasText: 'Staf dengan bidang kerja' });
+          await staffCard.scrollIntoViewIfNeeded();
+          await delay(1800);
+          assert.equal(await staffCard.locator('figcaption > div').nth(1).innerText(), unit.staff[0].work_area.toUpperCase());
+          assert.equal(await staffCard.locator('figcaption > div').nth(1).getAttribute('title'), unit.staff[0].work_area);
+          assert.equal(await staffCard.locator('figcaption > div').nth(1).evaluate((subtitle) =>
+            getComputedStyle(subtitle).webkitLineClamp), '2');
+          const emptyCard = page.locator('figure.person-card').filter({ hasText: 'Staf tanpa bidang kerja' });
+          assert.equal(await emptyCard.locator('figcaption > div').count(), 1);
+          assert.equal(await staffCard.locator('figcaption').evaluate((caption) => {
+            const box = caption.getBoundingClientRect();
+            return [...caption.children].every((child) => {
+              const text = child.getBoundingClientRect();
+              return text.left >= box.left && text.right <= box.right && text.bottom <= box.bottom;
+            });
+          }), true, 'Work area must fit inside the staff caption');
+          if (process.env.SIT_UI_SCREENSHOT_DIR) {
+            await staffCard.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-staff-work-area-${width}.png`) });
           }
         }
         const portrait = page.locator('figure.person-card [data-leader-portrait]').first();

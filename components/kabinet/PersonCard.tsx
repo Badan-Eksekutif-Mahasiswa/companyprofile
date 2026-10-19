@@ -13,7 +13,7 @@ export function PersonCard({ p, academic = false }: { p: Person; academic?: bool
       )}
       <figcaption className="absolute inset-x-3 bottom-3 rounded-lg border border-glass-border bg-glass-strong p-3 shadow-glass-soft backdrop-blur-glass">
         <div className="text-[14px] font-bold leading-tight text-navy">{p.nama}</div>
-        {subtitle && <div className={`mt-0.5 text-[11px] font-semibold text-secondary${academic ? "" : " uppercase"}`}>{subtitle}</div>}
+        {subtitle && <div title={subtitle} className={`mt-0.5 text-[11px] font-semibold text-secondary${academic ? "" : " uppercase line-clamp-2"}`}>{subtitle}</div>}
         {!academic && p.jurusanAngkatan && <div className="mt-1 text-[11px] text-secondary">{p.jurusanAngkatan}</div>}
       </figcaption>
     </figure>

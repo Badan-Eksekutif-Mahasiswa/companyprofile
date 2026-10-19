@@ -83,7 +83,7 @@ test("BPH uses a centered wrapping layout without changing staff grids", () => {
   assert.equal(centered["justify-content"], "center");
   const page = read("components/kabinet/ProjectPage.tsx");
   assert.match(page, /title="BPH" people=\{divisi.bph\} centered/);
-  assert.match(page, /title="Staff" people=\{divisi.staff\} \/>/);
+  assert.match(page, /title="Staf" people=\{divisi.staff\} \/>/);
   assert.doesNotMatch(read("components/kabinet-list/DivisiGrid.tsx"), /Arahkan kursor|divisi yang bekerja bersama/);
 });
 
@@ -114,4 +114,26 @@ test('birdep details use only the unit name and an unclipped, spacious info grid
   assert.equal(rules['.kd .section--text > .rich-text']['grid-column'], '7 / -1');
   assert.equal(rules['.kd .section--text .section__subtitle']['font-size'], '14px');
   assert.equal(rules['.kd .misi-list li']['margin-bottom'], '20px');
+});
+
+test('program documentation uses landscape 16:9 without changing portrait covers', () => {
+  const page = readFileSync(path.join(__dirname, '../components/home/detail/DetailViews.tsx'), 'utf8');
+  assert.match(page, /className="program-documentation" data-program-documentation/);
+  assert.doesNotMatch(page, /aspect-\[4\/3\]/);
+  const css = postcss.parse(readFileSync(path.join(__dirname, '../components/kabinet/project.css'), 'utf8'));
+  const rules = {};
+  css.walkRules((rule) => {
+    if (rule.parent.type !== 'root') return;
+    const values = {};
+    rule.walkDecls((decl) => { values[decl.prop] = decl.value; });
+    rules[rule.selector] = { ...rules[rule.selector], ...values };
+  });
+  assert.equal(rules['.kd .program-documentation']['aspect-ratio'], '16 / 9');
+  assert.equal(rules['.kd .program-documentation > .media-item__inner']['position'], 'absolute');
+  assert.equal(rules['.kd .program-documentation > .media-item__inner']['height'], '100%');
+  let coverRatio;
+  css.walkRules('.kd .hero__panel', (rule) => {
+    rule.walkDecls('aspect-ratio', (declaration) => { coverRatio = declaration.value; });
+  });
+  assert.equal(coverRatio, '3 / 4');
 });

@@ -85,7 +85,10 @@ async function main() {
     roles: ['Mengelola dan mengoptimalkan kanal media sosial resmi BEM UI 2026.',
       'Mengembangkan dan mengintegrasikan Sistem Informasi Terintegrasi (SIT).'],
     summary: '', description: 'Deskripsi unit', vision: 'Visi', missions: ['Misi'],
-    cover_photo: { url: photo }, main_photo: { url: photo }, leaders: [], staff: [], programs: [] });
+    cover_photo: { url: photo }, main_photo: { url: photo }, leaders: [], staff: [],
+    programs: slug === 'unit-gallery' ? [{ id: 99, slug: 'program-dokumentasi', title: 'Program dokumentasi',
+      status: 'done', schedule: '', summary: 'Ringkasan', description: 'Deskripsi program',
+      main_photo: { url: localPhoto }, gallery: [1, 2, 3].map((i) => ({ url: `${localPhoto}?documentation=${i}`, caption: `Kegiatan ${i}` })) }] : [] });
   const api = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
     apiRequests.push(url.pathname);
@@ -96,8 +99,8 @@ async function main() {
     const remote = `http://127.0.0.1:${apiPort}${mediaPath}`;
     const cabinet = { id: 1, name: '#TerusTerang', description: 'Deskripsi kabinet', vision: 'Visi', missions: ['Misi'],
       leaders: [], main_photo: null, units: [unit('unit-remote', remote), unit('unit-webgl', localPhoto),
-        unit('unit-fallback', `http://127.0.0.1:${storagePort}/image.png`)],
-      statistics: { units: 2, programs: 0, people: 0 } };
+        unit('unit-fallback', `http://127.0.0.1:${storagePort}/image.png`), unit('unit-gallery', localPhoto)],
+      statistics: { units: 4, programs: 1, people: 0 } };
     const data = url.pathname.endsWith('/cabinets/1/') ? cabinet :
       url.pathname.endsWith('/cabinets/') ? { results: [{ id: 1 }] } : { results: [], pages: 1 };
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -203,6 +206,37 @@ async function main() {
     await page.goto(base + '/kabinet/unit-webgl');
     await page.waitForFunction(() => document.querySelector('img.hero__panel-img')?.style.visibility === 'hidden');
     assert.ok((await canvasSignature(page)).visible > 1000, 'Compatible images must still render through WebGL');
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(base + '/');
+      const open = page.getByRole('button', { name: /^Program dokumentasi/ });
+      await open.focus();
+      await open.press('Enter');
+      const gallery = page.locator('[data-program-documentation]');
+      await gallery.first().waitFor();
+      assert.equal(await gallery.count(), 3);
+      for (const frame of await gallery.all()) {
+        const box = await frame.boundingBox();
+        assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.01);
+        const meshBounds = await frame.locator('.media-item__inner').boundingBox();
+        assert.ok(Math.abs(meshBounds.width / meshBounds.height - 16 / 9) < 0.01,
+          'WebGL texture bounds must match the 16:9 frame');
+        const imageBounds = await frame.locator('img').boundingBox();
+        assert.ok(Math.abs(imageBounds.width / imageBounds.height - 16 / 9) < 0.01,
+          'Native image must also fit the 16:9 frame');
+        await frame.locator('img').evaluate((image) => image.decode());
+      }
+      if (process.env.SIT_UI_SCREENSHOT_DIR) {
+        await page.mouse.move(width * 0.7, 450);
+        await scrollPhotoIntoView(page, gallery.first());
+        const box = await gallery.first().boundingBox();
+        await page.mouse.wheel(0, box.y - 160);
+        await delay(1800);
+        await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-documentation-16x9-${width}.png`) });
+      }
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      console.log('PASS three 16:9 documentation photos in actual program view', width);
+    }
     assert.deepEqual(errors, []);
     console.log('PASS compatible-image WebGL canvas is nonblank and no script errors');
   } catch (error) {

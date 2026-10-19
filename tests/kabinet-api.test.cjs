@@ -119,6 +119,18 @@ test("empty published cabinet does not invent programs or faculty counts", () =>
   assert.equal(api.toHeroProker(empty, () => "Biro").length, 0);
 });
 
+test("staff subtitles use editable work areas without inventing a staff job title", () => {
+  const mapped = adapter().toDivisi({ ...unit, staff: [
+    { id: 1, name: "Nama satu", work_area: "  Teknologi Informasi  ", photo: media },
+    { id: 2, name: "Nama dua", work_area: "", photo: media },
+    { id: 3, name: "Data lama", photo: null },
+    { id: 4, name: "Nama empat", work_area: "   ", photo: media },
+  ] }, 1, cabinet.name);
+  assert.deepEqual(Array.from(mapped.staff, (person) => person.jabatan), ["Teknologi Informasi", "", "", ""]);
+  assert.equal(mapped.staff[0].nama, "Nama satu");
+  assert.equal(mapped.staff[0].foto.url, media.url);
+});
+
 test("BPH academic subtitle comes from the SIT field without replacing the role", () => {
   const leader = { ...cabinet.leaders[0], description: "Kedokteran 2023", title: "Wakil Kepala Eksternal" };
   const mapped = adapter().toDivisi({ ...unit, leaders: [leader] }, 1, cabinet.name);

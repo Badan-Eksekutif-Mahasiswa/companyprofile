@@ -55,7 +55,7 @@ interface ApiUnit {
   main_photo: ApiMedia | null;
   cover_photo?: ApiMedia | null;
   leaders: ApiLeader[];
-  staff: { id: number; name: string; photo: ApiMedia | null }[];
+  staff: { id: number; name: string; work_area?: string; photo: ApiMedia | null }[];
   programs: ApiProgram[];
 }
 
@@ -198,7 +198,7 @@ export function toDivisi(unit: ApiUnit, order: number, cabinetName: string): Div
     visi: unit.vision,
     misi: unit.missions,
     bph,
-    staff: unit.staff.map((s) => orang(s.name, "Staf", s.photo, unit.name)),
+    staff: unit.staff.map((s) => orang(s.name, s.work_area?.trim() || "", s.photo, unit.name)),
     cover,
     logo: { url: placeholder(singkat, 1200, 1200, "navy", "LOGO", "logo"), alt: `Logo ${unit.name}` },
     foto_bph: cover,

@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Divisi, Media, Person, Section } from "@/lib/kabinet";
 import { createReveal } from "@/lib/gsap-reveal";
+import { revealProjectText } from "@/lib/project-text-reveal";
 import { WordRoll } from "./CharRoll";
 import { useShell } from "./shell-context";
 import { PersonCard } from "./PersonCard";
@@ -129,39 +130,15 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
         q(".hero--reveal-pending, .project--reveal-pending").forEach((n) => n.classList.remove("hero--reveal-pending", "project--reveal-pending"));
         return;
       }
-      const title = q(".hero__title");
-      const year = q(".hero__year");
-      const infoBits = [...q(".info__label"), ...q(".info__category"), ...q(".info__roles-list li")];
-      const textBits = [...q(".description .rich-text"), ...q(".section--text .section__subtitle"), ...q(".section--text .rich-text")];
-
-      reveal.revealWords({ elements: title, trigger: el.querySelector(".hero__row"), start: "top bottom", duration: 1.05, delay: 0.5, lineStagger: 0.085, wordStagger: 0, ease: "expo.out" });
-      gsap.set(title, { opacity: 1 });
-      title.forEach((n) => n.classList.remove("hero--reveal-pending"));
-
-      reveal.revealBlocks({ elements: year, start: "top bottom", duration: 1.05, delay: 0.5, y: 24 });
-      year.forEach((n) => n.classList.remove("hero--reveal-pending"));
-
-      infoBits.forEach((n) => n.classList.remove("project--reveal-pending"));
-      reveal.revealBlocks({
-        elements: infoBits,
-        start: "top 92%",
-        duration: 1.05,
-        y: 24,
-        fromVars: { opacity: 1, clipPath: "inset(0 0 100% 0)" },
-        toVars: { opacity: 1, clipPath: "inset(0 0 0% 0)" },
-      });
-      reveal.revealWords({ elements: textBits, start: "top 92%", duration: 1.05, lineStagger: 0.085, wordStagger: 0, ease: "expo.out" });
+      revealProjectText(el, reveal);
 
       // media: fade + naik; mesh WebGL ikut membaca opacity & posisi elemen
       q(".section .media-item__inner").forEach((n) => {
         gsap.fromTo(n, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 88%", once: true } });
       });
 
-      q(".media-caption").forEach((n) => {
-        gsap.fromTo(n, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.05, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
-      });
       q(".person-card").forEach((n) => {
-        gsap.fromTo(n, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
+        gsap.fromTo(n, { opacity: 0 }, { opacity: 1, duration: 1.05, ease: "expo.out", scrollTrigger: { trigger: n, start: "top 92%", once: true } });
       });
 
       // trio: parallax bertingkat (hanya desktop)
@@ -348,7 +325,7 @@ export function ProjectPage({ divisi, next }: { divisi: Divisi; next: Divisi | n
       {divisi.sections.map(renderSection)}
 
       <TeamSection title="BPH" people={divisi.bph} centered />
-      <TeamSection title="Staff" people={divisi.staff} />
+      <TeamSection title="Staf" people={divisi.staff} />
 
       {next && (
         <section
