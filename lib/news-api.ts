@@ -83,3 +83,10 @@ export async function fetchSitArticles(): Promise<NewsArticle[]> {
   } while (page <= pages);
   return out.sort((x, y) => y.tanggal.localeCompare(x.tanggal));
 }
+
+export async function fetchSitArticle(slug: string): Promise<NewsArticle | undefined> {
+  const res = await fetch(`${BASE}/articles/${encodeURIComponent(slug)}/`, { cache: "no-store" });
+  if (res.status === 404) return undefined;
+  if (!res.ok) throw new Error(`API SIT menjawab ${res.status}`);
+  return fromApi(await res.json() as ApiArticle);
+}
