@@ -28,6 +28,21 @@ function canvasSignature(page) {
   })));
 }
 
+function orbitSignature(page) {
+  return page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => {
+    const canvas = document.querySelector('canvas[aria-label^="Logo BEM UI 3D"]');
+    const gl = canvas.getContext('webgl2');
+    const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+    gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    let ink = 0, checksum = 0;
+    for (let offset = 0; offset < pixels.length; offset += 16) {
+      if (pixels[offset] + pixels[offset + 1] + pixels[offset + 2] < 690) ink++;
+      checksum = (checksum * 31 + pixels[offset] + pixels[offset + 1] * 3 + pixels[offset + 2] * 7) >>> 0;
+    }
+    resolve({ ink, checksum });
+  })));
+}
+
 async function scrollPhotoIntoView(page, image) {
   for (let attempt = 0; attempt < 12; attempt++) {
     const box = await image.boundingBox();
@@ -236,7 +251,55 @@ async function main() {
       }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       console.log('PASS three 16:9 documentation photos in actual program view', width);
+
+      await page.goto(base + '/kabinet/unit-gallery');
+      const poster = page.getByRole('link', { name: 'Lihat detail proker Program dokumentasi', exact: true });
+      assert.equal(await poster.getAttribute('href'), '/?proker=unit-gallery-program-dokumentasi');
+      const caption = poster.locator('..').locator('.media-caption');
+      const posterBox = await poster.boundingBox();
+      const captionBox = await caption.boundingBox();
+      assert.ok(captionBox.y >= posterBox.y + posterBox.height - 1, 'Single-poster caption stays below the image');
+      await scrollPhotoIntoView(page, poster.locator('img'));
+      if (width === 1440) {
+        await poster.focus();
+        await poster.press('Enter');
+      } else {
+        await poster.click();
+      }
+      await page.waitForURL('**/?proker=unit-gallery-program-dokumentasi');
+      const dialog = page.getByRole('dialog', { name: 'Detail proker Program dokumentasi', exact: true });
+      await dialog.waitFor();
+      assert.equal((await dialog.locator('h1').textContent()).trim(), 'Program dokumentasi');
+      assert.equal(await dialog.locator('[data-program-documentation]').count(), 3);
+      if (process.env.SIT_UI_SCREENSHOT_DIR) {
+        await delay(1600);
+        await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-poster-detail-${width}.png`) });
+      }
+      await page.reload();
+      await dialog.waitFor();
+      await page.goBack();
+      await page.waitForURL('**/kabinet/unit-gallery');
+      await page.goForward();
+      await page.waitForURL('**/?proker=unit-gallery-program-dokumentasi');
+      await dialog.waitFor();
+      await page.getByRole('button', { name: 'Tutup dan kembali ke orbit' }).click();
+      await page.waitForURL(base + '/');
+      await dialog.waitFor({ state: 'detached' });
+      assert.equal(await page.evaluate(() => document.documentElement.style.overflow), '');
+      await delay(1800);
+      const orbitBefore = await orbitSignature(page);
+      await delay(250);
+      const orbitAfter = await orbitSignature(page);
+      assert.ok(orbitAfter.ink > 1000, 'Orbit must display real logo/photo pixels after returning from detail');
+      assert.notEqual(orbitAfter.checksum, orbitBefore.checksum, 'Orbit resumes moving after closing a linked detail');
+      if (process.env.SIT_UI_SCREENSHOT_DIR) {
+        await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-random-orbit-${width}.png`) });
+      }
+      console.log('PASS poster to existing program detail, reload, browser back/forward and close', width);
     }
+    await page.goto(base + '/?proker=not-a-published-program');
+    assert.equal(await page.getByRole('dialog').count(), 0);
+    console.log('PASS unknown program link leaves the homepage usable');
     assert.deepEqual(errors, []);
     console.log('PASS compatible-image WebGL canvas is nonblank and no script errors');
   } catch (error) {

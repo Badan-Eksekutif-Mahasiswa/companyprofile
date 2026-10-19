@@ -60,13 +60,30 @@ function Caption({ m }: { m: Media }) {
   );
 }
 
+function SectionMedia({ media }: { media: Media }) {
+  if (!media.prokerSlug) return <MediaAsset media={media} />;
+  return (
+    <Link
+      href={`/?proker=${encodeURIComponent(media.prokerSlug)}`}
+      aria-label={`Lihat detail proker ${media.title || media.alt}`}
+      className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      data-hover
+    >
+      <MediaAsset media={media} />
+    </Link>
+  );
+}
+
 function renderSection(s: Section, i: number) {
   switch (s.type) {
     case "media-single":
       return (
         <section key={i} className={`section section--media-single section--${s.position ?? "center"}`}>
           <div className="media-item">
-            <MediaAsset media={s.media} />
+            <div className="media-single__content">
+              <SectionMedia media={s.media} />
+              <Caption m={s.media} />
+            </div>
           </div>
         </section>
       );
@@ -75,11 +92,11 @@ function renderSection(s: Section, i: number) {
         <section key={i} className="section section--media-duo">
           <div className="duo">
             <div className="media-item col-6">
-              <MediaAsset media={s.media_left} />
+              <SectionMedia media={s.media_left} />
               <Caption m={s.media_left} />
             </div>
             <div className="media-item col-6 col-start-7">
-              <MediaAsset media={s.media_right} />
+              <SectionMedia media={s.media_right} />
               <Caption m={s.media_right} />
             </div>
           </div>
@@ -91,7 +108,7 @@ function renderSection(s: Section, i: number) {
           <div className="trio">
             {[s.media_1, s.media_2, s.media_3].map((m, j) => (
               <div key={j} className="media-item">
-                <MediaAsset media={m} />
+                <SectionMedia media={m} />
               </div>
             ))}
           </div>

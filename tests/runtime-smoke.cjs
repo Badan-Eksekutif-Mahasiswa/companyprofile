@@ -45,6 +45,9 @@ async function verifyEmptyState(apiUrl, publishedUnit) {
         assert.ok(html.includes(`/kabinet/${publishedUnit.slug}`));
         assert.ok(html.includes("#TerusTerang"));
       }
+      if (route === "/" && publishedUnit?.programs.length) {
+        assert.ok(html.includes(publishedUnit.programs[0].title), 'Published unit programs stay accessible without a published cabinet');
+      }
     }
     if (publishedUnit) {
       assert.equal((await fetch(`${base}/kabinet/${publishedUnit.slug}`)).status, 200);
@@ -72,6 +75,8 @@ async function main() {
   const cabinet = { id: 7, name: "Kabinet Uji CMS", description: "Deskripsi kabinet CMS",
     vision: "Visi kabinet CMS", missions: ["Misi kabinet"], main_photo: null, leaders: [], units: [unit],
     statistics: { units: 1, programs: 0, people: 3, active_programs: 0, represented_students: 1234, faculties: 2 } };
+  const unitsOnly = { ...unit, programs: [{ id: 12, slug: 'program-terbit', title: 'Program Birdep Terbit',
+    description: 'Deskripsi proker resmi', main_photo: unit.main_photo, gallery: [] }] };
   const article = { slug: "berita-uji-cms", category: "news", title: "Berita Uji CMS", summary: "Ringkasan berita CMS",
     body: "<p>Isi berita resmi CMS</p>", published_at: "2026-10-17T08:00:00Z", tags: [], attachments: [] };
   const api = http.createServer((req, res) => {
@@ -82,7 +87,7 @@ async function main() {
     if (url.pathname === "/api/website/v1/cabinets/7/") data = cabinet;
     if (url.pathname === "/api/website/v1/articles/") data = { results: [article], pages: 1 };
     if (url.pathname === "/units-only/cabinets/") data = { results: [] };
-    if (url.pathname === "/units-only/units/") data = { results: [unit] };
+    if (url.pathname === "/units-only/units/") data = { results: [unitsOnly] };
     if (url.pathname === "/units-only/articles/") data = { results: [], pages: 1 };
     res.writeHead(data ? 200 : 404, { "Content-Type": "application/json" });
     res.end(JSON.stringify(data || { detail: "Not found" }));
@@ -134,7 +139,7 @@ async function main() {
     console.log("PASS runtime division, statistics, missing content and ID-based API requests");
     await verifyEmptyState("");
     await verifyEmptyState(`http://127.0.0.1:${apiPort}/unavailable`);
-    await verifyEmptyState(`http://127.0.0.1:${apiPort}/units-only`, unit);
+    await verifyEmptyState(`http://127.0.0.1:${apiPort}/units-only`, unitsOnly);
   } finally {
     child.kill();
     if (child.exitCode === null) await once(child, "exit");
