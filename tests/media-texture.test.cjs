@@ -42,6 +42,14 @@ test('unsupported or rejected texture sources keep the native fallback available
     assert.equal(source(url, 'https://site.example'), null);
 });
 
+test('orbit atlas uses safe same-origin sources and CORS-enabled decoding', () => {
+  const orbit = readFileSync(path.join(__dirname, '../components/home/orbit/scene.ts'), 'utf8');
+  assert.match(orbit, /import \{ mediaTextureSource \} from "@\/lib\/media-texture"/);
+  assert.match(orbit, /mediaTextureSource\(url, window.location.origin\)/);
+  assert.match(orbit, /img.crossOrigin = "anonymous"/);
+  assert.doesNotMatch(orbit, /urls\.map\(\(u\) => loadImage\(u\)/);
+});
+
 test('image optimization is restricted to the configured SIT media path, not an arbitrary remote proxy', async () => {
   const previous = { sit: process.env.SIT_API_URL, r2: process.env.NEXT_PUBLIC_R2_PUBLIC_URL };
   process.env.SIT_API_URL = 'https://cms.example/api/website/v1/';

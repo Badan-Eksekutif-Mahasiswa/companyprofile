@@ -19,6 +19,7 @@ import { STATUS_LABEL } from "@/lib/format";
 import { unitType } from "@/lib/unit";
 import type { HeroProker } from "@/types";
 import { PersonCard } from "@/components/kabinet/PersonCard";
+import { ProgramGallery } from "./ProgramGallery";
 
 export type EnterMode = "fly" | "toggle";
 
@@ -207,7 +208,6 @@ export function ProkerView({
   const root = React.useRef<HTMLElement>(null);
   useProjectReveal(root, p.play, p.enter);
   const type = item.unit.type;
-  const docs = item.dokumentasi.slice(0, 3);
   const others = unitProker.filter((x) => x.slug !== item.slug);
 
   return (
@@ -271,23 +271,7 @@ export function ProkerView({
         </div>
       </section>
 
-      {docs.length > 0 && (
-        <section className="section section--media-trio">
-          <div className="trio">
-            {docs.map((d, i) => (
-              <div key={d.url} className="media-item">
-                <div className="program-documentation" data-program-documentation>
-                  <MediaAsset src={d.url} alt={`Dokumentasi ${i + 1} ${item.nama}: ${d.caption}`} />
-                </div>
-                <div className="media-caption">
-                  <div className="label_info">Dokumentasi {String(i + 1).padStart(2, "0")}</div>
-                  <p>{d.caption}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <ProgramGallery photos={item.dokumentasi} name={item.nama} />
 
       {others.length > 0 && (
         <section className="section section--text">

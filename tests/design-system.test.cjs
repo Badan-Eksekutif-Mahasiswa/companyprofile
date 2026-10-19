@@ -118,7 +118,12 @@ test('birdep details use only the unit name and an unclipped, spacious info grid
 
 test('program documentation uses landscape 16:9 without changing portrait covers', () => {
   const page = readFileSync(path.join(__dirname, '../components/home/detail/DetailViews.tsx'), 'utf8');
-  assert.match(page, /className="program-documentation" data-program-documentation/);
+  const gallery = readFileSync(path.join(__dirname, '../components/home/detail/ProgramGallery.tsx'), 'utf8');
+  assert.match(page, /<ProgramGallery photos=\{item.dokumentasi\}/);
+  assert.doesNotMatch(page, /dokumentasi\.slice/);
+  assert.match(gallery, /className="program-documentation" data-program-documentation/);
+  assert.doesNotMatch(gallery, />Dokumentasi|Dokumentasi \d/);
+  assert.match(gallery, /photos\.map/);
   assert.doesNotMatch(page, /aspect-\[4\/3\]/);
   const css = postcss.parse(readFileSync(path.join(__dirname, '../components/kabinet/project.css'), 'utf8'));
   const rules = {};
@@ -129,6 +134,8 @@ test('program documentation uses landscape 16:9 without changing portrait covers
     rules[rule.selector] = { ...rules[rule.selector], ...values };
   });
   assert.equal(rules['.kd .program-documentation']['aspect-ratio'], '16 / 9');
+  assert.equal(rules['.kd .program-gallery__track']['overflow-x'], 'auto');
+  assert.equal(rules['.kd .program-gallery__track']['scroll-snap-type'], 'x mandatory');
   assert.equal(rules['.kd .program-documentation > .media-item__inner']['position'], 'absolute');
   assert.equal(rules['.kd .program-documentation > .media-item__inner']['height'], '100%');
   let coverRatio;
