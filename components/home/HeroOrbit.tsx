@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "@/components/kabinet/project.css";
 import { HERO, SITE } from "@/config/site";
@@ -25,7 +26,8 @@ const TOTAL_SLOTS = HERO.rings * HERO.cardsPerRing;
  * Scroll menambah putaran sampai HERO.maxRotations, lalu halaman lanjut ke bawah.
  * Klik kartu → detail proker (bisa ditukar ke detail biro/departemen); klik logo → filosofi logo.
  */
-export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProker[]; allItems: HeroProker[]; logoPhilosophy?: LogoPhilosophy }) {
+export function HeroOrbit({ items, allItems, initialProkerSlug, logoPhilosophy }: { items: HeroProker[]; allItems: HeroProker[]; initialProkerSlug?: string; logoPhilosophy?: LogoPhilosophy }) {
+  const router = useRouter();
   const wrapRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -43,6 +45,15 @@ export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProk
   const openRef = useRef(false);
   const goTop = useRef(false);
   openRef.current = detail !== null || filosofi;
+
+  useEffect(() => {
+    if (!initialProkerSlug) return;
+    const index = allItems.findIndex((program) => program.slug === initialProkerSlug);
+    if (index < 0) return;
+    ctrlRef.current?.setPaused(true);
+    setFilosofi(false);
+    setDetail({ index, origin: null });
+  }, [initialProkerSlug, allItems]);
 
   // Instance kartu → index proker. Langkah coprime agar kartu bertetangga tidak sama.
   const slots = useMemo(() => {
@@ -77,6 +88,7 @@ export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProk
       .then((ctrl) => {
         if (disposed) return ctrl.dispose();
         ctrlRef.current = ctrl;
+        ctrl.setPaused(openRef.current);
         ctrl.setScroll(0, window.scrollY);
         setStatus("ready");
         const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1500));
@@ -218,7 +230,7 @@ export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProk
       const a = (e.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
       if (!a || (a.target && a.target !== "_self")) return;
       const url = new URL(a.href, window.location.href);
-      if (url.origin !== window.location.origin || url.pathname !== "/" || url.hash || window.location.pathname !== "/") return;
+      if (url.origin !== window.location.origin || url.pathname !== "/" || url.search || url.hash || window.location.pathname !== "/") return;
       e.preventDefault();
       e.stopPropagation();
       if (openRef.current) {
@@ -326,6 +338,7 @@ export function HeroOrbit({ items, allItems, logoPhilosophy }: { items: HeroProk
           onClose={() => {
             setDetail(null);
             resume();
+            if (initialProkerSlug) router.replace("/", { scroll: false });
           }}
         />
       )}

@@ -15,7 +15,7 @@ import type { LogoPhilosophy } from "@/components/home/FilosofiLogo";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: { searchParams?: { proker?: string | string[] } }) {
   const [proker, stats, news] = await Promise.all([
     getHeroProker(),
     getStats(),
@@ -33,7 +33,7 @@ export default async function HomePage() {
       </a>
       <SiteNav />
       <main>
-        <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} logoPhilosophy={readDemoJson<LogoPhilosophy>("filosofi-logo.json")} />
+        <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} initialProkerSlug={typeof searchParams?.proker === "string" ? searchParams.proker : undefined} logoPhilosophy={readDemoJson<LogoPhilosophy>("filosofi-logo.json")} />
         <div id="konten">
           {kabinet && <StatsSection stats={stats} />}
           {kabinet && <TaglineSection kabinet={kabinet} />}

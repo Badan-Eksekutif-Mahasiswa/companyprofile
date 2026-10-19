@@ -111,6 +111,21 @@ test("maps published program status, summary, schedule and nullable gallery", ()
   assert.equal(program.unit.singkatan, "MM");
 });
 
+test("unit posters link to the same program identity as homepage details", () => {
+  const api = adapter();
+  const result = api.toDivisi(unit, 1, cabinet.name);
+  const [program] = api.toHeroProker(cabinet, () => "Biro");
+  assert.equal(result.sections[0].media.prokerSlug, undefined);
+  assert.equal(result.sections[1].media.prokerSlug, program.slug);
+  const galleryOnly = { ...unit, programs: [{ ...unit.programs[0], main_photo: null }] };
+  assert.equal(api.toDivisi(galleryOnly, 1, "").sections[1].media.prokerSlug, program.slug);
+  assert.equal(api.toDivisi(galleryOnly, 1, "").sections[1].media.url, media.url);
+  const empty = { ...unit, programs: [{ ...unit.programs[0], main_photo: null, gallery: [] }] };
+  assert.equal(api.toDivisi(empty, 1, "").sections[1].media.prokerSlug, undefined);
+  const legacy = { ...unit, programs: [{ ...unit.programs[0], slug: undefined }] };
+  assert.equal(api.toDivisi(legacy, 1, "").sections[1].media.prokerSlug, api.toHeroProker({ units: [legacy] }, () => "Biro")[0].slug);
+});
+
 test("empty published cabinet does not invent programs or faculty counts", () => {
   const api = adapter();
   const empty = { ...cabinet, units: [], leaders: [], statistics: { units: 0, programs: 0, people: 0 } };

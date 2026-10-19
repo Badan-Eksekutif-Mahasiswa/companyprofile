@@ -6,7 +6,7 @@ import portraits from "@/config/leader-portraits.json";
 import { fetchSitCabinet, fetchSitUnits, toDivisi, toHeroProker, toKabinet, type ApiCabinet } from "@/lib/kabinet-api";
 import type { HeroProker } from "@/types";
 
-export type Media = { url: string; alt: string; /** Opsional: judul & deskripsi (mis. program kerja) yang tampil sebagai caption. */ title?: string; desc?: string };
+export type Media = { url: string; alt: string; /** Opsional: judul & deskripsi (mis. program kerja) yang tampil sebagai caption. */ title?: string; desc?: string; prokerSlug?: string };
 
 export type Section =
   | { type: "media-single"; position?: "left" | "center" | "right"; media: Media }
@@ -131,7 +131,14 @@ export async function getSitStatistics(): Promise<ApiCabinet["statistics"] | nul
 /** Proker beranda dari SIT; null berarti pakai data/proker.json. */
 export async function getSitHeroProker(unitType: Parameters<typeof toHeroProker>[1]): Promise<HeroProker[] | null> {
   const sit = await getSitCabinet();
-  return sit ? toHeroProker(sit, unitType) : null;
+  if (sit) return toHeroProker(sit, unitType);
+  try {
+    const units = await fetchSitUnits();
+    return units === null ? null : toHeroProker({ units }, unitType);
+  } catch {
+    console.error("Daftar program kerja SIT gagal dimuat.");
+    return [];
+  }
 }
 
 /** Buang penanda **frasa kunci** → teks biasa. */

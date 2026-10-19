@@ -152,13 +152,19 @@ const orang = (nama: string, jabatan: string, foto: ApiMedia | null, unit: strin
   foto: media(foto, `${jabatan} ${unit}`, placeholder(nama.toUpperCase() || "FOTO", 1200, 1500, "navy", jabatan.toUpperCase())),
 });
 
+const programSlug = (unit: ApiUnit, program: ApiProgram) => `${unit.slug}-${program.slug || program.id}`;
+
 function sectionsDariProker(unit: ApiUnit, singkat: string): Section[] {
   const kartu = unit.programs.map(
-    (p): Media => ({
-      ...media(p.main_photo, p.title, placeholder(`${singkat} — PROKER`, 1200, 1600, "navy", "FOTO PROKER")),
-      title: p.title,
-      desc: p.description,
-    }),
+    (p): Media => {
+      const photo = p.main_photo?.url ? p.main_photo : p.gallery.find((image) => image?.url);
+      return {
+        ...media(photo, p.title, placeholder(`${singkat} — PROKER`, 1200, 1600, "navy", "FOTO PROKER")),
+        title: p.title,
+        desc: p.description,
+        ...(photo?.url ? { prokerSlug: programSlug(unit, p) } : {}),
+      };
+    },
   );
   const out: Section[] = [];
   if (unit.main_photo?.url) {
@@ -252,14 +258,14 @@ export function toKabinet(api: ApiCabinet, portrait?: Pick<Tokoh, "nama" | "faku
   };
 }
 
-export function toHeroProker(api: ApiCabinet, unitType: (d: Pick<Divisi, "slug" | "nama">) => HeroProker["unit"]["type"]): HeroProker[] {
+export function toHeroProker(api: Pick<ApiCabinet, "units">, unitType: (d: Pick<Divisi, "slug" | "nama">) => HeroProker["unit"]["type"]): HeroProker[] {
   return api.units.flatMap((u) =>
     u.programs.flatMap((p) => {
-      const foto_url = p.main_photo?.url ?? p.gallery.find((g) => g?.url)?.url;
+      const foto_url = p.main_photo?.url || p.gallery.find((g) => g?.url)?.url;
       if (!foto_url) return [];
       return [
         {
-          slug: `${u.slug}-${p.slug || p.id}`,
+          slug: programSlug(u, p),
           divisi: u.slug,
           nama: p.title,
           status: p.status || undefined,

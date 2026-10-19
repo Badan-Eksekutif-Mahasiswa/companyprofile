@@ -25,19 +25,15 @@ export async function getHeroProker(): Promise<HeroProker[]> {
   });
 }
 
-/**
- * Proker unggulan yang tampil di orbit (maks. `limit`). Sementara dipilih bergiliran per divisi
- * agar beragam; rotasi harian nanti cukup mengganti isi fungsi ini (mis. dari SIT).
- */
+/** Random sample without replacement; each eligible program has an equal chance. */
 export function pickFeaturedProker(all: HeroProker[], limit: number): HeroProker[] {
-  const byUnit = new Map<string, HeroProker[]>();
-  for (const p of all) byUnit.set(p.unit.slug, [...(byUnit.get(p.unit.slug) ?? []), p]);
-  const queues = [...byUnit.values()];
-  const out: HeroProker[] = [];
-  for (let round = 0; out.length < limit && queues.some((q) => q.length > round); round++) {
-    for (const q of queues) if (q[round] && out.length < limit) out.push(q[round]);
+  const pool = [...new Map(all.filter((program) => program.foto_url).map((program) => [program.slug, program])).values()];
+  const count = Number.isFinite(limit) ? Math.min(pool.length, Math.max(0, Math.floor(limit))) : 0;
+  for (let i = 0; i < count; i++) {
+    const j = i + Math.floor(Math.random() * (pool.length - i));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  return out;
+  return pool.slice(0, count);
 }
 
 export async function getStats(): Promise<Stats> {
