@@ -3,7 +3,7 @@ export type ProkerStatus = "upcoming" | "ongoing" | "done";
 /** Jenis unit; diturunkan dari data divisi (lihat lib/unit.ts). */
 export type UnitType = "BPH" | "Departemen" | "Biro";
 
-/** Foto dokumentasi proker. Selalu rasio 4:3 (landscape), mis. 1200×900. */
+/** Foto dokumentasi proker. Rasio 16:9 (landscape), mis. 1920x1080. */
 export interface Dokumentasi {
   url: string;
   caption: string;

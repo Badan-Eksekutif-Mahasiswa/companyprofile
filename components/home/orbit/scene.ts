@@ -51,6 +51,7 @@ import {
   WebGLRenderer,
 } from "three";
 import { LOGO_SHAPES, LOGO_SIZE } from "./logo-shapes";
+import { mediaTextureSource } from "@/lib/media-texture";
 
 export type Rect = { left: number; top: number; width: number; height: number };
 /** 4 sudut kartu di layar (px), urutan gambar: kiri-atas, kanan-atas, kanan-bawah, kiri-bawah. */
@@ -159,6 +160,7 @@ void main() {
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.decoding = "async";
     img.onload = () => resolve(img);
     img.onerror = reject;
@@ -173,7 +175,10 @@ const smooth = (a: number, b: number, x: number) => {
 
 /** Gabungkan semua sampul ke satu canvas atlas (sel 3:4) + hitung UV tiap sel. */
 async function buildAtlas(urls: string[]) {
-  const imgs = await Promise.all(urls.map((u) => loadImage(u).catch(() => null)));
+  const imgs = await Promise.all(urls.map((url) => {
+    const source = mediaTextureSource(url, window.location.origin);
+    return source ? loadImage(source).catch(() => null) : null;
+  }));
   const cols = Math.min(5, urls.length);
   const rows = Math.ceil(urls.length / cols);
   let cw = 450;

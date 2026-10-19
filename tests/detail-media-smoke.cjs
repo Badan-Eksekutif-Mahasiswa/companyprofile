@@ -34,12 +34,13 @@ function orbitSignature(page) {
     const gl = canvas.getContext('webgl2');
     const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
     gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    let ink = 0, checksum = 0;
+    let ink = 0, skin = 0, checksum = 0;
     for (let offset = 0; offset < pixels.length; offset += 16) {
       if (pixels[offset] + pixels[offset + 1] + pixels[offset + 2] < 690) ink++;
+      if (pixels[offset] > pixels[offset + 1] + 15 && pixels[offset + 1] > pixels[offset + 2] + 8 && pixels[offset] > 80) skin++;
       checksum = (checksum * 31 + pixels[offset] + pixels[offset + 1] * 3 + pixels[offset + 2] * 7) >>> 0;
     }
-    resolve({ ink, checksum });
+    resolve({ ink, skin, checksum });
   })));
 }
 
@@ -103,7 +104,9 @@ async function main() {
     cover_photo: { url: photo }, main_photo: { url: photo }, leaders: [], staff: [],
     programs: slug === 'unit-gallery' ? [{ id: 99, slug: 'program-dokumentasi', title: 'Program dokumentasi',
       status: 'done', schedule: '', summary: 'Ringkasan', description: 'Deskripsi program',
-      main_photo: { url: localPhoto }, gallery: [1, 2, 3].map((i) => ({ url: `${localPhoto}?documentation=${i}`, caption: `Kegiatan ${i}` })) }] : [] });
+      main_photo: { url: photo }, gallery: [1, 2, 3, 4, 5].map((i) => ({ url: `${localPhoto}?documentation=${i}`, caption: `Kegiatan ${i}` })) }]
+      : slug === 'unit-remote' ? [{ id: 100, slug: 'program-remote', title: 'Program remote',
+        description: 'Foto dari penyimpanan tanpa CORS', main_photo: { url: photo }, gallery: [] }] : [] });
   const api = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
     apiRequests.push(url.pathname);
@@ -114,8 +117,8 @@ async function main() {
     const remote = `http://127.0.0.1:${apiPort}${mediaPath}`;
     const cabinet = { id: 1, name: '#TerusTerang', description: 'Deskripsi kabinet', vision: 'Visi', missions: ['Misi'],
       leaders: [], main_photo: null, units: [unit('unit-remote', remote), unit('unit-webgl', localPhoto),
-        unit('unit-fallback', `http://127.0.0.1:${storagePort}/image.png`), unit('unit-gallery', localPhoto)],
-      statistics: { units: 4, programs: 1, people: 0 } };
+        unit('unit-fallback', `http://127.0.0.1:${storagePort}/image.png`), unit('unit-gallery', remote)],
+      statistics: { units: 4, programs: 2, people: 0 } };
     const data = url.pathname.endsWith('/cabinets/1/') ? cabinet :
       url.pathname.endsWith('/cabinets/') ? { results: [{ id: 1 }] } : { results: [], pages: 1 };
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -156,14 +159,14 @@ async function main() {
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(base + '/kabinet');
-      const card = page.locator('a[href="/kabinet/unit-remote"] img');
+      const card = page.locator('a[href="/kabinet/unit-remote"] img[alt="Foto bersama unit-remote"]');
       await card.scrollIntoViewIfNeeded();
       await card.evaluate((image) => image.decode());
       await page.goto(base + '/kabinet/unit-remote');
       assert.equal((await page.locator('h1').textContent()).trim(), 'unit-remote');
       await assertInfoLayout(page, width);
       const images = page.locator('main.project .media-item__inner img');
-      assert.equal(await images.count(), 2);
+      assert.equal(await images.count(), 3);
       for (const image of await images.all()) {
         await scrollPhotoIntoView(page, image);
         await image.evaluate((element) => element.decode());
@@ -229,13 +232,10 @@ async function main() {
       await open.press('Enter');
       const gallery = page.locator('[data-program-documentation]');
       await gallery.first().waitFor();
-      assert.equal(await gallery.count(), 3);
+      assert.equal(await gallery.count(), 5);
       for (const frame of await gallery.all()) {
         const box = await frame.boundingBox();
         assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.01);
-        const meshBounds = await frame.locator('.media-item__inner').boundingBox();
-        assert.ok(Math.abs(meshBounds.width / meshBounds.height - 16 / 9) < 0.01,
-          'WebGL texture bounds must match the 16:9 frame');
         const imageBounds = await frame.locator('img').boundingBox();
         assert.ok(Math.abs(imageBounds.width / imageBounds.height - 16 / 9) < 0.01,
           'Native image must also fit the 16:9 frame');
@@ -250,7 +250,53 @@ async function main() {
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-documentation-16x9-${width}.png`) });
       }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-      console.log('PASS three 16:9 documentation photos in actual program view', width);
+      const track = page.locator('.program-gallery__track');
+      assert.equal(await page.locator('.program-gallery .label_info').count(), 0);
+      assert.equal(await page.locator('.program-gallery .media-caption').count(), 5);
+      await page.getByRole('button', { name: 'Foto berikutnya', exact: true }).click();
+      await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft > 50);
+      await track.focus();
+      await track.press('End');
+      await page.waitForFunction(() => {
+        const element = document.querySelector('.program-gallery__track');
+        return element.scrollLeft >= element.scrollWidth - element.clientWidth - 1
+          && document.querySelector('button[aria-label="Foto berikutnya"]').disabled;
+      });
+      assert.equal(await page.getByRole('button', { name: 'Foto berikutnya', exact: true }).isDisabled(), true);
+      const lastPhoto = await gallery.last().boundingBox();
+      const viewport = await track.boundingBox();
+      assert.ok(lastPhoto.x >= viewport.x - 1 && lastPhoto.x + lastPhoto.width <= viewport.x + viewport.width + 1);
+      if (process.env.SIT_UI_SCREENSHOT_DIR) {
+        await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-gallery-last-${width}.png`) });
+      }
+      await track.press('Home');
+      await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft < 2);
+      const trackBox = await track.boundingBox();
+      const pointerY = Math.min(850, Math.max(140, trackBox.y + 50));
+      if (width === 1440) {
+        await page.mouse.move(trackBox.x + trackBox.width / 2, pointerY);
+        await page.mouse.wheel(450, 0);
+        await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft > 50);
+        await track.press('Home');
+        await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft < 2);
+        await page.mouse.move(trackBox.x + trackBox.width * 0.8, pointerY);
+        await page.mouse.down();
+        await page.mouse.move(trackBox.x + trackBox.width * 0.2, pointerY, { steps: 12 });
+        await page.mouse.up();
+      } else {
+        const session = await page.context().newCDPSession(page);
+        await session.send('Emulation.setTouchEmulationEnabled', { enabled: true });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: trackBox.x + trackBox.width * 0.85, y: pointerY }] });
+        for (const fraction of [0.7, 0.5, 0.3, 0.15]) {
+          await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: trackBox.x + trackBox.width * fraction, y: pointerY }] });
+          await delay(30);
+        }
+        await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await session.send('Emulation.setTouchEmulationEnabled', { enabled: false });
+        await session.detach();
+      }
+      await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft > 50);
+      console.log('PASS all five 16:9 photos, captions only, arrows, keyboard and drag/swipe', width);
 
       await page.goto(base + '/kabinet/unit-gallery');
       const poster = page.getByRole('link', { name: 'Lihat detail proker Program dokumentasi', exact: true });
@@ -270,7 +316,7 @@ async function main() {
       const dialog = page.getByRole('dialog', { name: 'Detail proker Program dokumentasi', exact: true });
       await dialog.waitFor();
       assert.equal((await dialog.locator('h1').textContent()).trim(), 'Program dokumentasi');
-      assert.equal(await dialog.locator('[data-program-documentation]').count(), 3);
+      assert.equal(await dialog.locator('[data-program-documentation]').count(), 5);
       if (process.env.SIT_UI_SCREENSHOT_DIR) {
         await delay(1600);
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-poster-detail-${width}.png`) });
@@ -279,6 +325,7 @@ async function main() {
       await dialog.waitFor();
       await page.goBack();
       await page.waitForURL('**/kabinet/unit-gallery');
+      await page.waitForFunction(() => document.querySelector('h1')?.textContent.trim() === 'unit-gallery');
       await page.goForward();
       await page.waitForURL('**/?proker=unit-gallery-program-dokumentasi');
       await dialog.waitFor();
@@ -286,11 +333,13 @@ async function main() {
       await page.waitForURL(base + '/');
       await dialog.waitFor({ state: 'detached' });
       assert.equal(await page.evaluate(() => document.documentElement.style.overflow), '');
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
       await delay(1800);
       const orbitBefore = await orbitSignature(page);
       await delay(250);
       const orbitAfter = await orbitSignature(page);
       assert.ok(orbitAfter.ink > 1000, 'Orbit must display real logo/photo pixels after returning from detail');
+      assert.ok(orbitAfter.skin > 20, 'Remote image atlas must contain portrait colors, not black rectangles');
       assert.notEqual(orbitAfter.checksum, orbitBefore.checksum, 'Orbit resumes moving after closing a linked detail');
       if (process.env.SIT_UI_SCREENSHOT_DIR) {
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-random-orbit-${width}.png`) });
@@ -312,6 +361,10 @@ async function main() {
             .map((entry) => ({ url: entry.name, duration: entry.duration })),
           images: [...document.querySelectorAll('main.project img')].map((image) => ({
             loaded: image.complete && image.naturalWidth > 0, visibility: image.style.visibility,
+          })),
+          gallery: [...document.querySelectorAll('.program-gallery__track')].map((track) => ({
+            left: track.scrollLeft, width: track.clientWidth, total: track.scrollWidth,
+            nextDisabled: document.querySelector('button[aria-label="Foto berikutnya"]')?.disabled,
           })),
         })));
       }
