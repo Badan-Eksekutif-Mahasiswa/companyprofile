@@ -86,6 +86,7 @@ async function main() {
     if (url.pathname === "/api/website/v1/cabinets/") data = { results: [{ id: 7 }] };
     if (url.pathname === "/api/website/v1/cabinets/7/") data = cabinet;
     if (url.pathname === "/api/website/v1/articles/") data = { results: [article], pages: 1 };
+    if (url.pathname === "/api/website/v1/articles/berita-uji-cms/") data = article;
     if (url.pathname === "/units-only/cabinets/") data = { results: [] };
     if (url.pathname === "/units-only/units/") data = { results: [unitsOnly] };
     if (url.pathname === "/units-only/articles/") data = { results: [], pages: 1 };

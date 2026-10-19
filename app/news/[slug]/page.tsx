@@ -4,6 +4,7 @@ import { ArticleView } from "@/components/news/article-view";
 import { getNewsBySlug, getRelatedArticles } from "@/lib/news-data";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

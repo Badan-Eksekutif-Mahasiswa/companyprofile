@@ -1,6 +1,6 @@
 // Hanya untuk server. Jangan diimpor dari komponen client.
 import { getSupabase, getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/server";
-import { fetchSitArticles, isSitConfigured } from "@/lib/news-api";
+import { fetchSitArticle, fetchSitArticles, isSitConfigured } from "@/lib/news-api";
 import { mediaUrl } from "@/lib/media";
 import { isNewsCategory, tagKey, type NewsArticle } from "@/lib/news";
 import { readDemoJson } from "@/lib/demo-data";
@@ -64,6 +64,7 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefined> {
+  if (isSitConfigured()) return fetchSitArticle(slug);
   return (await getNewsArticles()).find((a) => a.slug === slug);
 }
 
