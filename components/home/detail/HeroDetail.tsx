@@ -20,6 +20,7 @@ import "@/components/kabinet/project.css";
 import "./hero-detail.css";
 import type { Divisi } from "@/lib/kabinet";
 import { loadDivisi } from "@/lib/divisi-client";
+import { finishProgramTransition } from "@/lib/program-transition";
 import type { HeroProker } from "@/types";
 import { DivisiView, FloatingLabel, ProkerView, type EnterMode } from "./DetailViews";
 
@@ -148,6 +149,21 @@ export function HeroDetail({ items, initialIndex, originRect, getReturnRect, clo
       html.style.overflow = prevOverflow;
     };
   }, [distort]);
+
+  React.useEffect(() => {
+    if (!shell.ready) return;
+    const panel = contentRef.current?.querySelector<HTMLElement>(".hero__panel");
+    const image = panel?.querySelector("img");
+    if (!panel || !image) return;
+    let alive = true;
+    let frame = 0;
+    image.decode().catch(() => {}).then(() => {
+      frame = requestAnimationFrame(() => {
+        if (alive) finishProgramTransition(item.slug, panel);
+      });
+    });
+    return () => { alive = false; cancelAnimationFrame(frame); };
+  }, [shell.ready, item.slug]);
 
   /* ---- muat detail divisi lebih awal agar tukar tampilan langsung ---- */
   React.useEffect(() => {

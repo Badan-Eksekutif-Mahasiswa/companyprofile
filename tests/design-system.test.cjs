@@ -124,6 +124,7 @@ test('program documentation uses landscape 16:9 without changing portrait covers
   assert.match(gallery, /className="program-documentation" data-program-documentation/);
   assert.doesNotMatch(gallery, />Dokumentasi|Dokumentasi \d/);
   assert.match(gallery, /photos\.map/);
+  assert.doesNotMatch(gallery, /<button|program-gallery__button/);
   assert.doesNotMatch(page, /aspect-\[4\/3\]/);
   const css = postcss.parse(readFileSync(path.join(__dirname, '../components/kabinet/project.css'), 'utf8'));
   const rules = {};
