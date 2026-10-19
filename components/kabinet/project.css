@@ -131,9 +131,7 @@ html.kd-root::-webkit-scrollbar { display: none; }
 .kd .program-gallery { padding: 30px var(--margin); }
 .kd .program-gallery__controls { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 20px; }
 .kd .program-gallery__counter { min-width: 8ch; font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
-.kd .program-gallery__button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid rgba(11, 16, 45, 0.2); border-radius: 6px; background: white; }
-.kd .program-gallery__button:disabled { opacity: 0.3; cursor: default; }
-.kd .program-gallery__button:focus-visible, .kd .program-gallery__track:focus-visible { outline: 2px solid var(--color-accent, #d74675); outline-offset: 4px; }
+.kd .program-gallery__track:focus-visible { outline: 2px solid var(--color-accent, #d74675); outline-offset: 4px; }
 .kd .program-gallery__track { position: relative; display: flex; gap: 28px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: rgba(11, 16, 45, 0.3) transparent; padding-bottom: 16px; cursor: grab; }
 .kd .program-gallery__track.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
 .kd .program-gallery__slide { flex: 0 0 calc((100% - 56px) / 3); min-width: 0; margin: 0; scroll-snap-align: start; }

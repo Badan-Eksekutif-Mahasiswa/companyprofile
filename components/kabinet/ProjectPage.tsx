@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Divisi, Media, Person, Section } from "@/lib/kabinet";
 import { createReveal } from "@/lib/gsap-reveal";
 import { revealProjectText } from "@/lib/project-text-reveal";
+import { beginProgramTransition } from "@/lib/program-transition";
 import { WordRoll } from "./CharRoll";
 import { useShell } from "./shell-context";
 import { PersonCard } from "./PersonCard";
@@ -61,10 +62,23 @@ function Caption({ m }: { m: Media }) {
 }
 
 function SectionMedia({ media }: { media: Media }) {
+  const router = useRouter();
   if (!media.prokerSlug) return <MediaAsset media={media} />;
+  const href = `/?proker=${encodeURIComponent(media.prokerSlug)}`;
+  const preloadDetail = () => { void import("@/components/home/detail/HeroDetail").catch(() => {}); };
   return (
     <Link
-      href={`/?proker=${encodeURIComponent(media.prokerSlug)}`}
+      href={href}
+      onMouseEnter={preloadDetail}
+      onFocus={preloadDetail}
+      onClick={(event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        const image = event.currentTarget.querySelector("img");
+        if (!image) return;
+        event.preventDefault();
+        preloadDetail();
+        beginProgramTransition(media.prokerSlug!, image, () => router.push(href));
+      }}
       aria-label={`Lihat detail proker ${media.title || media.alt}`}
       className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       data-hover

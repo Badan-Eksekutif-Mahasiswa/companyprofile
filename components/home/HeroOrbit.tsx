@@ -38,7 +38,9 @@ export function HeroOrbit({ items, allItems, initialProkerSlug, logoPhilosophy }
   const [status, setStatus] = useState<"loading" | "ready" | "failed">("loading");
   const [, setFront] = useState(0);
   const [hover, setHover] = useState<number | "logo" | null>(null);
-  const [detail, setDetail] = useState<{ index: number; origin: Quad | null } | null>(null);
+  const initialIndex = allItems.findIndex((program) => program.slug === initialProkerSlug);
+  const [detail, setDetail] = useState<{ index: number; origin: Quad | null } | null>(() => initialIndex < 0 ? null : { index: initialIndex, origin: null });
+  const [sceneEnabled, setSceneEnabled] = useState(initialIndex < 0);
   const [filosofi, setFilosofi] = useState(false);
   // Klik "Beranda"/logo navbar saat panel terbuka → panel ditutup (pakai animasi tutupnya), lalu ke atas.
   const [closeSignal, setCloseSignal] = useState(0);
@@ -65,6 +67,7 @@ export function HeroOrbit({ items, allItems, initialProkerSlug, logoPhilosophy }
 
   // Muat scene WebGL setelah halaman tampil (three.js di chunk terpisah).
   useEffect(() => {
+    if (!sceneEnabled) return;
     const canvas = canvasRef.current;
     if (!canvas || items.length === 0) { setStatus("failed"); return; }
     let disposed = false;
@@ -104,7 +107,7 @@ export function HeroOrbit({ items, allItems, initialProkerSlug, logoPhilosophy }
       ctrlRef.current?.dispose();
       ctrlRef.current = null;
     };
-  }, [items, slots]);
+  }, [items, slots, sceneEnabled]);
 
   // Progress scroll di dalam hero yang "ditahan" (sticky) → putaran tambahan + parallax grid.
   useEffect(() => {
@@ -337,6 +340,7 @@ export function HeroOrbit({ items, allItems, initialProkerSlug, logoPhilosophy }
           getReturnRect={getReturnRect}
           onClose={() => {
             setDetail(null);
+            setSceneEnabled(true);
             resume();
             if (initialProkerSlug) router.replace("/", { scroll: false });
           }}

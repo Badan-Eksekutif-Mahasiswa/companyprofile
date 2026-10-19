@@ -253,19 +253,19 @@ async function main() {
       const track = page.locator('.program-gallery__track');
       assert.equal(await page.locator('.program-gallery .label_info').count(), 0);
       assert.equal(await page.locator('.program-gallery .media-caption').count(), 5);
-      await page.getByRole('button', { name: 'Foto berikutnya', exact: true }).click();
-      await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft > 50);
+      assert.equal(await page.locator('.program-gallery button').count(), 0);
       await track.focus();
       await track.press('End');
       await page.waitForFunction(() => {
         const element = document.querySelector('.program-gallery__track');
+        const viewport = element.getBoundingClientRect();
+        const photo = element.querySelector('figure:last-child [data-program-documentation]').getBoundingClientRect();
         return element.scrollLeft >= element.scrollWidth - element.clientWidth - 1
-          && document.querySelector('button[aria-label="Foto berikutnya"]').disabled;
+          && photo.left >= viewport.left - 2 && photo.right <= viewport.right + 2;
       });
-      assert.equal(await page.getByRole('button', { name: 'Foto berikutnya', exact: true }).isDisabled(), true);
       const lastPhoto = await gallery.last().boundingBox();
       const viewport = await track.boundingBox();
-      assert.ok(lastPhoto.x >= viewport.x - 1 && lastPhoto.x + lastPhoto.width <= viewport.x + viewport.width + 1);
+      assert.ok(lastPhoto.x >= viewport.x - 2 && lastPhoto.x + lastPhoto.width <= viewport.x + viewport.width + 2);
       if (process.env.SIT_UI_SCREENSHOT_DIR) {
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-gallery-last-${width}.png`) });
       }
@@ -296,7 +296,7 @@ async function main() {
         await session.detach();
       }
       await page.waitForFunction(() => document.querySelector('.program-gallery__track').scrollLeft > 50);
-      console.log('PASS all five 16:9 photos, captions only, arrows, keyboard and drag/swipe', width);
+      console.log('PASS all five 16:9 photos, captions only, no buttons, keyboard and drag/swipe', width);
 
       await page.goto(base + '/kabinet/unit-gallery');
       const poster = page.getByRole('link', { name: 'Lihat detail proker Program dokumentasi', exact: true });
@@ -306,17 +306,40 @@ async function main() {
       const captionBox = await caption.boundingBox();
       assert.ok(captionBox.y >= posterBox.y + posterBox.height - 1, 'Single-poster caption stays below the image');
       await scrollPhotoIntoView(page, poster.locator('img'));
+      await page.evaluate(() => {
+        window.__posterMotion = [];
+        const sample = () => {
+          const image = document.querySelector('[data-program-transition] img');
+          if (image) {
+            const rect = image.getBoundingClientRect();
+            window.__posterMotion.push([rect.left, rect.top, rect.width, rect.height]);
+          }
+          window.__posterFrame = requestAnimationFrame(sample);
+        };
+        sample();
+      });
       if (width === 1440) {
         await poster.focus();
         await poster.press('Enter');
       } else {
         await poster.click();
       }
+      const transition = page.locator('[data-program-transition="unit-gallery-program-dokumentasi"]');
+      await transition.waitFor();
+      assert.ok(await transition.locator('img').evaluate((image) => image.complete && image.naturalWidth > 0));
       await page.waitForURL('**/?proker=unit-gallery-program-dokumentasi');
       const dialog = page.getByRole('dialog', { name: 'Detail proker Program dokumentasi', exact: true });
       await dialog.waitFor();
       assert.equal((await dialog.locator('h1').textContent()).trim(), 'Program dokumentasi');
       assert.equal(await dialog.locator('[data-program-documentation]').count(), 5);
+      await transition.waitFor({ state: 'detached' });
+      const motion = await page.evaluate(() => {
+        cancelAnimationFrame(window.__posterFrame);
+        return window.__posterMotion;
+      });
+      assert.ok(new Set(motion.map((rect) => rect.map(Math.round).join(','))).size > 3,
+        'Poster should move through intermediate positions instead of jumping to detail');
+      assert.equal(await dialog.locator('.hero__panel img').evaluate((image) => image.complete && image.naturalWidth > 0), true);
       if (process.env.SIT_UI_SCREENSHOT_DIR) {
         await delay(1600);
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-poster-detail-${width}.png`) });
@@ -344,8 +367,17 @@ async function main() {
       if (process.env.SIT_UI_SCREENSHOT_DIR) {
         await page.screenshot({ path: path.join(process.env.SIT_UI_SCREENSHOT_DIR, `companyprofile-random-orbit-${width}.png`) });
       }
-      console.log('PASS poster to existing program detail, reload, browser back/forward and close', width);
+      console.log('PASS continuous poster transition, existing detail, reload, browser back/forward and close', width);
     }
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(base + '/kabinet/unit-gallery');
+    const reducedPoster = page.getByRole('link', { name: 'Lihat detail proker Program dokumentasi', exact: true });
+    await scrollPhotoIntoView(page, reducedPoster.locator('img'));
+    await reducedPoster.click();
+    await page.waitForURL('**/?proker=unit-gallery-program-dokumentasi');
+    await page.getByRole('dialog', { name: 'Detail proker Program dokumentasi', exact: true }).waitFor();
+    await page.locator('[data-program-transition]').waitFor({ state: 'detached' });
+    console.log('PASS linked program transition respects reduced motion');
     await page.goto(base + '/?proker=not-a-published-program');
     assert.equal(await page.getByRole('dialog').count(), 0);
     console.log('PASS unknown program link leaves the homepage usable');
@@ -364,7 +396,6 @@ async function main() {
           })),
           gallery: [...document.querySelectorAll('.program-gallery__track')].map((track) => ({
             left: track.scrollLeft, width: track.clientWidth, total: track.scrollWidth,
-            nextDisabled: document.querySelector('button[aria-label="Foto berikutnya"]')?.disabled,
           })),
         })));
       }

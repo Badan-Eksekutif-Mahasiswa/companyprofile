@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Dokumentasi } from "@/types";
 
 export function ProgramGallery({ photos, name }: { photos: Dokumentasi[]; name: string }) {
   const track = React.useRef<HTMLDivElement>(null);
   const drag = React.useRef<{ id: number; x: number; left: number } | null>(null);
   const [dragging, setDragging] = React.useState(false);
-  const [position, setPosition] = React.useState({ first: 0, last: 0, previous: false, next: false });
+  const [position, setPosition] = React.useState({ first: 0, last: 0 });
 
   const updatePosition = React.useCallback(() => {
     const element = track.current;
@@ -18,10 +17,8 @@ export function ProgramGallery({ photos, name }: { photos: Dokumentasi[]; name: 
       const box = child.getBoundingClientRect();
       return box.right > bounds.left + 1 && box.left < bounds.right - 1 ? [index] : [];
     });
-    const next = { first: visible[0] ?? 0, last: visible[visible.length - 1] ?? 0,
-      previous: element.scrollLeft > 1, next: element.scrollLeft < element.scrollWidth - element.clientWidth - 1 };
-    setPosition((current) => current.first === next.first && current.last === next.last
-      && current.previous === next.previous && current.next === next.next ? current : next);
+    const next = { first: visible[0] ?? 0, last: visible[visible.length - 1] ?? 0 };
+    setPosition((current) => current.first === next.first && current.last === next.last ? current : next);
   }, []);
 
   React.useEffect(() => {
@@ -54,14 +51,6 @@ export function ProgramGallery({ photos, name }: { photos: Dokumentasi[]; name: 
         <span className="program-gallery__counter" aria-live="polite" aria-atomic="true">
           {position.first + 1}{position.last > position.first ? `-${position.last + 1}` : ""} / {photos.length}
         </span>
-        <button type="button" onClick={() => goTo(position.first - 1)} disabled={!position.previous}
-          aria-label="Foto sebelumnya" title="Foto sebelumnya" className="program-gallery__button" data-hover>
-          <ArrowLeft aria-hidden className="size-5" />
-        </button>
-        <button type="button" onClick={() => goTo(position.first + 1)} disabled={!position.next}
-          aria-label="Foto berikutnya" title="Foto berikutnya" className="program-gallery__button" data-hover>
-          <ArrowRight aria-hidden className="size-5" />
-        </button>
       </div>
       <div ref={track} className={`program-gallery__track${dragging ? " is-dragging" : ""}`} tabIndex={0}
         role="group" aria-roledescription="karusel" aria-label={`Foto ${name}`} data-lenis-prevent onScroll={updatePosition}
