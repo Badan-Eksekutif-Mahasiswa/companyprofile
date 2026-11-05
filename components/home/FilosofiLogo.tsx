@@ -6,9 +6,32 @@ import { gsap } from "gsap";
 import { X } from "lucide-react";
 export type LogoPhilosophy = { judul: string; ringkasan: string; elemen: { nama: string; makna: string }[]; warna: { nama: string; hex: string; makna: string }[] };
 
+/** Filosofi logo resmi Kabinet TerusTerang (slide "Filosofi Logo" BEM UI 2026). */
+const FILOSOFI_LOGO: LogoPhilosophy = {
+  judul: "Logo BEM UI 2026",
+  ringkasan: "",
+  elemen: [
+    {
+      nama: "Diamond Crystal Clear",
+      makna:
+        "Diamond berwarna putih crystal clear, selain menunjukkan kilau cahaya, turut menggambarkan transparansi dan akuntabilitas bahwa setiap hal yang kami kerjakan dapat secara jernih diawasi oleh seluruh IKM UI.",
+    },
+    {
+      nama: "Pola Starry Night",
+      makna:
+        "Terinspirasi dari pola lukisan Van Gogh, Starry Night, yang selaras dengan semangat BEM UI 2026 untuk menjadi penerang di tengah keadaan yang gelap. Garis-garis yang tak terputus dan berliuk juga merepresentasikan resiliensi dalam gerakan mahasiswa.",
+    },
+    {
+      nama: "Garis yang Saling Terhubung",
+      makna: "Garis-garis yang saling terhubung di dalam diamond tersebut menjadi representasi atas seluruh elemen mahasiswa yang konvergen.",
+    },
+  ],
+  warna: [],
+};
+
 /** The production dialog displays only approved brand information. */
 export function FilosofiLogo({ closeSignal, onClose, content }: { closeSignal: number; onClose: () => void; content?: LogoPhilosophy }) {
-  const filosofi = content ?? { judul: "Logo BEM UI 2026", ringkasan: "", elemen: [], warna: [] };
+  const filosofi = content ?? FILOSOFI_LOGO;
   const backdrop = React.useRef<HTMLDivElement>(null);
   const card = React.useRef<HTMLDivElement>(null);
   const closeBtn = React.useRef<HTMLButtonElement>(null);
@@ -80,9 +103,9 @@ export function FilosofiLogo({ closeSignal, onClose, content }: { closeSignal: n
           <h2 id="filosofi-title" data-reveal className="mt-2 text-[clamp(1.75rem,3vw,2.5rem)] font-bold uppercase leading-none tracking-normal">
             {filosofi.judul}
           </h2>
-          <p data-reveal className="mt-5 text-[17px] leading-relaxed text-secondary">
+          {filosofi.ringkasan && <p data-reveal className="mt-5 text-[17px] leading-relaxed text-secondary">
             {filosofi.ringkasan}
-          </p>
+          </p>}
 
           <ol className="mt-8 border-t border-divider">
             {filosofi.elemen.map((e, i) => (
