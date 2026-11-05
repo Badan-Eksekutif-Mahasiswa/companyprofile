@@ -1,14 +1,13 @@
 import { HeroOrbit } from "@/components/home/HeroOrbit";
 import { KabinetPreview } from "@/components/home/KabinetPreview";
 import { NewsPreview } from "@/components/home/NewsPreview";
-import { StatsSection } from "@/components/home/StatsSection";
 import { TaglineSection } from "@/components/home/TaglineSection";
 import { VideoSection } from "@/components/home/VideoSection";
 import { SmoothScroll } from "@/components/home/SmoothScroll";
 import { Cursor } from "@/components/kabinet/Cursor";
 import { SiteFooter, SiteNav } from "@/components/ui";
 import { HERO } from "@/config/site";
-import { getHeroProker, getLatestNews, getStats, pickFeaturedProker } from "@/lib/data";
+import { getHeroProker, getLatestNews, pickFeaturedProker } from "@/lib/data";
 import { getAllDivisi, getKabinet } from "@/lib/kabinet";
 import { readDemoJson } from "@/lib/demo-data";
 import type { LogoPhilosophy } from "@/components/home/FilosofiLogo";
@@ -16,9 +15,8 @@ import type { LogoPhilosophy } from "@/components/home/FilosofiLogo";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage({ searchParams }: { searchParams?: { proker?: string | string[] } }) {
-  const [proker, stats, news] = await Promise.all([
+  const [proker, news] = await Promise.all([
     getHeroProker(),
-    getStats(),
     getLatestNews(3),
   ]);
   const [kabinet, divisi] = await Promise.all([getKabinet(), getAllDivisi()]);
@@ -35,7 +33,6 @@ export default async function HomePage({ searchParams }: { searchParams?: { prok
       <main>
         <HeroOrbit items={pickFeaturedProker(proker, HERO.featured)} allItems={proker} initialProkerSlug={typeof searchParams?.proker === "string" ? searchParams.proker : undefined} logoPhilosophy={readDemoJson<LogoPhilosophy>("filosofi-logo.json")} />
         <div id="konten">
-          {kabinet && <StatsSection stats={stats} />}
           {kabinet && <TaglineSection kabinet={kabinet} />}
           <KabinetPreview divisi={divisi} />
           <NewsPreview articles={news} />

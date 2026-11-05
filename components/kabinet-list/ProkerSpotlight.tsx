@@ -32,7 +32,7 @@ export function ProkerSpotlight({ kabinet }: { kabinet: Kabinet }) {
     <section className="mx-auto max-w-wrap px-6 pb-32" aria-labelledby="spot-title">
       <Reveal>
         <h2 id="spot-title" className="max-w-[1000px] text-[clamp(28px,4.4vw,64px)] font-bold leading-[1.1] tracking-[-0.03em]">
-          <Num>{stats.divisi}</Num> divisi, <Num>{stats.anggota}+</Num> anggota, dan <Num>{stats.proker}</Num> program kerja dari <Num>{stats.fakultas}</Num> fakultas — bergerak dalam satu kabinet.
+          <Num>{stats.divisi}</Num> divisi, <Num>{stats.anggota}+</Num> anggota, dan <Num>{stats.proker}</Num> program kerja.
         </h2>
       </Reveal>
 
