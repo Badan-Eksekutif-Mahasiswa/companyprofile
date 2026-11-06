@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { VisitCounter } from "./visit-counter";
 
 const SOCIALS = [
   {
@@ -108,7 +109,10 @@ export function SiteFooter() {
             />
           </div>
         </div>
-        <div className="text-[13px]">© {new Date().getFullYear()} BEM UI</div>
+        <div className="flex flex-wrap items-center justify-between gap-2 text-[13px]">
+          <span>© {new Date().getFullYear()} BEM UI</span>
+          <VisitCounter />
+        </div>
       </div>
     </footer>
   );
